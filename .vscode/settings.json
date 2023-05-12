@@ -1,5 +1,6 @@
 {
     "dart.lineLength": -1,
+    "dart.showTodos": false,
     "cSpell.words": [
         "APPL",
         "housewallet",
@@ -21,5 +22,7 @@
         ".flutter-plugins": true,
         ".flutter-plugins-dependencies": true,
         "lib/generated_plugin_registrant.dart": true,
+        ".metadata": true,
+        "pubspec.lock": true,
     }
 }

@@ -28,7 +28,7 @@ class _ExampleHomePageState extends State<ExampleHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Example")),
+      appBar: AppBar(title: const Text("HouseWallet")),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
