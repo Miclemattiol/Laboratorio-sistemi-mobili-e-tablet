@@ -1,47 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:house_wallet/pages/login.dart';
+import 'package:house_wallet/pages/main_page.dart';
 
 void main() => runApp(const App());
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   const App({super.key});
+
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
+  bool _loggedIn = true;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _loggedIn = true; //TODO Firebase Auth
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: ThemeData(primarySwatch: Colors.blueGrey),
       title: "HouseWallet",
-      home: const ExampleHomePage(),
-    );
-  }
-}
-
-class ExampleHomePage extends StatefulWidget {
-  const ExampleHomePage({super.key});
-
-  @override
-  State<ExampleHomePage> createState() => _ExampleHomePageState();
-}
-
-class _ExampleHomePageState extends State<ExampleHomePage> {
-  int _counter = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("HouseWallet")),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text("You have pushed the button this many times:"),
-            Text("$_counter", style: Theme.of(context).textTheme.headlineMedium),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => setState(() => _counter++),
-        tooltip: "Increment",
-        child: const Icon(Icons.add),
+      home: Scaffold(
+        body: _loggedIn ? const MainPage() : const Login(),
       ),
     );
   }
