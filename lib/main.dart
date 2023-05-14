@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:house_wallet/pages/login.dart';
 import 'package:house_wallet/pages/main_page.dart';
 
@@ -29,6 +30,14 @@ class _AppState extends State<App> {
       home: Scaffold(
         body: _loggedIn ? const MainPage() : const Login(),
       ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale("it")
+      ],
     );
   }
 }

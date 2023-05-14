@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:house_wallet/components/ui/app_bar_fix.dart';
 
 class Profilo extends StatelessWidget {
   const Profilo({super.key});
@@ -8,7 +9,7 @@ class Profilo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text(label)),
+      appBar: AppBarFix(title: const Text(label)),
       body: const Center(child: Text(label)),
     );
   }

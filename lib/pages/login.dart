@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:house_wallet/components/ui/app_bar_fix.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -6,7 +7,7 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Login")),
+      appBar: AppBarFix(title: const Text("Login")),
       body: const Center(child: Text("Login")),
     );
   }

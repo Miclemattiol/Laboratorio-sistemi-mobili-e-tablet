@@ -1,40 +1,40 @@
 import 'package:flutter/material.dart';
-import 'package:house_wallet/pages/casa.dart';
-import 'package:house_wallet/pages/incarichi.dart';
+import 'package:house_wallet/pages/casa/casa.dart';
+import 'package:house_wallet/pages/incarichi/incarichi.dart';
 import 'package:house_wallet/pages/profilo.dart';
 import 'package:house_wallet/pages/spesa.dart';
 import 'package:house_wallet/pages/transazioni.dart';
 
-class Page {
+class PageData {
   final String label;
   final IconData icon;
   final Widget widget;
 
-  const Page({required this.label, required this.icon, required this.widget});
+  const PageData({required this.label, required this.icon, required this.widget});
 }
 
-const _pages = <Page>[
-  Page(
+const _pages = <PageData>[
+  PageData(
     icon: Icons.person,
     label: Profilo.label,
     widget: Profilo(),
   ),
-  Page(
+  PageData(
     icon: Icons.attach_money,
     label: Transazioni.label,
     widget: Transazioni(),
   ),
-  Page(
+  PageData(
     icon: Icons.shopping_cart,
     label: Spesa.label,
     widget: Spesa(),
   ),
-  Page(
+  PageData(
     icon: Icons.assignment,
     label: Incarichi.label,
     widget: Incarichi(),
   ),
-  Page(
+  PageData(
     icon: Icons.groups,
     label: Casa.label,
     widget: Casa(),
