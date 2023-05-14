@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "564868718739",
+    "project_id": "housewallet-lpsmt",
+    "storage_bucket": "housewallet-lpsmt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:564868718739:android:49235a48d42ee89f4c2d66",
+        "android_client_info": {
+          "package_name": "it.unitn.lpsmt.housewallet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "564868718739-rb1sirdth25j8ujb8pj8roag5dsbe4v9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBlqMLMCB60IibOmsGzs4eyjwtjOvO3Pkc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "564868718739-rb1sirdth25j8ujb8pj8roag5dsbe4v9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

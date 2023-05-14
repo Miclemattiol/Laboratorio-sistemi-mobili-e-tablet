@@ -1,9 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:house_wallet/firebase_options.dart';
 import 'package:house_wallet/pages/login.dart';
 import 'package:house_wallet/pages/main_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-void main() => runApp(const App());
+late final SharedPreferences prefs;
+
+void main() async {
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  prefs = await SharedPreferences.getInstance();
+  runApp(const App());
+}
 
 class App extends StatefulWidget {
   const App({super.key});
@@ -19,7 +28,7 @@ class _AppState extends State<App> {
   void initState() {
     super.initState();
 
-    _loggedIn = true; //TODO Firebase Auth
+    _loggedIn = false; //TODO Firebase Auth
   }
 
   @override
@@ -36,7 +45,8 @@ class _AppState extends State<App> {
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: const [
-        Locale("it")
+        Locale("it"),
+        Locale("en"),
       ],
     );
   }

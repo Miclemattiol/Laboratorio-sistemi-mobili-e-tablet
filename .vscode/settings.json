@@ -25,5 +25,6 @@
         "lib/generated_plugin_registrant.dart": true,
         ".metadata": true,
         "pubspec.lock": true,
+        "lib/firebase_options.dart": true
     }
 }
