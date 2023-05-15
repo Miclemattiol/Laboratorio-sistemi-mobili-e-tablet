@@ -1,5 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:house_wallet/firebase_options.dart';
 import 'package:house_wallet/pages/login.dart';
@@ -8,9 +10,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 late final SharedPreferences prefs;
 
+AppLocalizations localizations(BuildContext context) => AppLocalizations.of(context)!;
+
+//Test Account
+//Email:    test@test.com
+//Password: test1234
+
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await FirebaseAuth.instance.currentUser?.reload();
+
   prefs = await SharedPreferences.getInstance();
+
   runApp(const App());
 }
 
@@ -22,13 +35,12 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  bool _loggedIn = true;
+  bool _loggedIn = FirebaseAuth.instance.currentUser != null;
 
   @override
   void initState() {
     super.initState();
-
-    _loggedIn = false; //TODO Firebase Auth
+    FirebaseAuth.instance.authStateChanges().listen((user) => setState(() => _loggedIn = user != null));
   }
 
   @override
@@ -36,10 +48,9 @@ class _AppState extends State<App> {
     return MaterialApp(
       theme: ThemeData(primarySwatch: Colors.blueGrey),
       title: "HouseWallet",
-      home: Scaffold(
-        body: _loggedIn ? const MainPage() : const Login(),
-      ),
+      home: _loggedIn ? const MainPage() : const Login(),
       localizationsDelegates: const [
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

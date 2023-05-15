@@ -19,6 +19,8 @@ dependencies:
   firebase_auth: ^4.6.0
   cloud_firestore: ^4.7.0
   shared_preferences: ^2.1.1
+  intl: ^0.18.0
+  email_validator: ^2.1.17
 
 dev_dependencies:
   flutter_test:
@@ -30,6 +32,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  generate: true
+  assets: [ assets/ ]
 
 # TODO icon
 # dart run flutter_launcher_icons

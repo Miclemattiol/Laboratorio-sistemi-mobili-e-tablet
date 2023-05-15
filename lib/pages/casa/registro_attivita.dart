@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
+import 'package:house_wallet/main.dart';
 
 class RegistroAttivita extends StatelessWidget {
   const RegistroAttivita({super.key});
@@ -7,12 +8,12 @@ class RegistroAttivita extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFix(title: const Text("Registro Attività")),
+      appBar: AppBarFix(title: Text(localizations(context).activityLogPage)),
       body: ListView(
         children: const [
-          ListTile(title: Text("Attività 1")),
-          ListTile(title: Text("Attività 2")),
-          ListTile(title: Text("Attività 3")),
+          ListTile(title: Text("Placeholder 1")),
+          ListTile(title: Text("Placeholder 2")),
+          ListTile(title: Text("Placeholder 3")),
         ],
       ),
     );

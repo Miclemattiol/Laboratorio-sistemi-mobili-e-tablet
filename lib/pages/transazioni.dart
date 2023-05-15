@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
+import 'package:house_wallet/main.dart';
 
 class Transazioni extends StatelessWidget {
   const Transazioni({super.key});
 
-  static const label = "Transazioni";
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFix(title: const Text(label)),
-      body: const Center(child: Text(label)),
+      appBar: AppBarFix(title: Text(localizations(context).transactionsPage)),
+      body: Center(child: Text(localizations(context).transactionsPage)),
       floatingActionButton: FloatingActionButton(
         heroTag: null,
         onPressed: () {},

@@ -1,0 +1,34 @@
+{
+    "@@locale": "en",
+    "loginPage": "Login",
+    "emailInput": "Email",
+    "errorMissingEmail": "Enter an email address",
+    "errorInvalidEmail": "Enter a valid email address",
+    "passwordInput": "Password",
+    "errorMissingPassword": "Enter a password",
+    "errorUserDisabled": "Could not login:\nUser disabled",
+    "errorUserNotFound": "Could not login:\nUser not found",
+    "errorWrongPassword": "Could not login:\nWrong password",
+    "errorTooManyRequests": "Could not login:\nToo many requests",
+    "errorOther": "Could not login",
+    "errorOtherDetails": "Could not login:\n{error}",
+    "@errorOtherDetails": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "loginButton": "Login",
+    "accountPage": "Account",
+    "logoutButton": "Logout",
+    "transactionsPage": "Transactions",
+    "shoppingPage": "Shopping",
+    "tasksPage": "Tasks",
+    "myTasksTab": "My tasks",
+    "allTasksTab": "All tasks",
+    "housePage": "House",
+    "tradesSection": "Trades",
+    "usersSection": "Users",
+    "activityLogPage": "Activity Log"
+}

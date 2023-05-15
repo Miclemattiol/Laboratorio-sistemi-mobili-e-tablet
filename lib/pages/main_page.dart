@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/casa/casa.dart';
 import 'package:house_wallet/pages/incarichi/incarichi.dart';
 import 'package:house_wallet/pages/profilo.dart';
@@ -13,33 +14,35 @@ class PageData {
   const PageData({required this.label, required this.icon, required this.widget});
 }
 
-const _pages = <PageData>[
-  PageData(
-    icon: Icons.person,
-    label: Profilo.label,
-    widget: Profilo(),
-  ),
-  PageData(
-    icon: Icons.attach_money,
-    label: Transazioni.label,
-    widget: Transazioni(),
-  ),
-  PageData(
-    icon: Icons.shopping_cart,
-    label: Spesa.label,
-    widget: Spesa(),
-  ),
-  PageData(
-    icon: Icons.assignment,
-    label: Incarichi.label,
-    widget: Incarichi(),
-  ),
-  PageData(
-    icon: Icons.groups,
-    label: Casa.label,
-    widget: Casa(),
-  )
-];
+List<PageData> _pages(BuildContext context) {
+  return [
+    PageData(
+      icon: Icons.person,
+      label: localizations(context).accountPage,
+      widget: const Profilo(),
+    ),
+    PageData(
+      icon: Icons.attach_money,
+      label: localizations(context).transactionsPage,
+      widget: const Transazioni(),
+    ),
+    PageData(
+      icon: Icons.shopping_cart,
+      label: localizations(context).shoppingPage,
+      widget: const Spesa(),
+    ),
+    PageData(
+      icon: Icons.assignment,
+      label: localizations(context).tasksPage,
+      widget: const Incarichi(),
+    ),
+    PageData(
+      icon: Icons.groups,
+      label: localizations(context).housePage,
+      widget: const Casa(),
+    )
+  ];
+}
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -53,16 +56,17 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    final pages = _pages(context);
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
-        children: _pages.map((page) => page.widget).toList(),
+        children: pages.map((page) => page.widget).toList(),
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) => setState(() => _selectedIndex = index),
         items: [
-          ..._pages.map(
+          ...pages.map(
             (page) => BottomNavigationBarItem(
               icon: Icon(page.icon),
               label: page.label,

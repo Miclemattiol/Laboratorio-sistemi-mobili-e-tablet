@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
+import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/incarichi/incarichi_tab.dart';
 
 class TabData {
@@ -9,35 +10,36 @@ class TabData {
   const TabData({required this.label, required this.widget});
 }
 
-const _tabs = <TabData>[
-  TabData(
-    label: "Le mie attività",
-    widget: IncarichiTab(text: "Le mie attività"),
-  ),
-  TabData(
-    label: "Tutte le attività",
-    widget: IncarichiTab(text: "Tutte le attività"),
-  ),
-];
+List<TabData> _tabs(BuildContext context) {
+  return [
+    TabData(
+      label: localizations(context).myTasksTab,
+      widget: IncarichiTab(text: localizations(context).myTasksTab),
+    ),
+    TabData(
+      label: localizations(context).allTasksTab,
+      widget: IncarichiTab(text: localizations(context).allTasksTab),
+    ),
+  ];
+}
 
 class Incarichi extends StatelessWidget {
   const Incarichi({super.key});
 
-  static const label = "Incarichi";
-
   @override
   Widget build(BuildContext context) {
+    final tabs = _tabs(context);
     return DefaultTabController(
-      length: _tabs.length,
+      length: tabs.length,
       child: Scaffold(
         appBar: AppBarFix(
-          title: const Text(label),
+          title: Text(localizations(context).tasksPage),
           bottom: TabBar(
-            tabs: _tabs.map((tab) => Tab(text: tab.label)).toList(),
+            tabs: tabs.map((tab) => Tab(text: tab.label)).toList(),
           ),
         ),
         body: TabBarView(
-          children: _tabs.map((tab) => tab.widget).toList(),
+          children: tabs.map((tab) => tab.widget).toList(),
         ),
         floatingActionButton: FloatingActionButton(
           heroTag: null,

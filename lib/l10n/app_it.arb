@@ -1,0 +1,34 @@
+{
+    "@@locale": "it",
+    "loginPage": "Login",
+    "emailInput": "Email",
+    "errorMissingEmail": "Inserisci un indirizzo email",
+    "errorInvalidEmail": "Inserisci un indirizzo email valido",
+    "passwordInput": "Password",
+    "errorMissingPassword": "Inserisci la password",
+    "errorUserDisabled": "Impossibile effettuare il login:\nUtente disabilitato",
+    "errorUserNotFound": "Impossibile effettuare il login:\nUtente inesistente",
+    "errorWrongPassword": "Impossibile effettuare il login:\nPassword errata",
+    "errorTooManyRequests": "Impossibile effettuare il login:\nTroppe richieste",
+    "errorOther": "Impossibile effettuare il login",
+    "errorOtherDetails": "Impossibile effettuare il login:\n{error}",
+    "@errorOtherDetails": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "loginButton": "Accedi",
+    "accountPage": "Profilo",
+    "logoutButton": "Logout",
+    "transactionsPage": "Transazioni",
+    "shoppingPage": "Spesa",
+    "tasksPage": "Incarichi",
+    "myTasksTab": "Le mie attività",
+    "allTasksTab": "Tutte le attività",
+    "housePage": "Casa",
+    "tradesSection": "Scambi",
+    "usersSection": "Utenti",
+    "activityLogPage": "Registro attività"
+}
