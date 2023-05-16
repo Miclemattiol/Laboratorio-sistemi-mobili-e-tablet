@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/main.dart';
 
-class Transazioni extends StatelessWidget {
-  const Transazioni({super.key});
+class Transactions extends StatelessWidget {
+  const Transactions({super.key});
 
   @override
   Widget build(BuildContext context) {

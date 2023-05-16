@@ -62,6 +62,17 @@ class _AppState extends State<App> {
         Locale("it"),
         // Locale("en"), //TODO translations
       ],
+      navigatorObservers: [
+        ClearFocusOnPush()
+      ],
     );
+  }
+}
+
+class ClearFocusOnPush extends NavigatorObserver {
+  @override
+  void didPush(Route route, Route? previousRoute) {
+    super.didPush(route, previousRoute);
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 }

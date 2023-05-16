@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/incarichi/incarichi_tab.dart';
+import 'package:house_wallet/pages/tasks/tasks_tab.dart';
 
 class TabData {
   final String label;
@@ -14,17 +14,17 @@ List<TabData> _tabs(BuildContext context) {
   return [
     TabData(
       label: localizations(context).myTasksTab,
-      widget: IncarichiTab(text: localizations(context).myTasksTab),
+      widget: TasksTab(text: localizations(context).myTasksTab),
     ),
     TabData(
       label: localizations(context).allTasksTab,
-      widget: IncarichiTab(text: localizations(context).allTasksTab),
+      widget: TasksTab(text: localizations(context).allTasksTab),
     ),
   ];
 }
 
-class Incarichi extends StatelessWidget {
-  const Incarichi({super.key});
+class Tasks extends StatelessWidget {
+  const Tasks({super.key});
 
   @override
   Widget build(BuildContext context) {

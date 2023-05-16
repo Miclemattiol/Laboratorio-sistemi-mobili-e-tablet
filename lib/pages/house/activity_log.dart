@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/main.dart';
 
-class RegistroAttivita extends StatelessWidget {
-  const RegistroAttivita({super.key});
+class ActivityLog extends StatelessWidget {
+  const ActivityLog({super.key});
 
   @override
   Widget build(BuildContext context) {

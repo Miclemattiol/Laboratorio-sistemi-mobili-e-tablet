@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/casa/casa.dart';
-import 'package:house_wallet/pages/incarichi/incarichi.dart';
 import 'package:house_wallet/pages/account/account.dart';
-import 'package:house_wallet/pages/spesa.dart';
-import 'package:house_wallet/pages/transazioni.dart';
+import 'package:house_wallet/pages/house/house.dart';
+import 'package:house_wallet/pages/shopping.dart';
+import 'package:house_wallet/pages/tasks/tasks.dart';
+import 'package:house_wallet/pages/transactions.dart';
 
 class PageData {
   final String label;
@@ -24,22 +24,22 @@ List<PageData> _pages(BuildContext context) {
     PageData(
       icon: Icons.attach_money,
       label: localizations(context).transactionsPage,
-      widget: const Transazioni(),
+      widget: const Transactions(),
     ),
     PageData(
       icon: Icons.shopping_cart,
       label: localizations(context).shoppingPage,
-      widget: const Spesa(),
+      widget: const Shopping(),
     ),
     PageData(
       icon: Icons.assignment,
       label: localizations(context).tasksPage,
-      widget: const Incarichi(),
+      widget: const Tasks(),
     ),
     PageData(
       icon: Icons.groups,
       label: localizations(context).housePage,
-      widget: const Casa(),
+      widget: const House(),
     )
   ];
 }

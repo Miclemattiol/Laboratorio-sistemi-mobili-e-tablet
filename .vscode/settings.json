@@ -6,7 +6,8 @@
         "fullscreen",
         "housewallet",
         "lpsmt",
-        "mipmap"
+        "mipmap",
+        "unfocus"
     ],
     "files.exclude": {
         "**/.git": true,
