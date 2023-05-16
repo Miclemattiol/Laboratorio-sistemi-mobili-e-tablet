@@ -15,7 +15,7 @@ class LinkListTile extends StatelessWidget {
     return ListTile(
       title: Text(title),
       onTap: onTap,
-      trailing: const Icon(Icons.keyboard_arrow_right, color: Colors.black),
+      trailing: const Icon(Icons.keyboard_arrow_right),
     );
   }
 }

@@ -6,6 +6,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:house_wallet/firebase_options.dart';
 import 'package:house_wallet/pages/login.dart';
 import 'package:house_wallet/pages/main_page.dart';
+import 'package:house_wallet/theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late final SharedPreferences prefs;
@@ -46,8 +47,10 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData(primarySwatch: Colors.blueGrey),
       title: "HouseWallet",
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: ThemeMode.system, //TODO sharedPreferences
       home: _loggedIn ? const MainPage() : const Login(),
       localizationsDelegates: const [
         AppLocalizations.delegate,
@@ -57,7 +60,7 @@ class _AppState extends State<App> {
       ],
       supportedLocales: const [
         Locale("it"),
-        Locale("en"),
+        // Locale("en"), //TODO translations
       ],
     );
   }
