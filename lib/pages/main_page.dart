@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/casa/casa.dart';
 import 'package:house_wallet/pages/incarichi/incarichi.dart';
-import 'package:house_wallet/pages/profilo.dart';
+import 'package:house_wallet/pages/account/account.dart';
 import 'package:house_wallet/pages/spesa.dart';
 import 'package:house_wallet/pages/transazioni.dart';
 
@@ -19,7 +19,7 @@ List<PageData> _pages(BuildContext context) {
     PageData(
       icon: Icons.person,
       label: localizations(context).accountPage,
-      widget: const Profilo(),
+      widget: const Account(),
     ),
     PageData(
       icon: Icons.attach_money,

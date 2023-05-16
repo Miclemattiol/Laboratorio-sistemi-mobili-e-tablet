@@ -21,6 +21,11 @@
     },
     "loginButton": "Accedi",
     "accountPage": "Profilo",
+    "ibanInput": "IBAN",
+    "paypalInput": "PayPal",
+    "logoutDialogTitle": "Logout",
+    "logoutDialogContent": "Sei sicuro di voler effettuare il logout?",
+    "notificationsPage": "Notifiche",
     "logoutButton": "Logout",
     "transactionsPage": "Transazioni",
     "shoppingPage": "Spesa",
@@ -30,5 +35,7 @@
     "housePage": "Casa",
     "tradesSection": "Scambi",
     "usersSection": "Utenti",
-    "activityLogPage": "Registro attività"
+    "activityLogPage": "Registro attività",
+    "yes": "Sì",
+    "no": "No"
 }
