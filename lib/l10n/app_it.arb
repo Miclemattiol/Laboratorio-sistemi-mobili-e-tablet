@@ -54,5 +54,6 @@
     "usersSection": "Utenti",
     "activityLogPage": "Registro attività",
     "yes": "Sì",
-    "no": "No"
+    "no": "No",
+    "title": "Titolo"
 }

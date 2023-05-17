@@ -257,13 +257,58 @@ List<Transazione> transazioni = List.from([
 class Transactions extends StatelessWidget {
   const Transactions({super.key});
 
+  void _addTransaction(BuildContext context) async {
+    print("Add transaction");
+    final ret = await showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      isScrollControlled: true,
+      builder: (context) => Padding(
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: SingleChildScrollView(
+          child: PadColumn(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            padding: const EdgeInsets.all(16),
+            children: [
+              PadRow(
+                spacing: 32,
+                children: [
+                  const SizedBox(
+                    width: 64,
+                    height: 64,
+                    child: Placeholder(),
+                  ),
+                  Expanded(
+                    child: Center(
+                      child: TextFormField(
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: localizations(context).title,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarFix(title: Text(localizations(context).transactionsPage)),
       floatingActionButton: FloatingActionButton(
         heroTag: null,
-        onPressed: () {},
+        onPressed: () {
+          _addTransaction(context);
+        },
         child: const Icon(Icons.add),
       ),
       body: ListView.separated(
