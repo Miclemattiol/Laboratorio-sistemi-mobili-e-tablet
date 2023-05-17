@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
@@ -257,13 +259,26 @@ List<Transazione> transazioni = List.from([
 class Transactions extends StatelessWidget {
   const Transactions({super.key});
 
+  void _addTransaction(BuildContext context) async {
+    print("Add transaction");
+    final ret = await showModalBottomSheet(
+      context: context,
+      builder: (context) => Container(
+        height: 400,
+        color: Colors.white,
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarFix(title: Text(localizations(context).transactionsPage)),
       floatingActionButton: FloatingActionButton(
         heroTag: null,
-        onPressed: () {},
+        onPressed: () {
+          _addTransaction(context);
+        },
         child: const Icon(Icons.add),
       ),
       body: ListView.separated(
