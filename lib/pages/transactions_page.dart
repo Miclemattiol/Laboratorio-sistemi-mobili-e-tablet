@@ -217,32 +217,34 @@ class TransactionsPage extends StatelessWidget {
       builder: (context) => Padding(
         padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: SingleChildScrollView(
-          child: PadColumn(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            padding: const EdgeInsets.all(16),
-            children: [
-              PadRow(
-                spacing: 32,
-                children: [
-                  const SizedBox(
-                    width: 64,
-                    height: 64,
-                    child: Placeholder(),
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(),
-                          labelText: localizations(context).title,
+          child: Form(
+            child: PadColumn(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              padding: const EdgeInsets.all(16),
+              children: [
+                PadRow(
+                  spacing: 32,
+                  children: [
+                    const SizedBox(
+                      width: 64,
+                      height: 64,
+                      child: Placeholder(),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            labelText: localizations(context).title,
+                          ),
                         ),
                       ),
-                    ),
-                  )
-                ],
-              )
-            ],
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
