@@ -71,6 +71,7 @@ class _LoginState extends State<Login> {
                 ),
                 TextFormField(
                   decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).passwordInput),
+                  obscureText: true,
                   enabled: !_loading,
                   validator: (password) => (password == null || password.trim().isEmpty) ? localizations(context).errorMissingPassword : null,
                   onSaved: (password) => _passwordValue = password,

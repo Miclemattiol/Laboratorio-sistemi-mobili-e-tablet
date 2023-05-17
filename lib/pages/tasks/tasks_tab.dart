@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class IncarichiTab extends StatelessWidget {
+class TasksTab extends StatelessWidget {
   final String text;
 
-  const IncarichiTab({
+  const TasksTab({
     required this.text,
     super.key,
   });
