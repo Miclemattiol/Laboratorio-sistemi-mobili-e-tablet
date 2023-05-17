@@ -3,10 +3,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/firebase_options.dart';
 import 'package:house_wallet/pages/login.dart';
 import 'package:house_wallet/pages/main_page.dart';
 import 'package:house_wallet/theme.dart';
+import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 late final SharedPreferences prefs;
@@ -21,7 +23,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await FirebaseAuth.instance.currentUser?.reload();
+  await LoggedUser.user?.reload();
 
   prefs = await SharedPreferences.getInstance();
 
@@ -36,7 +38,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  bool _loggedIn = FirebaseAuth.instance.currentUser != null;
+  bool _loggedIn = LoggedUser.user != null;
 
   @override
   void initState() {
@@ -51,7 +53,7 @@ class _AppState extends State<App> {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system, //TODO sharedPreferences
-      home: _loggedIn ? const MainPage() : const Login(),
+      home: KeyboardDismisser(child: _loggedIn ? const MainPage() : const Login()),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
