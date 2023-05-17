@@ -5,7 +5,7 @@ import 'package:house_wallet/components/sliding_page_route.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/components/ui/link_list_tile.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/house/activity_log.dart';
+import 'package:house_wallet/pages/house/activity_log_page.dart';
 
 class HousePage extends StatelessWidget {
   const HousePage({super.key});
@@ -20,7 +20,7 @@ class HousePage extends StatelessWidget {
           children: [
             LinkListTile(
               title: localizations(context).activityLogPage,
-              onTap: () => Navigator.of(context).push(SlidingPageRoute(const ActivityLog())),
+              onTap: () => Navigator.of(context).push(SlidingPageRoute(const ActivityLogPage())),
             ),
             Section(
               title: localizations(context).tradesSection,

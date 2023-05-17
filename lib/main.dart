@@ -7,7 +7,7 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/firebase_options.dart';
 import 'package:house_wallet/pages/login_page.dart';
 import 'package:house_wallet/pages/main_page.dart';
-import 'package:house_wallet/theme.dart';
+import 'package:house_wallet/themes.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
