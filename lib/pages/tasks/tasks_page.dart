@@ -23,8 +23,8 @@ List<TabData> _tabs(BuildContext context) {
   ];
 }
 
-class Tasks extends StatelessWidget {
-  const Tasks({super.key});
+class TasksPage extends StatelessWidget {
+  const TasksPage({super.key});
 
   @override
   Widget build(BuildContext context) {

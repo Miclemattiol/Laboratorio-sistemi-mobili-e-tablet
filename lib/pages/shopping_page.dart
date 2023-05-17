@@ -3,25 +3,25 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/logged_user.dart';
-import 'package:house_wallet/data/shopping_item.dart';
+import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
 
-class Shopping extends StatefulWidget {
-  const Shopping({super.key});
+class ShoppingPage extends StatefulWidget {
+  const ShoppingPage({super.key});
 
   static CollectionReference<ShoppingItem> get firestoreRef => FirebaseFirestore.instance.collection("/groups/${LoggedUser.houseId}/shopping").withConverter(fromFirestore: ShoppingItem.fromFirestore, toFirestore: ShoppingItem.toFirestore);
 
   @override
-  State<Shopping> createState() => _ShoppingState();
+  State<ShoppingPage> createState() => _ShoppingPageState();
 }
 
-class _ShoppingState extends State<Shopping> {
+class _ShoppingPageState extends State<ShoppingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarFix(title: Text(localizations(context).shoppingPage)),
       body: StreamBuilder(
-        stream: Shopping.firestoreRef.snapshots(),
+        stream: ShoppingPage.firestoreRef.snapshots(),
         builder: (context, snapshot) {
           final docs = parseFirestoreDocs(snapshot);
 
@@ -41,7 +41,7 @@ class _ShoppingState extends State<Shopping> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Shopping.firestoreRef.add(const ShoppingItem(number: 0)),
+        onPressed: () => ShoppingPage.firestoreRef.add(const ShoppingItem(number: 0)),
         child: const Icon(Icons.add),
       ),
     );

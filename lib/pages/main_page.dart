@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/account/account.dart';
-import 'package:house_wallet/pages/house/house.dart';
-import 'package:house_wallet/pages/shopping.dart';
-import 'package:house_wallet/pages/tasks/tasks.dart';
-import 'package:house_wallet/pages/transactions.dart';
+import 'package:house_wallet/pages/account/account_page.dart';
+import 'package:house_wallet/pages/house/house_page.dart';
+import 'package:house_wallet/pages/shopping_page.dart';
+import 'package:house_wallet/pages/tasks/tasks_page.dart';
+import 'package:house_wallet/pages/transactions_page.dart';
 
 class PageData {
   final String label;
@@ -19,27 +19,27 @@ List<PageData> _pages(BuildContext context) {
     PageData(
       icon: Icons.person,
       label: localizations(context).accountPage,
-      widget: const Account(),
+      widget: const AccountPage(),
     ),
     PageData(
       icon: Icons.attach_money,
       label: localizations(context).transactionsPage,
-      widget: const Transactions(),
+      widget: const TransactionsPage(),
     ),
     PageData(
       icon: Icons.shopping_cart,
       label: localizations(context).shoppingPage,
-      widget: const Shopping(),
+      widget: const ShoppingPage(),
     ),
     PageData(
       icon: Icons.assignment,
       label: localizations(context).tasksPage,
-      widget: const Tasks(),
+      widget: const TasksPage(),
     ),
     PageData(
       icon: Icons.groups,
       label: localizations(context).housePage,
-      widget: const House(),
+      widget: const HousePage(),
     )
   ];
 }
