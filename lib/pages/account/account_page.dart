@@ -5,10 +5,10 @@ import 'package:house_wallet/components/sliding_page_route.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/components/ui/link_list_tile.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/account/notifications.dart';
+import 'package:house_wallet/pages/account/notifications_page.dart';
 
-class Account extends StatelessWidget {
-  const Account({super.key});
+class AccountPage extends StatelessWidget {
+  const AccountPage({super.key});
 
   void _logout(BuildContext context) async {
     final confirm = await showDialog<bool>(
@@ -69,11 +69,11 @@ class Account extends StatelessWidget {
                   ),
                   LinkListTile(
                     title: localizations(context).notificationsPage,
-                    onTap: () => Navigator.of(context).push(SlidingPageRoute(const Notifications())),
+                    onTap: () => Navigator.of(context).push(SlidingPageRoute(const NotificationsPage())),
                   ),
                   LinkListTile(
                     title: localizations(context).changePasswordPage,
-                    onTap: () => Navigator.of(context).push(SlidingPageRoute(const Notifications())),
+                    onTap: () => Navigator.of(context).push(SlidingPageRoute(const NotificationsPage())),
                   )
                 ],
               )),

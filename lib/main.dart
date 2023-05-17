@@ -5,9 +5,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/firebase_options.dart';
-import 'package:house_wallet/pages/login.dart';
+import 'package:house_wallet/pages/login_page.dart';
 import 'package:house_wallet/pages/main_page.dart';
-import 'package:house_wallet/theme.dart';
+import 'package:house_wallet/themes.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -53,7 +53,7 @@ class _AppState extends State<App> {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system, //TODO sharedPreferences
-      home: KeyboardDismisser(child: _loggedIn ? const MainPage() : const Login()),
+      home: KeyboardDismisser(child: _loggedIn ? const MainPage() : const LoginPage()),
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
