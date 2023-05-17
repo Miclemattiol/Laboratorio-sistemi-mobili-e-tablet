@@ -27,7 +27,7 @@ class Account extends StatelessWidget {
         false;
 
     if (confirm) {
-      FirebaseAuth.instance.signOut(); //🥲
+      FirebaseAuth.instance.signOut();
     }
   }
 
@@ -36,13 +36,62 @@ class Account extends StatelessWidget {
     const String nome = 'Nome Cognome';
 
     return Scaffold(
-      appBar: AppBarFix(title: Text(localizations(context).accountPage)),
-      // body: Center(
+        appBar: AppBarFix(title: Text(localizations(context).accountPage)),
+        // body: Center(
 
-      //   child: ElevatedButton(onPressed: FirebaseAuth.instance.signOut, child: Text(localizations(context).logoutButton)),
-      // ),
+        //   child: ElevatedButton(onPressed: FirebaseAuth.instance.signOut, child: Text(localizations(context).logoutButton)),
+        // ),
 
-      body: Column(
+        body: PadColumn(
+          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                  child: PadColumn(
+                spacing: 8,
+                children: [
+                  const Row(
+                    children: [
+                      SizedBox(
+                        width: 128,
+                        height: 128,
+                        child: Placeholder(),
+                      ),
+                      Expanded(child: Center(child: Text(nome)))
+                    ],
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).ibanInput),
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).paypalInput),
+                  ),
+                  LinkListTile(
+                    title: localizations(context).notificationsPage,
+                    onTap: () => Navigator.of(context).push(SlidingPageRoute(const Notifications())),
+                  ),
+                  LinkListTile(
+                    title: localizations(context).changePasswordPage,
+                    onTap: () => Navigator.of(context).push(SlidingPageRoute(const Notifications())),
+                  )
+                ],
+              )),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 64.0),
+              child: ElevatedButton(onPressed: () => _logout(context), child: Text(localizations(context).logoutButton)),
+            )
+          ],
+        ));
+  }
+}
+
+//FirebaseAuth.instance.signOut
+
+/*
+
+Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(
@@ -81,9 +130,5 @@ class Account extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
 
-
-//FirebaseAuth.instance.signOut
+*/

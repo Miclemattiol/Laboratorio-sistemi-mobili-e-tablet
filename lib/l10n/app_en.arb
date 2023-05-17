@@ -26,8 +26,25 @@
     "logoutDialogTitle": "Logout",
     "logoutDialogContent": "Are you sure you want to logout?",
     "notificationsPage": "Notifications",
+    "changePasswordPage": "Change Password",
     "logoutButton": "Logout",
     "transactionsPage": "Transactions",
+    "transactionPaidFrom": "Paid from {from}",
+    "@transactionPaidFrom": {
+        "placeholders": {
+            "from": {
+                "type": "String"
+            }
+        }
+    },
+    "transactionPaidImpact": "Impact: {impact}",
+    "@transactionPaidImpact": {
+        "placeholders": {
+            "impact": {
+                "type": "String"
+            }
+        }
+    },
     "shoppingPage": "Shopping",
     "tasksPage": "Tasks",
     "myTasksTab": "My tasks",
