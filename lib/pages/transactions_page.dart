@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/transactions/transaction_tile.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
@@ -240,9 +241,23 @@ class TransactionsPage extends StatelessWidget {
                           ),
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      width: 64,
+                      height: double.infinity,
+                      child: TextFormField(
+                        keyboardType: TextInputType.number,
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: "prezzo",
+                        ),
+                      ),
                     )
                   ],
-                )
+                ),
               ],
             ),
           ),
