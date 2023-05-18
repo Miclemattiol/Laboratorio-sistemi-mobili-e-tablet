@@ -51,7 +51,26 @@
     "allTasksTab": "Tutte le attività",
     "housePage": "Casa",
     "tradesSection": "Scambi",
+    "tradeAmount": "Hai ricevuto {amount}",
+    "@tradeAmount": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "tradeFrom": "da {from}",
+    "@tradeFrom": {
+        "placeholders": {
+            "from": {
+                "type": "String"
+            }
+        }
+    },
+    "tradeConfirm": "Conferma scambio",
+    "tradeDeny": "Rifiuta scambio",
     "usersSection": "Utenti",
+    "userInvite": "Invita utente...",
     "activityLogPage": "Registro attività",
     "yes": "Sì",
     "no": "No",

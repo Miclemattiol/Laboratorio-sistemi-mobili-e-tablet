@@ -22,9 +22,9 @@ class TransactionTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.end,
         spacing: 4,
         children: [
-          Text('€ ${transazione.amount.toStringAsFixed(2)}'),
+          Text(currencyFormat(context).format(transazione.amount)),
           Text(
-            localizations(context).transactionPaidImpact(transazione.impact.toStringAsFixed(2)),
+            localizations(context).transactionPaidImpact(currencyFormat(context).format(transazione.impact)),
             style: const TextStyle(fontSize: 10),
           ),
         ],
