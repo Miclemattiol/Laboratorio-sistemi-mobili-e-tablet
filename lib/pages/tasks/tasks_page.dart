@@ -1,7 +1,43 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
+import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/tasks/tasks_tab.dart';
+import 'package:intl/intl.dart';
+
+DateFormat taskDateFormat(BuildContext context) => DateFormat("dd/MM", Localizations.localeOf(context).languageCode);
+
+final tasks = <Task>[
+  Task(
+    from: DateTime(2023, 5, 18),
+    to: DateTime(2023, 5, 20),
+    repeating: true,
+    description: "Descrizione 1",
+    assignedTo: [
+      "Mario Rossi"
+    ],
+  ),
+  Task(
+    from: DateTime(2023, 5, 20),
+    to: DateTime(2023, 6, 2),
+    repeating: false,
+    description: "Descrizione 2",
+    assignedTo: [
+      "Mario Rossi",
+      "Luigi Verdi",
+      "Paolo Bianchi"
+    ],
+  ),
+  Task(
+    from: DateTime(2023, 5, 20),
+    to: DateTime(2023, 5, 22),
+    repeating: false,
+    description: "Descrizione 3",
+    assignedTo: [
+      "Luigi Verdi"
+    ],
+  ),
+];
 
 class TabData {
   final String label;
@@ -10,21 +46,21 @@ class TabData {
   const TabData({required this.label, required this.widget});
 }
 
-List<TabData> _tabs(BuildContext context) {
-  return [
-    TabData(
-      label: localizations(context).myTasksTab,
-      widget: TasksTab(text: localizations(context).myTasksTab),
-    ),
-    TabData(
-      label: localizations(context).allTasksTab,
-      widget: TasksTab(text: localizations(context).allTasksTab),
-    ),
-  ];
-}
-
 class TasksPage extends StatelessWidget {
   const TasksPage({super.key});
+
+  List<TabData> _tabs(BuildContext context) {
+    return [
+      TabData(
+        label: localizations(context).myTasksTab,
+        widget: TasksTab.myTasks(tasks),
+      ),
+      TabData(
+        label: localizations(context).allTasksTab,
+        widget: TasksTab.allTasks(tasks),
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {

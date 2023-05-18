@@ -49,6 +49,33 @@
     "tasksPage": "Incarichi",
     "myTasksTab": "Le mie attività",
     "allTasksTab": "Tutte le attività",
+    "task": "Incarico",
+    "taskAssignedTo": "per {to}",
+    "@taskAssignedTo": {
+        "placeholders": {
+            "to": {
+                "type": "String"
+            }
+        }
+    },
+    "taskFromDate": "Dal {from}",
+    "@taskFromDate": {
+        "placeholders": {
+            "from": {
+                "type": "String"
+            }
+        }
+    },
+    "taskToDate": "Al {to}",
+    "@taskToDate": {
+        "placeholders": {
+            "to": {
+                "type": "String"
+            }
+        }
+    },
+    "taskEdit": "Modifica incarico",
+    "taskDelete": "Elimina incarico",
     "housePage": "Casa",
     "tradesSection": "Scambi",
     "tradeAmount": "Hai ricevuto {amount}",

@@ -64,17 +64,17 @@ class ExampleShoppingItem extends StatelessWidget {
         children: [
           IconButton(
             icon: const Icon(Icons.plus_one),
+            splashRadius: 24,
             onPressed: () {
               doc.reference.update({
                 "number": doc.data.number + 1
               });
             },
-            splashRadius: 24,
           ),
           IconButton(
             icon: const Icon(Icons.delete),
-            onPressed: doc.reference.delete,
             splashRadius: 24,
+            onPressed: doc.reference.delete,
           ),
         ],
       ),

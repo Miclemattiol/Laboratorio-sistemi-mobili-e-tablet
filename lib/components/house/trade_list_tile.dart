@@ -25,14 +25,14 @@ class TradeListTile extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           IconButton(
-            splashRadius: 24,
             icon: const Icon(Icons.check),
+            splashRadius: 24,
             tooltip: localizations(context).tradeConfirm,
             onPressed: onAccept,
           ),
           IconButton(
-            splashRadius: 24,
             icon: const Icon(Icons.close),
+            splashRadius: 24,
             tooltip: localizations(context).tradeDeny,
             onPressed: onDeny,
           )
