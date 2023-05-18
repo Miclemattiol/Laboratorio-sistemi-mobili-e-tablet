@@ -13,10 +13,7 @@ class TransactionTile extends StatelessWidget {
     return ListTile(
       title: Text(transazione.title),
       subtitle: Text(localizations(context).transactionPaidFrom(transazione.from)),
-      leading: SizedBox(
-        height: double.infinity,
-        child: Icon(transazione.icon),
-      ),
+      leading: SizedBox(height: double.infinity, child: Icon(transazione.icon)),
       trailing: PadColumn(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,

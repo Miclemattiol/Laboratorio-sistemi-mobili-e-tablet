@@ -18,8 +18,8 @@ class AccountPage extends StatelessWidget {
               title: Text(localizations(context).logoutDialogTitle),
               content: Text(localizations(context).logoutDialogContent),
               actions: [
-                TextButton(onPressed: () => Navigator.of(context).pop<bool>(true), child: Text(localizations(context).yes)),
-                TextButton(onPressed: () => Navigator.of(context).pop<bool>(false), child: Text(localizations(context).no)),
+                TextButton(onPressed: () => Navigator.of(context).pop<bool>(true), child: Text(localizations(context).buttonYes)),
+                TextButton(onPressed: () => Navigator.of(context).pop<bool>(false), child: Text(localizations(context).buttonNo)),
               ],
             );
           },
@@ -37,11 +37,6 @@ class AccountPage extends StatelessWidget {
 
     return Scaffold(
         appBar: AppBarFix(title: Text(localizations(context).accountPage)),
-        // body: Center(
-
-        //   child: ElevatedButton(onPressed: FirebaseAuth.instance.signOut, child: Text(localizations(context).logoutButton)),
-        // ),
-
         body: PadColumn(
           padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -86,49 +81,3 @@ class AccountPage extends StatelessWidget {
         ));
   }
 }
-
-//FirebaseAuth.instance.signOut
-
-/*
-
-Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: PadColumn(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
-                spacing: 8,
-                children: [
-                  const Row(
-                    children: [
-                      SizedBox(
-                        width: 128,
-                        height: 128,
-                        child: Placeholder(),
-                      ),
-                      Expanded(child: Center(child: Text(nome)))
-                    ],
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).ibanInput),
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).paypalInput),
-                  ),
-                  LinkListTile(
-                    title: localizations(context).notificationsPage,
-                    onTap: () => Navigator.of(context).push(SlidingPageRoute(const Notifications())),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 64),
-            child: ElevatedButton(onPressed: () => _logout(context), child: Text(localizations(context).logoutButton)),
-          ),
-        ],
-      ),
-
-*/

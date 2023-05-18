@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/components/ui/modal_button.dart';
 
 class BottomSheetContainer extends StatelessWidget {
-  final Widget child;
-  final EdgeInsets? padding;
+  final Widget body;
+  final List<ModalButton>? actions;
+
+  static const ShapeBorder borderRadius = RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)));
 
   const BottomSheetContainer({
-    required this.child,
-    this.padding,
+    required this.body,
+    this.actions,
     super.key,
   });
 
@@ -14,8 +18,14 @@ class BottomSheetContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom) + (padding ?? EdgeInsets.zero),
-        child: child,
+        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            body,
+            if (actions != null) PadRow(spacing: 1, children: actions!.map((button) => Expanded(child: button)).toList())
+          ],
+        ),
       ),
     );
   }

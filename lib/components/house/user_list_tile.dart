@@ -1,30 +1,45 @@
 import 'package:flutter/material.dart';
+import 'package:house_wallet/components/ui/bottom_sheet_container.dart';
+import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/house/user_details_bottom_sheet.dart';
+import 'package:share_plus/share_plus.dart';
 
 class UserListTile extends StatelessWidget {
-  final String? user;
+  final User? user;
 
   const UserListTile(
-    String this.user, {
+    User this.user, {
     super.key,
   });
 
   const UserListTile.invite({super.key}) : user = null;
 
+  void _openUserDetails(BuildContext context) {
+    if (user == null) return;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: BottomSheetContainer.borderRadius,
+      builder: (context) => UserDetailsBottomSheet(user!),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final user = this.user;
-
     if (user == null) {
       return ListTile(
-        leading: const CircleAvatar(child: Icon(Icons.ios_share)),
+        leading: const CircleAvatar(child: Icon(Icons.ios_share, size: 20)),
         title: Text(localizations(context).userInvite),
+        onTap: () => Share.share("https://it.wikipedia.org/wiki/Moai"), //TODO group code
       );
     }
 
     return ListTile(
-      leading: const CircleAvatar(child: Icon(Icons.person)),
-      title: Text(user),
+      leading: const CircleAvatar(child: Icon(Icons.person, size: 20)),
+      title: Text(user!.name),
+      onTap: () => _openUserDetails(context),
     );
   }
 }

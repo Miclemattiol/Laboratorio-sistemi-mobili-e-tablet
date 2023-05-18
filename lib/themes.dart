@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 //TODO themes
 final lightTheme = ThemeData(
+  //useMaterial3: true, //TODO ?
   primarySwatch: Colors.blueGrey,
   listTileTheme: const ListTileThemeData(iconColor: Colors.black),
   textTheme: const TextTheme(
