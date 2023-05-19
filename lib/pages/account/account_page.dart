@@ -33,51 +33,51 @@ class AccountPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const String nome = 'Nome Cognome';
+    const String nome = "Nome Cognome";
 
     return Scaffold(
-        appBar: AppBarFix(title: Text(localizations(context).accountPage)),
-        body: PadColumn(
-          padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: SingleChildScrollView(
-                  child: PadColumn(
-                spacing: 8,
+      appBar: AppBarFix(title: Text(localizations(context).accountPage)),
+      body: ListView(
+        children: [
+          PadColumn(
+            spacing: 16,
+            padding: const EdgeInsets.all(16),
+            children: [
+              const Row(
                 children: [
-                  const Row(
-                    children: [
-                      SizedBox(
-                        width: 128,
-                        height: 128,
-                        child: Placeholder(),
-                      ),
-                      Expanded(child: Center(child: Text(nome)))
-                    ],
+                  SizedBox(
+                    width: 128,
+                    height: 128,
+                    child: Placeholder(),
                   ),
-                  TextFormField(
-                    decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).ibanInput),
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).paypalInput),
-                  ),
-                  LinkListTile(
-                    title: localizations(context).notificationsPage,
-                    onTap: () => Navigator.of(context).push(SlidingPageRoute(const NotificationsPage())),
-                  ),
-                  LinkListTile(
-                    title: localizations(context).changePasswordPage,
-                    onTap: () => Navigator.of(context).push(SlidingPageRoute(const NotificationsPage())),
-                  )
+                  Expanded(child: Center(child: Text(nome)))
                 ],
-              )),
+              ),
+              TextFormField(
+                decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).ibanInput),
+              ),
+              TextFormField(
+                decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).paypalInput),
+              ),
+            ],
+          ),
+          LinkListTile(
+            title: localizations(context).notificationsPage,
+            onTap: () => Navigator.of(context).push(SlidingPageRoute(const NotificationsPage())),
+          ),
+          LinkListTile(
+            title: localizations(context).changePasswordPage,
+            onTap: () => Navigator.of(context).push(SlidingPageRoute(const NotificationsPage())),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: ElevatedButton(
+              onPressed: () => _logout(context),
+              child: Text(localizations(context).logoutButton),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 64.0),
-              child: ElevatedButton(onPressed: () => _logout(context), child: Text(localizations(context).logoutButton)),
-            )
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

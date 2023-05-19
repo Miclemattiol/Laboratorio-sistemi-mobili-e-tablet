@@ -26,15 +26,18 @@ DateFormat dateFormat(BuildContext context) => DateFormat("EEEE dd MMMM, HH:mm",
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  await LoggedUser.user?.reload();
-
-  prefs = await SharedPreferences.getInstance();
-
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(systemNavigationBarColor: Colors.transparent),
   );
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  try {
+    await LoggedUser.user?.reload();
+  } catch (_) {}
+
+  prefs = await SharedPreferences.getInstance();
 
   runApp(const App());
 }

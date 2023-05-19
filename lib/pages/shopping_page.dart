@@ -37,7 +37,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
             return const Center(child: Text("No data"));
           }
 
-          return ListView(children: docs.map(ExampleShoppingItem.new).toList());
+          return ListView(children: docs.map((doc) => ExampleShoppingItem(doc, key: Key(doc.id))).toList());
         },
       ),
       floatingActionButton: FloatingActionButton(

@@ -22,6 +22,7 @@ class ModalButton extends StatelessWidget {
       disabledForegroundColor: colorScheme.onSurface.withOpacity(0.38),
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      minimumSize: const Size.fromHeight(40),
     );
   }
 

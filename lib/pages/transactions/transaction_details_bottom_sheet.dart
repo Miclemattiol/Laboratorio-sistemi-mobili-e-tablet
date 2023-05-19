@@ -11,46 +11,44 @@ class TransactionDetailsBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomSheetContainer(
       body: Form(
-        child: SingleChildScrollView(
-          child: PadColumn(
-            spacing: 16,
-            padding: const EdgeInsets.all(16),
-            children: [
-              PadRow(
-                spacing: 16,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const SizedBox(width: 64, height: 64, child: Placeholder()),
-                  Expanded(
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        labelText: localizations(context).title,
-                      ),
+        child: PadColumn(
+          spacing: 16,
+          padding: const EdgeInsets.all(16),
+          children: [
+            PadRow(
+              spacing: 16,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const SizedBox(width: 64, height: 64, child: Placeholder()),
+                Expanded(
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: localizations(context).title,
                     ),
                   ),
-                  SizedBox(
-                    width: 100,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        border: const OutlineInputBorder(),
-                        labelText: localizations(context).price,
-                      ),
+                ),
+                SizedBox(
+                  width: 100,
+                  child: TextFormField(
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      labelText: localizations(context).price,
                     ),
                   ),
-                ],
-              ),
-              TextFormField(
-                decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "TODO"),
-              ),
-              TextFormField(
-                decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "TODO"),
-              ),
-              TextFormField(
-                decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "TODO"),
-              ),
-            ],
-          ),
+                ),
+              ],
+            ),
+            TextFormField(
+              decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "TODO"),
+            ),
+            TextFormField(
+              decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "TODO"),
+            ),
+            TextFormField(
+              decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "TODO"),
+            ),
+          ],
         ),
       ),
       actions: [
