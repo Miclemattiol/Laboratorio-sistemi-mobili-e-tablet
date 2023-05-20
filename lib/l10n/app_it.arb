@@ -98,6 +98,14 @@
     "tradeConfirm": "Conferma scambio",
     "tradeDeny": "Rifiuta scambio",
     "usersSection": "Utenti",
+    "userYou": "{username} (Tu)",
+    "@userYou": {
+        "placeholders": {
+            "username": {
+                "type": "String"
+            }
+        }
+    },
     "userInvite": "Invita utente...",
     "userBalance": "Saldo: {balance}",
     "@userBalance": {

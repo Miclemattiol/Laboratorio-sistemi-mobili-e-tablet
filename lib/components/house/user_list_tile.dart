@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/bottom_sheet_container.dart';
+import 'package:house_wallet/data/firestore.dart';
+import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/house/user_details_bottom_sheet.dart';
 import 'package:share_plus/share_plus.dart';
 
 class UserListTile extends StatelessWidget {
-  final User? user;
+  final FirestoreDocument<User>? user;
 
   const UserListTile(
-    User this.user, {
+    FirestoreDocument<User> this.user, {
     super.key,
   });
 
@@ -37,8 +39,12 @@ class UserListTile extends StatelessWidget {
     }
 
     return ListTile(
-      leading: const CircleAvatar(child: Icon(Icons.person, size: 20)),
-      title: Text(user!.name),
+      leading: CircleAvatar(
+        foregroundImage: NetworkImage(user!.data.imageUrl ?? ""),
+        onForegroundImageError: (exception, stackTrace) {},
+        child: const Icon(Icons.person, size: 20),
+      ),
+      title: Text(user!.id == LoggedUser.uid ? localizations(context).userYou(user!.data.username) : user!.data.username),
       onTap: () => _openUserDetails(context),
     );
   }

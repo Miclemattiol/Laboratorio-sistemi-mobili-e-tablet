@@ -7,7 +7,7 @@ class BottomSheetContainer extends StatelessWidget {
   final Widget body;
   final List<ModalButton>? actions;
 
-  static const ShapeBorder borderRadius = RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(16)));
+  static const ShapeBorder borderRadius = RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10)));
 
   const BottomSheetContainer({
     required this.body,

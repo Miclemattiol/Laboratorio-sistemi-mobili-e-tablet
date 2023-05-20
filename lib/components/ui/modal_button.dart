@@ -13,7 +13,7 @@ class ModalButton extends StatelessWidget {
   });
 
   ButtonStyle _defaultStyle(BuildContext context) {
-    final ColorScheme colorScheme = Theme.of(context).colorScheme;
+    final colorScheme = Theme.of(context).colorScheme;
 
     return TextButton.styleFrom(
       backgroundColor: colorScheme.primary,
