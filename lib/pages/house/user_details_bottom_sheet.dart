@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/bottom_sheet_container.dart';
 import 'package:house_wallet/components/user_avatar.dart';
-import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
 
 class UserDetailsBottomSheet extends StatelessWidget {
-  final FirestoreDocument<User> user;
+  final User user;
 
   const UserDetailsBottomSheet(
     this.user, {
@@ -28,15 +27,15 @@ class UserDetailsBottomSheet extends StatelessWidget {
             spacing: 16,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              UserAvatar(user.data.imageUrl),
-              Text(user.data.username),
+              UserAvatar(user.imageUrl),
+              Text(user.username),
             ],
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: Text(localizations(context).userBalance(currencyFormat(context).format(10))), //TODO balance
           ),
-          if (user.id == LoggedUser.uid) ...[
+          if (user.uid == LoggedUser.uid) ...[
             ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),

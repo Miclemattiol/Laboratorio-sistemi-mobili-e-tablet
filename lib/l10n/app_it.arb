@@ -95,8 +95,10 @@
             }
         }
     },
-    "tradeConfirm": "Conferma scambio",
-    "tradeDeny": "Rifiuta scambio",
+    "tradeConfirmDialogTitle": "Conferma scambio",
+    "tradeConfirmDialogContent": "Sei sicuro di voler confermare lo scambio?",
+    "tradeDenyDialogTitle": "Rifiuta scambio",
+    "tradeDenyDialogContent": "Sei sicuro di voler rifiutare lo scambio?",
     "usersSection": "Utenti",
     "userYou": "{username} (Tu)",
     "@userYou": {

@@ -3,31 +3,39 @@ import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {
   final String? imageUrl;
+  final double size;
 
-  const UserAvatar(this.imageUrl, {super.key});
+  const UserAvatar(
+    this.imageUrl, {
+    this.size = 64,
+    super.key,
+  });
+
+  BorderRadius get _borderRadius => BorderRadius.circular(10);
+
+  BoxDecoration _border(BuildContext context) {
+    return BoxDecoration(
+      border: Border.all(color: Theme.of(context).dividerColor),
+      borderRadius: _borderRadius,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 64,
-      height: 64,
+      width: size,
+      height: size,
       clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
+      decoration: BoxDecoration(borderRadius: _borderRadius),
       child: CachedNetworkImage(
         imageUrl: imageUrl ?? "",
         placeholder: (context, url) => Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).dividerColor),
-            borderRadius: BorderRadius.circular(10),
-          ),
-          padding: const EdgeInsets.all(16),
+          decoration: _border(context),
+          padding: EdgeInsets.all((size - 32) / 2),
           child: const CircularProgressIndicator(),
         ),
         errorWidget: (context, url, error) => Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Theme.of(context).dividerColor),
-            borderRadius: BorderRadius.circular(10),
-          ),
+          decoration: _border(context),
           child: const Icon(Icons.person),
         ),
         fit: BoxFit.cover,

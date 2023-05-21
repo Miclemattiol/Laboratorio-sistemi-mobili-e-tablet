@@ -8,7 +8,10 @@ class ShoppingItem {
   });
 
   factory ShoppingItem.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc, [SnapshotOptions? _]) {
-    return ShoppingItem(number: doc.data()?["number"]);
+    final data = doc.data()!;
+    return ShoppingItem(
+      number: data["number"],
+    );
   }
 
   static Map<String, dynamic> toFirestore(ShoppingItem shoppingItem, [SetOptions? _]) {

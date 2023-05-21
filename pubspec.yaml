@@ -25,6 +25,7 @@ dependencies:
   font_awesome_flutter: ^10.4.0
   share_plus: ^7.0.0
   cached_network_image: ^3.2.3
+  multiple_stream_builder: ^3.0.2
 
 dev_dependencies:
   flutter_test:
