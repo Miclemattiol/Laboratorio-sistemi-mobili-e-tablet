@@ -52,11 +52,12 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int _selectedIndex = 0;
+  int _selectedIndex = prefs.lastSection;
 
   @override
   Widget build(BuildContext context) {
     final pages = _pages(context);
+    _selectedIndex = _selectedIndex.clamp(0, pages.length - 1);
     return Scaffold(
       body: IndexedStack(
         index: _selectedIndex,
@@ -64,7 +65,10 @@ class _MainPageState extends State<MainPage> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
-        onTap: (index) => setState(() => _selectedIndex = index),
+        onTap: (index) {
+          prefs.setLastSection(index);
+          setState(() => _selectedIndex = index);
+        },
         items: pages.map((page) {
           return BottomNavigationBarItem(
             icon: Icon(page.icon),
