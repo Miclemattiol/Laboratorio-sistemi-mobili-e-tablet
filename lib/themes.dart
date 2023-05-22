@@ -9,7 +9,8 @@ final lightTheme = () {
     colorScheme: colorScheme,
     listTileTheme: const ListTileThemeData(iconColor: Colors.black),
     textTheme: const TextTheme(
-      headlineSmall: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+      headlineMedium: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
+      headlineSmall: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

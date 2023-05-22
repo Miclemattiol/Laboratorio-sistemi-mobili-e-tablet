@@ -3,14 +3,24 @@ import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 
 //TODO when opened, don't cover entire screen
-class BottomSheetContainer extends StatelessWidget {
-  final Widget body;
+class CustomBottomSheet extends StatelessWidget {
+  final List<Widget> body;
+  final double spacing;
+  final EdgeInsetsGeometry padding;
+  final MainAxisSize mainAxisSize;
+  final MainAxisAlignment mainAxisAlignment;
+  final CrossAxisAlignment crossAxisAlignment;
   final List<ModalButton>? actions;
 
   static const ShapeBorder borderRadius = RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10)));
 
-  const BottomSheetContainer({
+  const CustomBottomSheet({
     required this.body,
+    this.spacing = 8,
+    this.padding = const EdgeInsets.all(16),
+    this.mainAxisSize = MainAxisSize.min,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.crossAxisAlignment = CrossAxisAlignment.stretch,
     this.actions,
     super.key,
   });
@@ -23,7 +33,14 @@ class BottomSheetContainer extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            body,
+            PadColumn(
+              spacing: spacing,
+              padding: padding,
+              mainAxisSize: mainAxisSize,
+              mainAxisAlignment: mainAxisAlignment,
+              crossAxisAlignment: crossAxisAlignment,
+              children: body,
+            ),
             if (actions != null) PadRow(spacing: 1, children: actions!.map((button) => Expanded(child: button)).toList())
           ],
         ),

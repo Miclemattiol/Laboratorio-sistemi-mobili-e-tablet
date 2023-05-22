@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/sliding_page_route.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
+import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/link_list_tile.dart';
 import 'package:house_wallet/components/user_avatar.dart';
 import 'package:house_wallet/data/firestore.dart';
@@ -14,19 +15,11 @@ class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
 
   void _logout(BuildContext context) async {
-    final confirm = await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(localizations(context).logoutDialogTitle),
-            content: Text(localizations(context).logoutDialogContent),
-            actions: [
-              TextButton(onPressed: () => Navigator.of(context).pop<bool>(false), child: Text(localizations(context).buttonNo)),
-              TextButton(onPressed: () => Navigator.of(context).pop<bool>(true), child: Text(localizations(context).buttonYes)),
-            ],
-          ),
-        ) ??
-        false;
-    if (!confirm) return;
+    if (!await CustomDialog.confirm(
+      context: context,
+      title: localizations(context).logoutDialogTitle,
+      content: localizations(context).logoutDialogContent,
+    )) return;
 
     FirebaseAuth.instance.signOut();
   }

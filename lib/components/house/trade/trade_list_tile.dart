@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house/trade.dart';
 import 'package:house_wallet/main.dart';
@@ -10,19 +11,11 @@ class TradeListTile extends StatelessWidget {
   TradeListTile(this.trade) : super(key: Key(trade.id));
 
   void _confirm(BuildContext context) async {
-    final confirm = await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(localizations(context).tradeConfirmDialogTitle),
-            content: Text(localizations(context).tradeConfirmDialogContent),
-            actions: [
-              TextButton(onPressed: () => Navigator.of(context).pop<bool>(false), child: Text(localizations(context).buttonNo)),
-              TextButton(onPressed: () => Navigator.of(context).pop<bool>(true), child: Text(localizations(context).buttonYes)),
-            ],
-          ),
-        ) ??
-        false;
-    if (!confirm) return;
+    if (!await CustomDialog.confirm(
+      context: context,
+      title: localizations(context).tradeConfirmDialogTitle,
+      content: localizations(context).tradeConfirmDialogContent,
+    )) return;
 
     trade.reference.update({
       "accepted": true
@@ -30,19 +23,11 @@ class TradeListTile extends StatelessWidget {
   }
 
   void _deny(BuildContext context) async {
-    final confirm = await showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text(localizations(context).tradeDenyDialogTitle),
-            content: Text(localizations(context).tradeDenyDialogContent),
-            actions: [
-              TextButton(onPressed: () => Navigator.of(context).pop<bool>(false), child: Text(localizations(context).buttonNo)),
-              TextButton(onPressed: () => Navigator.of(context).pop<bool>(true), child: Text(localizations(context).buttonYes)),
-            ],
-          ),
-        ) ??
-        false;
-    if (!confirm) return;
+    if (!await CustomDialog.confirm(
+      context: context,
+      title: localizations(context).tradeDenyDialogTitle,
+      content: localizations(context).tradeDenyDialogContent,
+    )) return;
 
     trade.reference.delete();
   }

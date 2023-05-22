@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/transactions/transaction_tile.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
-import 'package:house_wallet/components/ui/bottom_sheet_container.dart';
+import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/data/transactions/transaction.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/transactions/transaction_details_bottom_sheet.dart';
@@ -211,7 +211,7 @@ class TransactionsPage extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: BottomSheetContainer.borderRadius,
+      shape: CustomBottomSheet.borderRadius,
       builder: (context) => const TransactionDetailsBottomSheet(),
     );
   }

@@ -17,7 +17,7 @@ class Section extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12) + const EdgeInsets.only(top: 16),
-          child: Text(title, style: Theme.of(context).textTheme.headlineSmall),
+          child: Text(title, style: Theme.of(context).textTheme.headlineMedium),
         ),
         ...children
       ],
