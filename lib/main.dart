@@ -35,6 +35,7 @@ void main() async {
 
   try {
     await LoggedUser.user?.reload();
+    await LoggedUser.updateData();
   } catch (_) {}
 
   prefs = await SharedPreferences.getInstance();
@@ -55,7 +56,16 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((user) => setState(() => _loggedIn = user != null));
+    FirebaseAuth.instance.authStateChanges().listen((user) async {
+      final loggedIn = user != null;
+      if (loggedIn == _loggedIn) return;
+
+      if (loggedIn) {
+        await LoggedUser.updateData();
+      }
+
+      setState(() => _loggedIn = loggedIn);
+    });
   }
 
   @override
