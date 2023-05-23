@@ -2,7 +2,6 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
-import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/main.dart';
 
 class LoginPage extends StatefulWidget {
@@ -48,7 +47,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFix(title: Text(localizations(context).loginPage)),
       body: Form(
         key: _formKey,
         child: Center(

@@ -121,13 +121,34 @@
     "userKick": "Espelli utente",
     "userTransfer": "Trasferisci proprietà",
     "userLeave": "Esci dalla casa",
+    "leaveErrorDialogContent": "Non puoi uscire da una casa se sei il suo proprietario e non sei l'ultimo utente al suo interno! Trasferisci la proprietà della casa ad un altro utente e riprova",
     "leaveConfirmDialogTitle": "Conferma uscita",
-    "leaveConfirmDialogContent": "Sei sicuro di voler uscire dalla casa?\nDovrai essere invitato nuovamente per rientrarci",
+    "leaveConfirmDialogContent": "Sei sicuro di voler uscire dalla casa? Dovrai essere invitato nuovamente per rientrarci",
+    "kickConfirmDialogTitle": "Conferma espulsione",
+    "kickConfirmDialogContent": "Sei sicuro di voler espellere {username} dalla casa? Dovrà essere invitato nuovamente per rientrarci",
+    "@kickConfirmDialogContent": {
+        "placeholders": {
+            "username": {
+                "type": "String"
+            }
+        }
+    },
+    "transferConfirmDialogTitle": "Conferma trasferimento",
+    "transferConfirmDialogContent": "Sei sicuro di voler trasferire a {username} la proprietà dalla casa? Solo lui potrà annullare l'azione!",
+    "@transferConfirmDialogContent": {
+        "placeholders": {
+            "username": {
+                "type": "String"
+            }
+        }
+    },
     "leaveConfirmDialogContentLastUser": "Sei sicuro di voler uscire dalla casa?\nEssendo l'ultimo utente la casa verrà eliminata permanentemente!",
     "buttonYes": "Sì",
     "buttonNo": "No",
     "buttonOk": "OK",
+    "buttonPay": "Paga",
     "buttonCancel": "Annulla",
+    "error": "Errore",
     "title": "Titolo",
     "price": "Prezzo"
 }
