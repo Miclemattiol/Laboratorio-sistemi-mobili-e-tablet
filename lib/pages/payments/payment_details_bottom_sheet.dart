@@ -43,7 +43,8 @@ class PaymentDetailsBottomSheet extends StatelessWidget {
           decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "TODO"),
         ),
         TextFormField(
-          decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "TODO"),
+          decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "Description"),
+          keyboardType: TextInputType.multiline,
         ),
       ],
       actions: [
