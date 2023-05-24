@@ -28,17 +28,17 @@
     "notificationsPage": "Notifiche",
     "changePasswordPage": "Cambia password",
     "logoutButton": "Logout",
-    "transactionsPage": "Transazioni",
-    "transactionPaidFrom": "Pagato da {from}",
-    "@transactionPaidFrom": {
+    "paymentsPage": "Transazioni",
+    "paymentPaidFrom": "Pagato da {from}",
+    "@paymentPaidFrom": {
         "placeholders": {
             "from": {
                 "type": "String"
             }
         }
     },
-    "transactionPaidImpact": "Impatto: {impact}",
-    "@transactionPaidImpact": {
+    "paymentPaidImpact": "Impatto: {impact}",
+    "@paymentPaidImpact": {
         "placeholders": {
             "impact": {
                 "type": "String"

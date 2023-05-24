@@ -4,8 +4,8 @@ import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/main.dart';
 
-class TransactionDetailsBottomSheet extends StatelessWidget {
-  const TransactionDetailsBottomSheet({super.key});
+class PaymentDetailsBottomSheet extends StatelessWidget {
+  const PaymentDetailsBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
