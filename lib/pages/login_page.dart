@@ -2,8 +2,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
-import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/themes.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -48,7 +48,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFix(title: Text(localizations(context).loginPage)),
       body: Form(
         key: _formKey,
         child: Center(
@@ -60,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Image.asset("assets/logo.png", width: 200),
                 TextFormField(
-                  decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).emailInput),
+                  decoration: inputDecoration(localizations(context).emailInput),
                   enabled: !_loading,
                   validator: (email) {
                     if (email == null || email.trim().isEmpty) return localizations(context).errorMissingEmail;
@@ -70,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                   onSaved: (email) => _emailValue = email,
                 ),
                 TextFormField(
-                  decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).passwordInput),
+                  decoration: inputDecoration(localizations(context).passwordInput),
                   obscureText: true,
                   enabled: !_loading,
                   validator: (password) => (password == null || password.trim().isEmpty) ? localizations(context).errorMissingPassword : null,

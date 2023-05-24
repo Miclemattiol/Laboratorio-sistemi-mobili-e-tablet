@@ -10,6 +10,7 @@ import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/account/notifications_page.dart';
+import 'package:house_wallet/themes.dart';
 
 class AccountPage extends StatelessWidget {
   const AccountPage({super.key});
@@ -56,11 +57,11 @@ class AccountPage extends StatelessWidget {
                     ),
                     TextFormField(
                       initialValue: user.iban,
-                      decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).ibanInput),
+                      decoration: inputDecoration(localizations(context).ibanInput),
                     ),
                     TextFormField(
                       initialValue: user.payPal,
-                      decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).paypalInput),
+                      decoration: inputDecoration(localizations(context).paypalInput),
                     ),
                   ],
                 ),

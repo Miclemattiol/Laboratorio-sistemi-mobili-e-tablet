@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+const modalBorderRadius = Radius.circular(10);
+InputDecoration inputDecoration(String labelText) => InputDecoration(border: const OutlineInputBorder(), labelText: labelText, contentPadding: const EdgeInsets.symmetric(horizontal: 12));
+
 //TODO themes
 final lightTheme = () {
   final colorScheme = ColorScheme.fromSeed(seedColor: const Color(0x00A6D0DD));

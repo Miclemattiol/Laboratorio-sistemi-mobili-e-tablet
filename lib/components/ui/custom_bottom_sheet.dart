@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
+import 'package:house_wallet/themes.dart';
 
 //TODO when opened, don't cover entire screen
 class CustomBottomSheet extends StatelessWidget {
@@ -12,7 +13,7 @@ class CustomBottomSheet extends StatelessWidget {
   final CrossAxisAlignment crossAxisAlignment;
   final List<ModalButton>? actions;
 
-  static const ShapeBorder borderRadius = RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10)));
+  static const ShapeBorder borderRadius = RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: modalBorderRadius));
 
   const CustomBottomSheet({
     required this.body,

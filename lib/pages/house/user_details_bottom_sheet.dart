@@ -6,6 +6,7 @@ import 'package:house_wallet/components/user_avatar.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/house/send_money_dialog.dart';
 
 class UserDetailsBottomSheet extends StatelessWidget {
   final User user;
@@ -23,8 +24,8 @@ class UserDetailsBottomSheet extends StatelessWidget {
     if (!canLeave) {
       return CustomDialog.alert(
         context: context,
-        title: "Non puoi",
-        content: "Perché no",
+        title: localizations(context).error,
+        content: localizations(context).leaveErrorDialogContent,
       );
     }
 
@@ -35,22 +36,51 @@ class UserDetailsBottomSheet extends StatelessWidget {
     )) return;
 
     //TODO leave house
+    if (context.mounted) {
+      CustomDialog.alert(
+        context: context,
+        title: "TODO",
+        content: "Leave house...",
+      );
+    }
     /* house.leave();
     if(lastUser) {
       house.delete();
     } */
   }
 
-  void _sendMoney(BuildContext context) {
-    //TODO dialog
+  void _kick(BuildContext context) async {
+    if (!await CustomDialog.confirm(
+      context: context,
+      title: localizations(context).kickConfirmDialogTitle,
+      content: localizations(context).kickConfirmDialogContent(user.username),
+    )) return;
+
+    //TODO kick user
+    if (context.mounted) {
+      CustomDialog.alert(
+        context: context,
+        title: "TODO",
+        content: "Kick user...",
+      );
+    }
   }
 
-  void _kick(BuildContext context) {
-    //TODO dialog
-  }
+  void _transfer(BuildContext context) async {
+    if (!await CustomDialog.confirm(
+      context: context,
+      title: localizations(context).transferConfirmDialogTitle,
+      content: localizations(context).transferConfirmDialogContent(user.username),
+    )) return;
 
-  void _transfer(BuildContext context) {
-    //TODO dialog
+    //TODO transfer ownership
+    if (context.mounted) {
+      CustomDialog.alert(
+        context: context,
+        title: "TODO",
+        content: "Transfer ownership...",
+      );
+    }
   }
 
   @override
@@ -77,7 +107,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
           ),
         ] else ...[
           ElevatedButton(
-            onPressed: () => _sendMoney(context),
+            onPressed: () => showDialog(context: context, builder: (context) => SendMoneyDialog(user)),
             style: ElevatedButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
             child: Text(localizations(context).userSendMoney),
           ),
