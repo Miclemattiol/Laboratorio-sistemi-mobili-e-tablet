@@ -44,14 +44,18 @@ class PaymentDetailsBottomSheet extends StatelessWidget {
           decoration: inputDecoration("TODO"),
         ),
         ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 55.0),
+          constraints: const BoxConstraints(maxHeight: 250.0),
           child: SingleChildScrollView(
             scrollDirection: Axis.vertical,
-            child: TextFormField(
-              decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).descriptionInput), //TODO modificare la funzione per lo stile e aggiungere localizations
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              minLines: 1,
+            reverse: true,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: TextFormField(
+                decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).descriptionInput), //TODO modificare la funzione per lo stile e aggiungere localizations
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                minLines: 1,
+              ),
             ),
           ),
         ),
