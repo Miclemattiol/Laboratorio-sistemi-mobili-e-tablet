@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/themes.dart';
 
 class TransactionDetailsBottomSheet extends StatelessWidget {
   const TransactionDetailsBottomSheet({super.key});
@@ -19,31 +21,26 @@ class TransactionDetailsBottomSheet extends StatelessWidget {
             const SizedBox(width: 64, height: 64, child: Placeholder()),
             Expanded(
               child: TextFormField(
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: localizations(context).title,
-                ),
+                decoration: inputDecoration(localizations(context).title),
               ),
             ),
             SizedBox(
               width: 100,
-              child: TextFormField(
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: localizations(context).price,
-                ),
+              child: NumberFormField(
+                decoration: inputDecoration(localizations(context).price),
+                decimal: true,
               ),
             ),
           ],
         ),
         TextFormField(
-          decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "TODO"),
+          decoration: inputDecoration("TODO"),
         ),
         TextFormField(
-          decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "TODO"),
+          decoration: inputDecoration("TODO"),
         ),
         TextFormField(
-          decoration: const InputDecoration(border: OutlineInputBorder(), labelText: "TODO"),
+          decoration: inputDecoration("TODO"),
         ),
       ],
       actions: [

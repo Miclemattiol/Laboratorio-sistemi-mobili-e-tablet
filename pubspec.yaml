@@ -26,6 +26,7 @@ dependencies:
   share_plus: ^7.0.0
   cached_network_image: ^3.2.3
   multiple_stream_builder: ^3.0.2
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:
