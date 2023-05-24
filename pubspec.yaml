@@ -27,6 +27,9 @@ dependencies:
   cached_network_image: ^3.2.3
   multiple_stream_builder: ^3.0.2
   url_launcher: ^6.1.11
+  image_picker: ^0.8.7+5
+  shimmer: ^3.0.0
+  firebase_storage: ^11.2.1
 
 dev_dependencies:
   flutter_test:

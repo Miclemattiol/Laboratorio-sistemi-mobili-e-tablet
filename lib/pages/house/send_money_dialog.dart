@@ -30,7 +30,7 @@ class SendMoneyDialog extends StatelessWidget {
     if (user.payPal == null) return;
 
     try {
-      launchUrl(Uri.parse(user.payPal!), mode: LaunchMode.externalApplication);
+      launchUrl(Uri.parse("https://paypal.me/${user.payPal}"), mode: LaunchMode.externalApplication);
     } catch (_) {}
   }
 
