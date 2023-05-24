@@ -1,14 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-
-class PaymentPartecipant {
-  final String userId;
-  final double amount;
-
-  const PaymentPartecipant({
-    required this.userId,
-    required this.amount,
-  });
-}
+import 'package:house_wallet/data/firestore.dart';
+import 'package:house_wallet/data/user.dart';
 
 class Payment {
   final String category;
@@ -61,4 +53,47 @@ class Payment {
       "to": trade.to,
     };
   }
+}
+
+class UserData {
+  final User user;
+  final num amount;
+
+  const UserData(this.user, this.amount);
+}
+
+class PaymentRef {
+  final String category; //TODO Category type
+  final DateTime date;
+  final String description;
+  final User from;
+  final String imageUrl;
+  final num price;
+  final String title;
+  final Map<String, UserData> to;
+
+  const PaymentRef({
+    required this.category,
+    required this.date,
+    required this.description,
+    required this.from,
+    required this.imageUrl,
+    required this.price,
+    required this.title,
+    required this.to,
+  });
+
+  static final converter = firestoreConverterAsync<Payment, PaymentRef>((doc) async {
+    final payment = doc.data();
+    return PaymentRef(
+      category: payment.category,
+      date: payment.date,
+      description: payment.description,
+      from: await FirestoreData.getUser(payment.from),
+      imageUrl: payment.imageUrl,
+      price: payment.price,
+      title: payment.title,
+      to: Map<String, UserData>.fromEntries(await Future.wait(payment.to.entries.map((entry) async => MapEntry(entry.key, UserData(await FirestoreData.getUser(entry.key), entry.value))))),
+    );
+  });
 }

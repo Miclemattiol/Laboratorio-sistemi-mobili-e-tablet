@@ -6,37 +6,36 @@ import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/main.dart';
 
 class PaymentTile extends StatelessWidget {
-  final FirestoreDocument<Payment> doc;
+  final FirestoreDocument<PaymentRef> doc;
 
   const PaymentTile(this.doc, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     num impact;
-    print(LoggedUser.uid);
-    if (doc.data.from == LoggedUser.uid) {
+    if (doc.data.from.uid == LoggedUser.uid) {
       num nParts = 0;
-      doc.data.to.forEach((key, value) {
-        nParts += value;
+      doc.data.to.forEach((uid, data) {
+        nParts += data.amount;
       });
       if (doc.data.to.containsKey(LoggedUser.uid)) {
-        impact = (doc.data.price / nParts) * (nParts - doc.data.to[LoggedUser.uid]!);
+        impact = (doc.data.price / nParts) * (nParts - doc.data.to[LoggedUser.uid]!.amount);
       } else {
         impact = doc.data.price;
       }
     } else if (doc.data.to.containsKey(LoggedUser.uid)) {
       num nParts = 0;
-      doc.data.to.forEach((key, value) {
-        nParts += value;
+      doc.data.to.forEach((key, data) {
+        nParts += data.amount;
       });
-      impact = -(doc.data.price / nParts) * doc.data.to[LoggedUser.uid]!;
+      impact = -(doc.data.price / nParts) * doc.data.to[LoggedUser.uid]!.amount;
     } else {
       impact = 0;
     }
 
     return ListTile(
       title: Text(doc.data.title),
-      subtitle: FutureBuilder(future: FirestoreData.getUser(doc.data.from), builder: (context, snapshot) => Text(localizations(context).paymentPaidFrom(snapshot.data!.username))),
+      subtitle: Text(localizations(context).paymentPaidFrom(doc.data.from.username)),
       leading: const SizedBox(height: double.infinity, child: Icon(Icons.shopping_cart)),
       trailing: PadColumn(
         mainAxisAlignment: MainAxisAlignment.center,
