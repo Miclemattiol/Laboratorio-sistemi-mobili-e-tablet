@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/payments/payment_tile.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
-import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payments/payment.dart';
@@ -18,7 +17,6 @@ class PaymentsPage extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: CustomBottomSheet.borderRadius,
       builder: (context) => const PaymentDetailsBottomSheet(),
     );
   }

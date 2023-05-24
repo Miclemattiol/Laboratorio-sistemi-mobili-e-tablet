@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
@@ -19,7 +18,6 @@ class UserListTile extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      shape: CustomBottomSheet.borderRadius,
       builder: (context) => UserDetailsBottomSheet(user!),
     );
   }

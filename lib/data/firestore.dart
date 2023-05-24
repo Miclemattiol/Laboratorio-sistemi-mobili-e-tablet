@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:house_wallet/data/user.dart';
 
 class FirestoreData {
-  static DocumentReference<Map<String, dynamic>> userFirestoreRef(String userId) => FirebaseFirestore.instance.doc("/users/$userId");
+  static DocumentReference<User> userFirestoreRef(String userId) => FirebaseFirestore.instance.doc("/users/$userId").withConverter(fromFirestore: User.fromFirestore, toFirestore: User.toFirestore);
 
   static final _users = <String, User>{};
 
   static Future<User> getUser(String uid) async {
     if (!_users.containsKey(uid)) {
       try {
-        _users[uid] = User.fromFirestore(await userFirestoreRef(uid).get());
+        _users[uid] = (await userFirestoreRef(uid).get()).data()!;
       } catch (_) {}
     }
     return _users[uid] ?? const User.invalid();

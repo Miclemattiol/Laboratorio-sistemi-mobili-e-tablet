@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/themes.dart';
 
 class CustomDialog extends StatelessWidget {
   final List<Widget> body;
@@ -67,7 +66,6 @@ class CustomDialog extends StatelessWidget {
     return WillPopScope(
       onWillPop: () async => dismissible,
       child: Dialog(
-        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(modalBorderRadius)),
         clipBehavior: Clip.antiAlias,
         child: Column(
           mainAxisSize: MainAxisSize.min,

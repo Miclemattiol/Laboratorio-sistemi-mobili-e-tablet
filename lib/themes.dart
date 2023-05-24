@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-const modalBorderRadius = Radius.circular(10);
 InputDecoration inputDecoration(String labelText) => InputDecoration(border: const OutlineInputBorder(), labelText: labelText, contentPadding: const EdgeInsets.symmetric(horizontal: 12));
 
 //TODO themes
@@ -20,6 +19,12 @@ final lightTheme = () {
         backgroundColor: colorScheme.primary,
         foregroundColor: colorScheme.onPrimary,
       ),
+    ),
+    dialogTheme: const DialogTheme(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+    ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
     ),
   );
 }();

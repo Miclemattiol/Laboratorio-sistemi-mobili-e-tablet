@@ -19,10 +19,6 @@ AppLocalizations localizations(BuildContext context) => AppLocalizations.of(cont
 NumberFormat currencyFormat(BuildContext context) => NumberFormat("0.00 €", Localizations.localeOf(context).languageCode);
 DateFormat dateFormat(BuildContext context) => DateFormat("EEEE dd MMMM, HH:mm", Localizations.localeOf(context).languageCode);
 
-//Test Account
-//Email:    test@test.com
-//Password: test1234
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -75,7 +71,7 @@ class _AppState extends State<App> {
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: ThemeMode.system, //TODO sharedPreferences
-      home: KeyboardDismisser(child: _loggedIn ? const MainPage() : const LoginPage()),
+      home: KeyboardDismisser(child: _loggedIn ? const MainPage() : const LoginPage()), //TODO handle when user isn't in any group
       localizationsDelegates: const [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

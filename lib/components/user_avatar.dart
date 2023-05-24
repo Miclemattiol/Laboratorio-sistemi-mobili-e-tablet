@@ -11,9 +11,9 @@ class UserAvatar extends StatelessWidget {
     super.key,
   });
 
-  BorderRadius get _borderRadius => BorderRadius.circular(10);
+  static BorderRadius get _borderRadius => BorderRadius.circular(10);
 
-  BoxDecoration _border(BuildContext context) {
+  static BoxDecoration border(BuildContext context) {
     return BoxDecoration(
       border: Border.all(color: Theme.of(context).dividerColor),
       borderRadius: _borderRadius,
@@ -30,12 +30,12 @@ class UserAvatar extends StatelessWidget {
       child: CachedNetworkImage(
         imageUrl: imageUrl ?? "",
         placeholder: (context, url) => Container(
-          decoration: _border(context),
+          decoration: border(context),
           padding: EdgeInsets.all((size - 32) / 2),
           child: const CircularProgressIndicator(),
         ),
         errorWidget: (context, url, error) => Container(
-          decoration: _border(context),
+          decoration: border(context),
           child: const Icon(Icons.person),
         ),
         fit: BoxFit.cover,

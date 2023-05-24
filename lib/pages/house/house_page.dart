@@ -3,7 +3,6 @@ import 'package:house_wallet/components/house/trade/trades_section.dart';
 import 'package:house_wallet/components/house/user/users_section.dart';
 import 'package:house_wallet/components/sliding_page_route.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
-import 'package:house_wallet/components/ui/link_list_tile.dart';
 import 'package:house_wallet/data/house/trade.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';
@@ -28,7 +27,11 @@ class HousePage extends StatelessWidget {
           appBar: AppBarFix(title: Text(localizations(context).housePage)),
           body: ListView(
             children: [
-              LinkListTile(title: localizations(context).activityLogPage, onTap: () => Navigator.of(context).push(SlidingPageRoute(const ActivityLogPage()))),
+              ListTile(
+                title: Text(localizations(context).activityLogPage),
+                onTap: () => Navigator.of(context).push(SlidingPageRoute(const ActivityLogPage())),
+                trailing: const Icon(Icons.keyboard_arrow_right),
+              ),
               if ((trades.connectionState != ConnectionState.waiting) && (trades.data?.isNotEmpty ?? true)) TradesSection(trades),
               UsersSection(users),
             ],

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
-import 'package:house_wallet/themes.dart';
 
 //TODO when opened, don't cover entire screen
 class CustomBottomSheet extends StatelessWidget {
@@ -12,8 +11,6 @@ class CustomBottomSheet extends StatelessWidget {
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;
   final List<ModalButton>? actions;
-
-  static const ShapeBorder borderRadius = RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: modalBorderRadius));
 
   const CustomBottomSheet({
     required this.body,
@@ -26,24 +23,35 @@ class CustomBottomSheet extends StatelessWidget {
     super.key,
   });
 
+  BorderRadiusGeometry? borderRadius(BuildContext context) {
+    try {
+      return (Theme.of(context).bottomSheetTheme.shape as RoundedRectangleBorder).borderRadius;
+    } catch (_) {
+      return null;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: SingleChildScrollView(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            PadColumn(
-              spacing: spacing,
-              padding: padding,
-              mainAxisSize: mainAxisSize,
-              mainAxisAlignment: mainAxisAlignment,
-              crossAxisAlignment: crossAxisAlignment,
-              children: body,
-            ),
-            if (actions != null) PadRow(spacing: 1, children: actions!.map((button) => Expanded(child: button)).toList())
-          ],
+      child: ClipRRect(
+        borderRadius: borderRadius(context),
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              PadColumn(
+                spacing: spacing,
+                padding: padding,
+                mainAxisSize: mainAxisSize,
+                mainAxisAlignment: mainAxisAlignment,
+                crossAxisAlignment: crossAxisAlignment,
+                children: body,
+              ),
+              if (actions != null) PadRow(spacing: 1, children: actions!.map((button) => Expanded(child: button)).toList())
+            ],
+          ),
         ),
       ),
     );
