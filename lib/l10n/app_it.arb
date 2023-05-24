@@ -45,6 +45,7 @@
             }
         }
     },
+    "descriptionInput": "Descrizione",
     "shoppingPage": "Spesa",
     "tasksPage": "Incarichi",
     "myTasksTab": "Le mie attività",
