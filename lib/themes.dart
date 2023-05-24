@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 
-InputDecoration inputDecoration(String labelText) => InputDecoration(border: const OutlineInputBorder(), labelText: labelText, contentPadding: const EdgeInsets.symmetric(horizontal: 12));
+InputDecoration inputDecoration(String labelText, [bool multiline = false]) {
+  return InputDecoration(
+    border: const OutlineInputBorder(),
+    labelText: labelText,
+    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: multiline ? 8 : 0),
+  );
+}
 
 //TODO themes
 final lightTheme = () {

@@ -10,41 +10,39 @@ class PaymentTile extends StatelessWidget {
 
   const PaymentTile(this.doc, {Key? key}) : super(key: key);
 
+  num _calculateImpact(PaymentRef payment) {
+    final totalShares = payment.to.values.fold<num>(0, (prev, element) => prev + element.share);
+    final pricePerShare = payment.price / totalShares;
+    final myShare = payment.to[LoggedUser.uid]?.share;
+
+    if (payment.from.uid == LoggedUser.uid) {
+      if (payment.to.containsKey(LoggedUser.uid)) {
+        return pricePerShare * (totalShares - myShare!);
+      } else {
+        return payment.price;
+      }
+    } else if (payment.to.containsKey(LoggedUser.uid)) {
+      return -pricePerShare * myShare!;
+    } else {
+      return 0;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    num impact;
-    if (doc.data.from.uid == LoggedUser.uid) {
-      num nParts = 0;
-      doc.data.to.forEach((uid, data) {
-        nParts += data.amount;
-      });
-      if (doc.data.to.containsKey(LoggedUser.uid)) {
-        impact = (doc.data.price / nParts) * (nParts - doc.data.to[LoggedUser.uid]!.amount);
-      } else {
-        impact = doc.data.price;
-      }
-    } else if (doc.data.to.containsKey(LoggedUser.uid)) {
-      num nParts = 0;
-      doc.data.to.forEach((key, data) {
-        nParts += data.amount;
-      });
-      impact = -(doc.data.price / nParts) * doc.data.to[LoggedUser.uid]!.amount;
-    } else {
-      impact = 0;
-    }
-
+    final payment = doc.data;
     return ListTile(
-      title: Text(doc.data.title),
-      subtitle: Text(localizations(context).paymentPaidFrom(doc.data.from.username)),
+      title: Text(payment.title),
+      subtitle: Text(localizations(context).paymentPaidFrom(payment.from.username)),
       leading: const SizedBox(height: double.infinity, child: Icon(Icons.shopping_cart)),
       trailing: PadColumn(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
         spacing: 4,
         children: [
-          Text(currencyFormat(context).format(doc.data.price)),
+          Text(currencyFormat(context).format(payment.price)),
           Text(
-            localizations(context).paymentPaidImpact(currencyFormat(context).format(impact)),
+            localizations(context).paymentPaidImpact(currencyFormat(context).format(_calculateImpact(payment))),
             style: const TextStyle(fontSize: 10),
           ),
         ],

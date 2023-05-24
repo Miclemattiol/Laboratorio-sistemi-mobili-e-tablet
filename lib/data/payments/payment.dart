@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:house_wallet/data/firestore.dart';
+import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/user.dart';
 
 class Payment {
@@ -21,14 +22,10 @@ class Payment {
     required this.price,
     required this.title,
     required this.to,
-  }); //! Da modificare quando integreremo con Firebase.
-  //! Se il pagamento è stato effettuato dall'utente l'impatto sul suo conto sarà positivo,
-  //! altrimenti se è stato effettuato da un altro utente l'impatto sarà negativo o nullo nel caso
-  //! in cui l'utente non sia tra i destinatari della pagamento.
+  });
 
   factory Payment.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc, [SnapshotOptions? _]) {
     final data = doc.data()!;
-
     return Payment(
       category: data["category"],
       date: (data["date"] as Timestamp).toDate(),
@@ -57,13 +54,13 @@ class Payment {
 
 class UserData {
   final User user;
-  final num amount;
+  final num share;
 
-  const UserData(this.user, this.amount);
+  const UserData(this.user, this.share);
 }
 
 class PaymentRef {
-  final String category; //TODO Category type
+  final Category? category;
   final DateTime date;
   final String description;
   final User from;
@@ -83,17 +80,20 @@ class PaymentRef {
     required this.to,
   });
 
-  static final converter = firestoreConverterAsync<Payment, PaymentRef>((doc) async {
-    final payment = doc.data();
-    return PaymentRef(
-      category: payment.category,
-      date: payment.date,
-      description: payment.description,
-      from: await FirestoreData.getUser(payment.from),
-      imageUrl: payment.imageUrl,
-      price: payment.price,
-      title: payment.title,
-      to: Map<String, UserData>.fromEntries(await Future.wait(payment.to.entries.map((entry) async => MapEntry(entry.key, UserData(await FirestoreData.getUser(entry.key), entry.value))))),
-    );
-  });
+  static Future<Iterable<FirestoreDocument<PaymentRef>>> Function(QuerySnapshot<Payment>) converter(Iterable<FirestoreDocument<Category>>? categories) {
+    final categoriesMap = Map<String, Category>.fromEntries((categories ?? []).map((category) => MapEntry(category.id, category.data)));
+    return firestoreConverterAsync((doc) async {
+      final payment = doc.data();
+      return PaymentRef(
+        category: categoriesMap[payment.category],
+        date: payment.date,
+        description: payment.description,
+        from: await FirestoreData.getUser(payment.from),
+        imageUrl: payment.imageUrl,
+        price: payment.price,
+        title: payment.title,
+        to: Map<String, UserData>.fromEntries(await Future.wait(payment.to.entries.map((entry) async => MapEntry(entry.key, UserData(await FirestoreData.getUser(entry.key), entry.value))))),
+      );
+    });
+  }
 }

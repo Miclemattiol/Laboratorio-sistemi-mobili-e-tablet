@@ -51,7 +51,7 @@ class PaymentDetailsBottomSheet extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 4),
               child: TextFormField(
-                decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).descriptionInput), //TODO modificare la funzione per lo stile e aggiungere localizations
+                decoration: inputDecoration(localizations(context).descriptionInput, true),
                 keyboardType: TextInputType.multiline,
                 maxLines: null,
                 minLines: 1,

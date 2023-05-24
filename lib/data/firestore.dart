@@ -5,7 +5,6 @@ class FirestoreData {
   static DocumentReference<User> userFirestoreRef(String userId) => FirebaseFirestore.instance.doc("/users/$userId").withConverter(fromFirestore: User.fromFirestore, toFirestore: User.toFirestore);
 
   static final _users = <String, User>{};
-
   static Future<User> getUser(String uid) async {
     if (!_users.containsKey(uid)) {
       try {
