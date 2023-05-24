@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
-import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/themes.dart';
 
-class TransactionDetailsBottomSheet extends StatelessWidget {
-  const TransactionDetailsBottomSheet({super.key});
+class PaymentDetailsBottomSheet extends StatelessWidget {
+  const PaymentDetailsBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,14 +20,19 @@ class TransactionDetailsBottomSheet extends StatelessWidget {
             const SizedBox(width: 64, height: 64, child: Placeholder()),
             Expanded(
               child: TextFormField(
-                decoration: inputDecoration(localizations(context).title),
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: localizations(context).title,
+                ),
               ),
             ),
             SizedBox(
               width: 100,
-              child: NumberFormField(
-                decoration: inputDecoration(localizations(context).price),
-                decimal: true,
+              child: TextFormField(
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: localizations(context).price,
+                ),
               ),
             ),
           ],
@@ -39,8 +43,17 @@ class TransactionDetailsBottomSheet extends StatelessWidget {
         TextFormField(
           decoration: inputDecoration("TODO"),
         ),
-        TextFormField(
-          decoration: inputDecoration("TODO"),
+        ConstrainedBox(
+          constraints: const BoxConstraints(maxHeight: 55.0),
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: TextFormField(
+              decoration: InputDecoration(border: const OutlineInputBorder(), labelText: localizations(context).descriptionInput), //TODO modificare la funzione per lo stile e aggiungere localizations
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              minLines: 1,
+            ),
+          ),
         ),
       ],
       actions: [

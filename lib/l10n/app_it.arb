@@ -35,23 +35,26 @@
     "logoutDialogTitle": "Logout",
     "logoutDialogContent": "Sei sicuro di voler effettuare il logout?",
     "notificationsPage": "Notifiche",
-    "transactionsPage": "Transazioni",
-    "transactionPaidFrom": "Pagato da {from}",
-    "@transactionPaidFrom": {
+    "changePasswordPage": "Cambia password",
+    "logoutButton": "Logout",
+    "paymentsPage": "Transazioni",
+    "paymentPaidFrom": "Pagato da {from}",
+    "@paymentPaidFrom": {
         "placeholders": {
             "from": {
                 "type": "String"
             }
         }
     },
-    "transactionPaidImpact": "Impatto: {impact}",
-    "@transactionPaidImpact": {
+    "paymentPaidImpact": "Impatto: {impact}",
+    "@paymentPaidImpact": {
         "placeholders": {
             "impact": {
                 "type": "String"
             }
         }
     },
+    "descriptionInput": "Descrizione",
     "shoppingPage": "Spesa",
     "tasksPage": "Incarichi",
     "myTasksTab": "Le mie attività",

@@ -4,7 +4,7 @@ import 'package:house_wallet/pages/account/account_page.dart';
 import 'package:house_wallet/pages/house/house_page.dart';
 import 'package:house_wallet/pages/shopping_page.dart';
 import 'package:house_wallet/pages/tasks/tasks_page.dart';
-import 'package:house_wallet/pages/transactions/transactions_page.dart';
+import 'package:house_wallet/pages/payments/payments_page.dart';
 
 class PageData {
   final String label;
@@ -23,8 +23,8 @@ List<PageData> _pages(BuildContext context) {
     ),
     PageData(
       icon: Icons.attach_money,
-      label: localizations(context).transactionsPage,
-      widget: const TransactionsPage(),
+      label: localizations(context).paymentsPage,
+      widget: const PaymentsPage(),
     ),
     PageData(
       icon: Icons.shopping_cart,
