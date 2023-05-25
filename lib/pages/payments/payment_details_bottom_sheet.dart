@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
@@ -33,8 +34,24 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
   String? _description;
   double? _price;
 
-  _setImagePicture() async {
-    final image = await pickImage(context);
+  _setImagePicture(DocumentReference p) async {
+    if (_imageFile == null) return;
+
+    final upload = FirebaseStorage.instance.ref("groups/${LoggedUser.houseId}/${p.id}.png").putFile(_imageFile!);
+
+    setState(() => _uploadProgress = null);
+    upload.snapshotEvents.listen((event) => setState(() => _uploadProgress = event.bytesTransferred / event.totalBytes));
+
+    try {
+      final imageUrl = await (await upload).ref.getDownloadURL();
+      setState(() => _uploadProgress = null);
+
+      await p.update({
+        "imageUrl": imageUrl
+      });
+    } on FirebaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${e.message})")));
+    }
   }
 
   _savePayment() async {
@@ -57,11 +74,18 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
           LoggedUser.uid!: 1
         },
       );
+
+      DocumentReference ref;
+
       if (widget._payment == null) {
-        await PaymentsPage.paymentsFirestoreRef.add(payment);
+        ref = await PaymentsPage.paymentsFirestoreRef.add(payment);
       } else {
-        await widget._payment!.reference.update(Payment.toFirestore(payment));
+        widget._payment!.reference.update(Payment.toFirestore(payment));
+        ref = widget._payment!.reference;
       }
+
+      await _setImagePicture(ref);
+
       navigator.pop();
     } on FirebaseException catch (e) {
       scaffoldMessenger.showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${e.message})")));
@@ -86,7 +110,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
                   children: [
                     GestureDetector(
                         onTap: () async => () async {
-                              final image = await pickImage(context);
+                              final image = await pickImage(context); //TODO fix image picker add String? imageURL to visualize image
                               if (image == null) return;
                               setState(() {
                                 _imageFile = image;
