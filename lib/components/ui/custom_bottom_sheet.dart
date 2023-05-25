@@ -5,6 +5,7 @@ import 'package:house_wallet/components/ui/modal_button.dart';
 //TODO when opened, don't cover entire screen
 class CustomBottomSheet extends StatelessWidget {
   final List<Widget> body;
+  final Color? backgroundColor;
   final double spacing;
   final EdgeInsetsGeometry padding;
   final MainAxisSize mainAxisSize;
@@ -14,6 +15,7 @@ class CustomBottomSheet extends StatelessWidget {
 
   const CustomBottomSheet({
     required this.body,
+    this.backgroundColor,
     this.spacing = 8,
     this.padding = const EdgeInsets.all(16),
     this.mainAxisSize = MainAxisSize.min,
@@ -34,8 +36,9 @@ class CustomBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: ClipRRect(
-        borderRadius: borderRadius(context),
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: BoxDecoration(color: backgroundColor, borderRadius: borderRadius(context)),
         child: SingleChildScrollView(
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(

@@ -11,6 +11,7 @@ import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
 
 final payments = <Payment>[];
 
+//TODO aggiungere anche gli scambi di denaro accettati
 class PaymentsPage extends StatelessWidget {
   const PaymentsPage({super.key});
 

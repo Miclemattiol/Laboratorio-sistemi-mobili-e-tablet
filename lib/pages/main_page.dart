@@ -3,7 +3,7 @@ import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/account/account_page.dart';
 import 'package:house_wallet/pages/house/house_page.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
-import 'package:house_wallet/pages/shopping_page.dart';
+import 'package:house_wallet/pages/shopping/shopping_page.dart';
 import 'package:house_wallet/pages/tasks/tasks_page.dart';
 
 class PageData {

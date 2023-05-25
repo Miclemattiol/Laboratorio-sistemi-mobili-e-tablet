@@ -63,6 +63,8 @@
     },
     "descriptionInput": "Descrizione",
     "shoppingPage": "Spesa",
+    "showDetailsTooltip": "Mostra dettagli aggiuntivi",
+    "hideDetailsTooltip": "Nascondi dettagli aggiuntivi",
     "tasksPage": "Incarichi",
     "myTasksTab": "Le mie attività",
     "allTasksTab": "Tutte le attività",

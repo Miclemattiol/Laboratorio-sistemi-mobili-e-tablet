@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/house/trade/trades_section.dart';
 import 'package:house_wallet/components/house/user/users_section.dart';
-import 'package:house_wallet/components/sliding_page_route.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/data/house/trade.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/house/activity_log_page.dart';
 import 'package:multiple_stream_builder/multiple_stream_builder.dart';
 
 class HousePage extends StatelessWidget {
@@ -25,16 +24,14 @@ class HousePage extends StatelessWidget {
         final users = streams.snapshot2;
         return Scaffold(
           appBar: AppBarFix(title: Text(localizations(context).housePage)),
-          body: ListView(
-            children: [
-              ListTile(
-                title: Text(localizations(context).activityLogPage),
-                onTap: () => Navigator.of(context).push(SlidingPageRoute(const ActivityLogPage())),
-                trailing: const Icon(Icons.keyboard_arrow_right),
-              ),
-              if ((trades.connectionState != ConnectionState.waiting) && (trades.data?.isNotEmpty ?? true)) TradesSection(trades),
-              UsersSection(users),
-            ],
+          body: SingleChildScrollView(
+            child: PadColumn(
+              spacing: 16,
+              children: [
+                if ((trades.connectionState != ConnectionState.waiting) && (trades.data?.isNotEmpty ?? true)) TradesSection(trades),
+                UsersSection(users),
+              ],
+            ),
           ),
         );
       },

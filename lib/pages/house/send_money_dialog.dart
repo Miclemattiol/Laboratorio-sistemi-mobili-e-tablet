@@ -39,6 +39,12 @@ class SendMoneyDialog extends StatelessWidget {
           decoration: inputDecoration(localizations(context).price),
           decimal: true,
         ),
+        TextFormField(
+          decoration: inputDecoration(localizations(context).descriptionInput),
+          keyboardType: TextInputType.multiline,
+          minLines: 1,
+          maxLines: 5,
+        ),
         if (user.iban != null) CopyFormField(user.iban!, decoration: inputDecoration(localizations(context).ibanInput)),
         if (user.payPal != null)
           ElevatedButton(
@@ -60,7 +66,7 @@ class SendMoneyDialog extends StatelessWidget {
       ],
       actions: [
         ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel)),
-        ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonPay)),
+        ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonPay)), //TODO create trade
       ],
     );
   }

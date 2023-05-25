@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/user.dart';
+import 'package:house_wallet/data/user_share.dart';
 
 class Payment {
   final String category;
@@ -11,7 +12,7 @@ class Payment {
   final String imageUrl;
   final num price;
   final String title;
-  final Map<String, num> to;
+  final Map<String, int> to;
 
   const Payment({
     required this.category,
@@ -52,13 +53,6 @@ class Payment {
   }
 }
 
-class UserData {
-  final User user;
-  final num share;
-
-  const UserData(this.user, this.share);
-}
-
 class PaymentRef {
   final Category? category;
   final DateTime date;
@@ -67,7 +61,7 @@ class PaymentRef {
   final String imageUrl;
   final num price;
   final String title;
-  final Map<String, UserData> to;
+  final Map<String, UserShare> to;
 
   const PaymentRef({
     required this.category,
@@ -92,7 +86,7 @@ class PaymentRef {
         imageUrl: payment.imageUrl,
         price: payment.price,
         title: payment.title,
-        to: Map<String, UserData>.fromEntries(await Future.wait(payment.to.entries.map((entry) async => MapEntry(entry.key, UserData(await FirestoreData.getUser(entry.key), entry.value))))),
+        to: Map.fromEntries(await Future.wait(payment.to.entries.map((entry) async => MapEntry(entry.key, UserShare(await FirestoreData.getUser(entry.key), entry.value))))),
       );
     });
   }

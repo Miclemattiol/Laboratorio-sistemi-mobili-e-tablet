@@ -20,19 +20,13 @@ class PaymentDetailsBottomSheet extends StatelessWidget {
             const SizedBox(width: 64, height: 64, child: Placeholder()),
             Expanded(
               child: TextFormField(
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: localizations(context).title,
-                ),
+                decoration: inputDecoration(localizations(context).title),
               ),
             ),
             SizedBox(
               width: 100,
               child: TextFormField(
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: localizations(context).price,
-                ),
+                decoration: inputDecoration(localizations(context).price),
               ),
             ),
           ],
@@ -43,21 +37,11 @@ class PaymentDetailsBottomSheet extends StatelessWidget {
         TextFormField(
           decoration: inputDecoration("TODO"),
         ),
-        ConstrainedBox(
-          constraints: const BoxConstraints(maxHeight: 250.0),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.vertical,
-            reverse: true,
-            child: Padding(
-              padding: const EdgeInsets.only(top: 4),
-              child: TextFormField(
-                decoration: inputDecoration(localizations(context).descriptionInput, true),
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                minLines: 1,
-              ),
-            ),
-          ),
+        TextFormField(
+          decoration: inputDecoration(localizations(context).descriptionInput),
+          keyboardType: TextInputType.multiline,
+          minLines: 1,
+          maxLines: 5,
         ),
       ],
       actions: [

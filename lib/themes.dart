@@ -11,11 +11,11 @@ class ThemeNotifier extends ValueNotifier<ThemeMode> {
   }
 }
 
-InputDecoration inputDecoration(String labelText, [bool multiline = false]) {
+InputDecoration inputDecoration(String labelText) {
   return InputDecoration(
     border: const OutlineInputBorder(),
     labelText: labelText,
-    contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: multiline ? 8 : 0),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
   );
 }
 
