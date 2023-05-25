@@ -12,6 +12,7 @@ import 'package:house_wallet/pages/main_page.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
+import 'package:provider/provider.dart';
 
 late final SharedPreferences prefs;
 
@@ -66,25 +67,32 @@ class _AppState extends State<App> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: "HouseWallet",
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: ThemeMode.system, //TODO sharedPreferences
-      home: KeyboardDismisser(child: _loggedIn ? const MainPage() : const LoginPage()), //TODO handle when user isn't in any group
-      localizationsDelegates: const [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-      ],
-      supportedLocales: const [
-        Locale("it"),
-        // Locale("en"), //TODO translations
-      ],
-      navigatorObservers: [
-        ClearFocusOnPush()
-      ],
+    return ChangeNotifierProvider(
+      create: (context) => ThemeNotifier(prefs.theme),
+      child: Consumer<ThemeNotifier>(
+        builder: (context, themeNotifier, _) {
+          return MaterialApp(
+            title: "HouseWallet",
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: themeNotifier.value,
+            home: KeyboardDismisser(child: _loggedIn ? const MainPage() : const LoginPage()), //TODO handle when user isn't in any group
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale("it"),
+              // Locale("en"), //TODO translations
+            ],
+            navigatorObservers: [
+              ClearFocusOnPush()
+            ],
+          );
+        },
+      ),
     );
   }
 }

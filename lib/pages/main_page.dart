@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/account/account_page.dart';
 import 'package:house_wallet/pages/house/house_page.dart';
+import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/pages/shopping_page.dart';
 import 'package:house_wallet/pages/tasks/tasks_page.dart';
-import 'package:house_wallet/pages/payments/payments_page.dart';
 
 class PageData {
   final String label;
@@ -69,13 +69,7 @@ class _MainPageState extends State<MainPage> {
           prefs.setLastSection(index);
           setState(() => _selectedIndex = index);
         },
-        items: pages.map((page) {
-          return BottomNavigationBarItem(
-            icon: Icon(page.icon),
-            label: page.label,
-            backgroundColor: Theme.of(context).primaryColor,
-          );
-        }).toList(),
+        items: pages.map((page) => BottomNavigationBarItem(icon: Icon(page.icon), label: page.label)).toList(),
       ),
     );
   }

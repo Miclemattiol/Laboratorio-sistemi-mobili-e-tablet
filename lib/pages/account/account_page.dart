@@ -5,6 +5,7 @@ import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/sliding_page_route.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
+import 'package:house_wallet/components/ui/dropdown_list_tile.dart';
 import 'package:house_wallet/components/user_avatar.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/logged_user.dart';
@@ -12,6 +13,7 @@ import 'package:house_wallet/image_picker.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/account/notifications_page.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 class AccountPage extends StatefulWidget {
@@ -58,6 +60,31 @@ class _AccountPageState extends State<AccountPage> {
     } on FirebaseException catch (error) {
       scaffoldMessenger.showSnackBar(SnackBar(content: Text("${appLocalizations.saveChangesDialogContentError}\n(${error.message})")));
       setState(() => _uploadProgress = null);
+    }
+  }
+
+  void _changeUsername(String currentUsername) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final appLocalizations = localizations(context);
+
+    final username = await CustomDialog.prompt(
+      context: context,
+      title: localizations(context).changeUsernameDialogTitle,
+      inputLabel: localizations(context).usernameInput,
+      initialValue: currentUsername,
+      onSaved: (newValue) => newValue?.trim(),
+      validator: (value) => (value ?? "").trim().isEmpty ? localizations(context).usernameInputErrorMissing : null,
+    );
+    if (username == null || username == currentUsername) return;
+
+    try {
+      await FirestoreData.userFirestoreRef(LoggedUser.uid!).update({
+        "username": username,
+      });
+
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.saveChangesDialogContent)));
+    } on FirebaseException catch (error) {
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${appLocalizations.saveChangesDialogContentError}\n(${error.message})")));
     }
   }
 
@@ -235,8 +262,19 @@ class _AccountPageState extends State<AccountPage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              //TODO change username
-                              FittedBox(fit: BoxFit.fitWidth, child: Text(user.username, style: Theme.of(context).textTheme.headlineMedium)),
+                              FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Row(
+                                  children: [
+                                    Text(user.username, style: Theme.of(context).textTheme.headlineMedium),
+                                    IconButton(
+                                      icon: const Icon(Icons.edit),
+                                      tooltip: localizations(context).changeUsernameDialogTitle,
+                                      onPressed: () => _changeUsername(user.username),
+                                    )
+                                  ],
+                                ),
+                              ),
                               Text(LoggedUser.user!.email!),
                             ],
                           ),
@@ -267,6 +305,18 @@ class _AccountPageState extends State<AccountPage> {
                   title: Text(localizations(context).notificationsPage),
                   onTap: () => Navigator.of(context).push(SlidingPageRoute(const NotificationsPage())),
                   trailing: const Icon(Icons.keyboard_arrow_right),
+                ),
+                Consumer<ThemeNotifier>(
+                  builder: (context, themeNotifier, _) => DropdownListTile<ThemeMode>(
+                    initialValue: themeNotifier.value,
+                    title: Text(localizations(context).themeInput),
+                    values: [
+                      DropdownMenuItem(value: ThemeMode.system, child: Text(localizations(context).themeDevice)),
+                      DropdownMenuItem(value: ThemeMode.light, child: Text(localizations(context).themeLight)),
+                      DropdownMenuItem(value: ThemeMode.dark, child: Text(localizations(context).themeDark))
+                    ],
+                    onChanged: (newValue) => themeNotifier.value = newValue,
+                  ),
                 ),
                 ListTile(
                   title: Text(localizations(context).changePasswordDialogTitle),

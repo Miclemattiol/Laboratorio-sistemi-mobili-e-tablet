@@ -30,15 +30,15 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(() {
         switch (e.code) {
           case "user-disabled":
-            return localizations(context).errorUserDisabled;
+            return localizations(context).loginErrorUserDisabled;
           case "user-not-found":
-            return localizations(context).errorUserNotFound;
+            return localizations(context).loginErrorUserNotFound;
           case "wrong-password":
-            return localizations(context).errorWrongPassword;
+            return localizations(context).loginErrorWrongPassword;
           case "too-many-requests":
-            return localizations(context).errorTooManyRequests;
+            return localizations(context).loginErrorTooManyRequests;
           default:
-            return e.message == null ? localizations(context).errorOther : localizations(context).errorOtherDetails(e.message!);
+            return e.message == null ? localizations(context).loginErrorOther : localizations(context).loginErrorOtherDetails(e.message!);
         }
       }())));
       setState(() => _loading = false);
@@ -62,8 +62,8 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: inputDecoration(localizations(context).emailInput),
                   enabled: !_loading,
                   validator: (email) {
-                    if (email == null || email.trim().isEmpty) return localizations(context).errorMissingEmail;
-                    if (!EmailValidator.validate(email.trim())) return localizations(context).errorInvalidEmail;
+                    if (email == null || email.trim().isEmpty) return localizations(context).emailInputErrorMissing;
+                    if (!EmailValidator.validate(email.trim())) return localizations(context).emailInputErrorInvalid;
                     return null;
                   },
                   onSaved: (email) => _emailValue = email,
@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                   decoration: inputDecoration(localizations(context).passwordInput),
                   obscureText: true,
                   enabled: !_loading,
-                  validator: (password) => (password == null || password.trim().isEmpty) ? localizations(context).errorMissingPassword : null,
+                  validator: (password) => (password == null || password.trim().isEmpty) ? localizations(context).passwordInputErrorMissing : null,
                   onSaved: (password) => _passwordValue = password,
                 ),
                 ElevatedButton(
