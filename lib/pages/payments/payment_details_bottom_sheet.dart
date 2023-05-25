@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
@@ -36,7 +37,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
   double? _priceValue;
 
   void _chooseImage() async {
-    final image = await pickImage(context);
+    final image = await pickImage(context); //TODO add String? imageURL to visualize image
     if (image == null) return;
 
     setState(() {
@@ -45,8 +46,24 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
     });
   }
 
-  void _setImagePicture() async {
-    final image = await pickImage(context);
+  Future<void> _setImagePicture(DocumentReference p) async {
+    if (_imageFile == null) return;
+
+    final upload = FirebaseStorage.instance.ref("groups/${LoggedUser.houseId}/${p.id}.png").putFile(_imageFile!);
+
+    setState(() => _uploadProgress = null);
+    upload.snapshotEvents.listen((event) => setState(() => _uploadProgress = event.bytesTransferred / event.totalBytes));
+
+    try {
+      final imageUrl = await (await upload).ref.getDownloadURL();
+      setState(() => _uploadProgress = null);
+
+      await p.update({
+        "imageUrl": imageUrl
+      });
+    } on FirebaseException catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${e.message})")));
+    }
   }
 
   void _savePayment() async {
@@ -70,11 +87,14 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
         },
       );
 
+      DocumentReference ref;
       if (widget.payment == null) {
-        await PaymentsPage.paymentsFirestoreRef.add(payment);
+        ref = await PaymentsPage.paymentsFirestoreRef.add(payment);
       } else {
         await widget.payment!.reference.update(Payment.toFirestore(payment));
+        ref = widget.payment!.reference;
       }
+      await _setImagePicture(ref);
 
       navigator.pop();
     } on FirebaseException catch (e) {
