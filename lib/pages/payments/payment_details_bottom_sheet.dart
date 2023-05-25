@@ -15,41 +15,53 @@ import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/themes.dart';
 
 class PaymentDetailsBottomSheet extends StatefulWidget {
-  final FirestoreDocument<PaymentRef>? _payment;
+  final FirestoreDocument<PaymentRef>? payment;
 
-  const PaymentDetailsBottomSheet({super.key}) : _payment = null;
-  const PaymentDetailsBottomSheet.edit(this._payment, {super.key});
+  const PaymentDetailsBottomSheet({super.key}) : payment = null;
+
+  const PaymentDetailsBottomSheet.edit(this.payment, {super.key});
 
   @override
   State<PaymentDetailsBottomSheet> createState() => _PaymentDetailsBottomSheetState();
 }
 
 class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
-  double? _uploadProgress;
-  File? _imageFile;
-  bool _edited = false;
   final _formKey = GlobalKey<FormState>();
-  String? _title;
-  String? _description;
-  double? _price;
+  double? _uploadProgress;
+  bool _edited = false;
 
-  _setImagePicture() async {
+  File? _imageFile;
+  String? _titleValue;
+  String? _descriptionValue;
+  double? _priceValue;
+
+  void _chooseImage() async {
+    final image = await pickImage(context);
+    if (image == null) return;
+
+    setState(() {
+      _imageFile = image;
+      _uploadProgress = 0;
+    });
+  }
+
+  void _setImagePicture() async {
     final image = await pickImage(context);
   }
 
-  _savePayment() async {
+  void _savePayment() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
-    if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
+    if (!_formKey.currentState!.validate()) return;
 
     try {
       final payment = Payment(
-        title: _title!,
-        category: "evPQw3qSnmIHEeZKeOGW",
-        description: _description ?? "",
-        price: _price!,
+        title: _titleValue!,
+        category: "evPQw3qSnmIHEeZKeOGW", //TODO category
+        description: _descriptionValue ?? "",
+        price: _priceValue!,
         imageUrl: "",
         date: DateTime.now(),
         from: LoggedUser.uid!,
@@ -57,11 +69,13 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
           LoggedUser.uid!: 1
         },
       );
-      if (widget._payment == null) {
+
+      if (widget.payment == null) {
         await PaymentsPage.paymentsFirestoreRef.add(payment);
       } else {
-        await widget._payment!.reference.update(Payment.toFirestore(payment));
+        await widget.payment!.reference.update(Payment.toFirestore(payment));
       }
+
       navigator.pop();
     } on FirebaseException catch (e) {
       scaffoldMessenger.showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${e.message})")));
@@ -85,15 +99,9 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
                 child: Stack(
                   children: [
                     GestureDetector(
-                        onTap: () async => () async {
-                              final image = await pickImage(context);
-                              if (image == null) return;
-                              setState(() {
-                                _imageFile = image;
-                                _uploadProgress = 0;
-                              });
-                            }(),
-                        child: _imageFile != null ? PaymentImage.file(_imageFile, size: 64) : PaymentImage(widget._payment != null ? widget._payment!.data.imageUrl : "", size: 64)),
+                      onTap: _chooseImage,
+                      child: _imageFile != null ? PaymentImage.file(_imageFile, size: 64) : PaymentImage(widget.payment?.data.imageUrl, size: 64),
+                    ),
                     if (_uploadProgress != null)
                       Container(
                         width: 64,
@@ -110,25 +118,25 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
               ),
               Expanded(
                 child: TextFormField(
-                  initialValue: widget._payment?.data.title ?? "",
+                  initialValue: widget.payment?.data.title ?? "",
                   decoration: inputDecoration(localizations(context).title).copyWith(errorStyle: const TextStyle(fontSize: 10)),
                   onChanged: (title) {
                     if (!_edited && title.trim().isNotEmpty) _edited = true;
                   },
-                  onSaved: (title) => _title = (title ?? "").trim().isEmpty ? null : title?.trim(),
+                  onSaved: (title) => _titleValue = (title ?? "").trim().isEmpty ? null : title?.trim(),
                   validator: (value) => value?.trim().isEmpty == true ? localizations(context).paymentTitleInvalid : null,
                 ),
               ),
               SizedBox(
                 width: 120,
                 child: TextFormField(
-                  initialValue: widget._payment?.data.price.toStringAsFixed(2) ?? "",
+                  initialValue: widget.payment?.data.price.toStringAsFixed(2) ?? "",
                   decoration: inputDecoration(localizations(context).price).copyWith(errorStyle: const TextStyle(fontSize: 10)),
                   keyboardType: TextInputType.number,
                   onChanged: (price) {
                     if (!_edited && price.trim().isNotEmpty) _edited = true;
                   },
-                  onSaved: (price) => _price = (price ?? "").trim().isEmpty ? null : double.parse(price!),
+                  onSaved: (price) => _priceValue = (price ?? "").trim().isEmpty ? null : double.parse(price!),
                   validator: (value) {
                     try {
                       final price = double.parse(value!);
@@ -149,7 +157,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
             decoration: inputDecoration("TODO"),
           ),
           TextFormField(
-            initialValue: widget._payment?.data.description ?? "",
+            initialValue: widget.payment?.data.description ?? "",
             decoration: inputDecoration(localizations(context).descriptionInput),
             keyboardType: TextInputType.multiline,
             minLines: 1,
@@ -157,16 +165,12 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
             onChanged: (description) {
               if (!_edited && description.trim().isNotEmpty) _edited = true;
             },
-            onSaved: (description) => _description = (description ?? "").trim().isEmpty ? null : description?.trim(),
+            onSaved: (description) => _descriptionValue = (description ?? "").trim().isEmpty ? null : description?.trim(),
           ),
         ],
         actions: [
           ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel)),
-          ModalButton(
-              onPressed: () {
-                _savePayment();
-              },
-              child: Text(localizations(context).buttonOk)),
+          ModalButton(onPressed: _savePayment, child: Text(localizations(context).buttonOk)),
         ],
       ),
     );

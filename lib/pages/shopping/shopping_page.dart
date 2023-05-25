@@ -15,7 +15,12 @@ class ShoppingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFix(title: Text(localizations(context).shoppingPage)),
+      appBar: AppBarFix(
+        title: Text(localizations(context).shoppingPage),
+        shadowColor: Colors.black,
+        elevation: 3,
+        scrolledUnderElevation: 3,
+      ),
       body: Column(
         children: [
           Expanded(
