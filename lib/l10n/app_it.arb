@@ -45,6 +45,8 @@
     "changePasswordPage": "Cambia password",
     "logoutButton": "Logout",
     "paymentsPage": "Transazioni",
+    "priceInvalid": "Prezzo non valido",
+    "paymentTitleInvalid": "Titolo non valido",
     "paymentPaidFrom": "Pagato da {from}",
     "@paymentPaidFrom": {
         "placeholders": {
