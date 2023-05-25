@@ -27,7 +27,7 @@ class CustomBottomSheet extends StatelessWidget {
     try {
       return (Theme.of(context).bottomSheetTheme.shape as RoundedRectangleBorder).borderRadius;
     } catch (_) {
-      return null;
+      return BorderRadius.circular(10);
     }
   }
 

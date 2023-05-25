@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/form/copy_form_field.dart';
 import 'package:house_wallet/components/form/number_form_field.dart';
@@ -22,10 +21,6 @@ class SendMoneyDialog extends StatelessWidget {
     super.key,
   });
 
-  void _copyIban(BuildContext context) async {
-    await Clipboard.setData(ClipboardData(text: user.iban!));
-  }
-
   void _payWithPayPal() {
     if (user.payPal == null) return;
 
@@ -37,6 +32,7 @@ class SendMoneyDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomDialog(
+      spacing: 12,
       body: [
         NumberFormField(
           initialValue: 10, //TODO balance
