@@ -10,7 +10,7 @@ import 'package:house_wallet/main.dart';
 class ShoppingPage extends StatelessWidget {
   const ShoppingPage({super.key});
 
-  static CollectionReference<ShoppingItem> get firestoreRef => FirebaseFirestore.instance.collection("/groups/${LoggedUser.houseId}/shopping").withConverter(fromFirestore: ShoppingItem.fromFirestore, toFirestore: ShoppingItem.toFirestore);
+  static CollectionReference<ShoppingItem> get firestoreRef => FirebaseFirestore.instance.collection("/groups/${LoggedUser.houseId!}/shopping").withConverter(fromFirestore: ShoppingItem.fromFirestore, toFirestore: ShoppingItem.toFirestore);
 
   @override
   Widget build(BuildContext context) {

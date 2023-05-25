@@ -33,7 +33,7 @@
     "saveChangesDialogContentError": "Impossibile salvare le modifiche",
     "changePasswordDialogTitle": "Cambia password",
     "changePasswordDialogContent": "Ti verrà inviata un email con un link per cambiare la tua password. Vuoi procedere?",
-    "changePasswordDialogContentSendSuccess": "Email per il reset della password inviata",
+    "changePasswordDialogContentSendSuccess": "Email inviata, controlla la tua posta in arrivo e lo spam",
     "changePasswordDialogContentSendError": "Impossibile inviare l'email per il reset della password",
     "logoutDialogTitle": "Logout",
     "logoutDialogContent": "Sei sicuro di voler effettuare il logout?",

@@ -4,10 +4,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 class LoggedUser {
   static User? get user => FirebaseAuth.instance.currentUser;
   static String? get uid => FirebaseAuth.instance.currentUser?.uid;
-  static String get houseId => _houses[currentHouse];
+  static String? get houseId => _houses.isNotEmpty ? _houses.first : null;
 
   //TODO multiple houses?
-  static int currentHouse = 0;
   static List<String> _houses = [];
 
   static Future<void> updateData() async {

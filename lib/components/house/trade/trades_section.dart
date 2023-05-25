@@ -12,7 +12,7 @@ class TradesSection extends StatelessWidget {
 
   const TradesSection(this.snapshot, {super.key});
 
-  static CollectionReference<Trade> get firestoreRef => FirebaseFirestore.instance.collection("/groups/${LoggedUser.houseId}/trades").withConverter(fromFirestore: Trade.fromFirestore, toFirestore: Trade.toFirestore);
+  static CollectionReference<Trade> get firestoreRef => FirebaseFirestore.instance.collection("/groups/${LoggedUser.houseId!}/trades").withConverter(fromFirestore: Trade.fromFirestore, toFirestore: Trade.toFirestore);
 
   @override
   Widget build(BuildContext context) {

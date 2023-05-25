@@ -65,31 +65,44 @@ class _AppState extends State<App> {
     });
   }
 
+  Widget get home {
+    if (!_loggedIn) return const LoginPage();
+
+    if (LoggedUser.houseId == null) {
+      //TODO no group
+      return const Scaffold(body: Center(child: Text("TODO: User is not a member of any group!")));
+    } else {
+      return const MainPage();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
       create: (context) => ThemeNotifier(prefs.theme),
       child: Consumer<ThemeNotifier>(
         builder: (context, themeNotifier, _) {
-          return MaterialApp(
-            title: "HouseWallet",
-            theme: lightTheme,
-            darkTheme: darkTheme,
-            themeMode: themeNotifier.value,
-            home: KeyboardDismisser(child: _loggedIn ? const MainPage() : const LoginPage()), //TODO handle when user isn't in any group
-            localizationsDelegates: const [
-              AppLocalizations.delegate,
-              GlobalMaterialLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-            ],
-            supportedLocales: const [
-              Locale("it"),
-              // Locale("en"), //TODO translations
-            ],
-            navigatorObservers: [
-              ClearFocusOnPush()
-            ],
+          return KeyboardDismisser(
+            child: MaterialApp(
+              title: "HouseWallet",
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode: themeNotifier.value,
+              home: home,
+              localizationsDelegates: const [
+                AppLocalizations.delegate,
+                GlobalMaterialLocalizations.delegate,
+                GlobalCupertinoLocalizations.delegate,
+                GlobalWidgetsLocalizations.delegate,
+              ],
+              supportedLocales: const [
+                Locale("it"),
+                // Locale("en"), //TODO translations
+              ],
+              navigatorObservers: [
+                ClearFocusOnPush()
+              ],
+            ),
           );
         },
       ),

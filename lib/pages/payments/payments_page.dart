@@ -14,8 +14,8 @@ final payments = <Payment>[];
 class PaymentsPage extends StatelessWidget {
   const PaymentsPage({super.key});
 
-  static CollectionReference<Payment> get paymentsFirestoreRef => FirebaseFirestore.instance.collection("/groups/${LoggedUser.houseId}/transactions").withConverter(fromFirestore: Payment.fromFirestore, toFirestore: Payment.toFirestore);
-  static CollectionReference<Category> get categoriesFirestoreRef => FirebaseFirestore.instance.collection("/groups/${LoggedUser.houseId}/categories").withConverter(fromFirestore: Category.fromFirestore, toFirestore: Category.toFirestore);
+  static CollectionReference<Payment> get paymentsFirestoreRef => FirebaseFirestore.instance.collection("/groups/${LoggedUser.houseId!}/transactions").withConverter(fromFirestore: Payment.fromFirestore, toFirestore: Payment.toFirestore);
+  static CollectionReference<Category> get categoriesFirestoreRef => FirebaseFirestore.instance.collection("/groups/${LoggedUser.houseId!}/categories").withConverter(fromFirestore: Category.fromFirestore, toFirestore: Category.toFirestore);
 
   void _addPayment(BuildContext context) {
     showModalBottomSheet(

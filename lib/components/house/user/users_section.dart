@@ -13,7 +13,7 @@ class UsersSection extends StatelessWidget {
 
   const UsersSection(this.snapshot, {super.key});
 
-  static DocumentReference<Map<String, dynamic>> get firestoreRef => FirebaseFirestore.instance.doc("/groups/${LoggedUser.houseId}/");
+  static DocumentReference<Map<String, dynamic>> get firestoreRef => FirebaseFirestore.instance.doc("/groups/${LoggedUser.houseId!}/");
 
   @override
   Widget build(BuildContext context) {
