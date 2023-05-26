@@ -9,6 +9,7 @@ DateFormat taskDateFormat(BuildContext context) => DateFormat("dd/MM", Localizat
 
 final tasks = <Task>[
   Task(
+    title: "Task 1",
     from: DateTime(2023, 5, 18),
     to: DateTime(2023, 5, 20),
     repeating: true,
@@ -18,6 +19,7 @@ final tasks = <Task>[
     ],
   ),
   Task(
+    title: "Task 2",
     from: DateTime(2023, 5, 20),
     to: DateTime(2023, 6, 2),
     repeating: false,
@@ -29,6 +31,7 @@ final tasks = <Task>[
     ],
   ),
   Task(
+    title: "Task 3",
     from: DateTime(2023, 5, 20),
     to: DateTime(2023, 5, 22),
     repeating: false,

@@ -33,7 +33,7 @@ class TaskDetailsPage extends StatelessWidget {
         const Calendar(),
         Padding(
           padding: const EdgeInsets.all(16),
-          child: Text(task.description),
+          child: Text(task.description ?? ""),
         )
       ]),
     );
