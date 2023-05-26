@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/tasks/task_details_bottom_sheet.dart';
 import 'package:house_wallet/pages/tasks/tasks_tab.dart';
 import 'package:intl/intl.dart';
 
@@ -52,6 +53,14 @@ class TabData {
 class TasksPage extends StatelessWidget {
   const TasksPage({super.key});
 
+  void _addTask(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => const TaskDetailsBottomSheet(),
+    );
+  }
+
   List<TabData> _tabs(BuildContext context) {
     return [
       TabData(
@@ -82,7 +91,7 @@ class TasksPage extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           heroTag: null,
-          onPressed: () {},
+          onPressed: () => _addTask(context),
           child: const Icon(Icons.add),
         ),
       ),
