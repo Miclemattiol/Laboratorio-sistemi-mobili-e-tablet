@@ -3,6 +3,7 @@ import 'package:house_wallet/components/form/date_picker_form_field.dart';
 import 'package:house_wallet/components/ui/collapsible_container.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
+import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/themes.dart';
 
@@ -24,18 +25,34 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
   DateTime? _startDate;
   DateTime? _endDate;
   bool _repeat = false;
-  String repeatValue = repeatOptions.keys.first;
+  late String repeatValue = repeatOptions.keys.first;
+  DateTime? _startDateChangedValue;
 
-  static Map<String, IconData> repeatOptions = {
-    "Daily": Icons.repeat,
-    "Weekly": Icons.repeat,
-    "Monthly": Icons.repeat,
-    "Yearly": Icons.repeat,
+  late Map<String, IconData> repeatOptions = {
+    //Never                                       //-1
+    localizations(context).taskRepeatDaily: Icons.repeat_one, //0
+    localizations(context).taskRepeatWeekly: Icons.repeat, //1
+    localizations(context).taskRepeatMonthly: Icons.calendar_month_outlined, //2
+    localizations(context).taskRepeatYearly: Icons.calendar_today_outlined, //3
+    localizations(context).taskRepeatCustom: Icons.edit_calendar_outlined, //4
   };
 
   _saveTask() async {
-    _formKey.currentState!.save();
     if (!_formKey.currentState!.validate()) return;
+    _formKey.currentState!.save();
+
+    int repeating = repeatOptions.keys.toList().indexOf(repeatValue);
+
+    Task task = Task(
+      title: _titleValue!,
+      description: _descriptionValue,
+      from: _startDate!,
+      to: _endDate!,
+      repeating: repeating,
+      assignedTo: [],
+    );
+
+    task; //TODO: save task
 
     Navigator.of(context).pop();
   }
@@ -63,8 +80,11 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
               _startDate = newValue;
             },
             onChanged: (newValue) {
-              if (!_edited && newValue != null) {
-                _edited = true;
+              if (newValue != null) {
+                _startDateChangedValue = newValue;
+                if (!_edited) {
+                  _edited = true;
+                }
               }
             },
             validator: (value) {
@@ -86,7 +106,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
             validator: (value) {
               if (value == null) {
                 return localizations(context).taskDateInvalid;
-              } else if (_startDate?.isAfter(value) ?? false) {
+              } else if (_startDateChangedValue?.isAfter(value) ?? false) {
                 return localizations(context).taskEndDateBeforeStartDate;
               }
               return null;
@@ -142,26 +162,22 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
                   ),
                 ),
               ),
+              CollapsibleContainer(
+                collapsed: !_repeat || repeatValue != localizations(context).taskRepeatCustom,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: TextFormField(
+                    decoration: inputDecoration(localizations(context).taskRepeatCustomPrompt),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) return localizations(context).taskRepeatCustomInvalid;
+                      return null;
+                    },
+                  ),
+                ),
+              ),
             ],
           ),
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //   children: [
-          //     const Text("Ripeti"),
-          //     Switch(
-          //       value: _repeat,
-          //       onChanged: (value) {
-          //         setState(() {
-          //           _repeat = value;
-          //           if (!_edited) {
-          //             _edited = true;
-          //           }
-          //         });
-          //       },
-          //     ),
-          //   ],
-          // ),
-
           TextFormField(
             decoration: inputDecoration(localizations(context).descriptionInput),
             keyboardType: TextInputType.multiline,
