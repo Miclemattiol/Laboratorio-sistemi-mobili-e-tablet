@@ -67,7 +67,6 @@ class DatePickerFormField extends StatelessWidget {
             locale: const Locale("it", "IT"),
           );
     if (date == null) return;
-    onChanged?.call(date);
     TimeOfDay? time = await (() async => !pickTime || !context.mounted
         ? const TimeOfDay(hour: 0, minute: 0)
         : await showTimePicker(
@@ -83,6 +82,7 @@ class DatePickerFormField extends StatelessWidget {
           ))();
     if (time == null) return;
 
+    onChanged?.call(date);
     state.didChange(DateTime(date.year, date.month, date.day, time.hour, time.minute));
   }
 

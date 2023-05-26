@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/form/date_picker_form_field.dart';
+import 'package:house_wallet/components/ui/collapsible_container.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/main.dart';
@@ -91,11 +92,11 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
               return null;
             },
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          Column(
             children: [
-              const Text("Ripeti"),
-              Switch(
+              SwitchListTile(
+                title: const Text("Ripeti"),
+                contentPadding: EdgeInsets.zero,
                 value: _repeat,
                 onChanged: (value) {
                   setState(() {
@@ -106,38 +107,61 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
                   });
                 },
               ),
+              CollapsibleContainer(
+                collapsed: !_repeat,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: repeatValue,
+                      isExpanded: true,
+                      style: const TextStyle(fontWeight: FontWeight.normal, color: Colors.black), //TODO set color to theme
+                      items: repeatOptions.entries
+                          .map(
+                            (e) => DropdownMenuItem<String>(
+                              value: e.key,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(e.key),
+                                  Icon(e.value),
+                                ],
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          repeatValue = value!;
+                          if (!_edited) {
+                            _edited = true;
+                          }
+                        });
+                      },
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
-          if (_repeat)
-            DropdownButtonHideUnderline(
-              child: DropdownButton<String>(
-                value: repeatValue,
-                isExpanded: true,
-                style: const TextStyle(fontWeight: FontWeight.normal, color: Colors.black), //TODO set color to theme
-                items: repeatOptions.entries
-                    .map(
-                      (e) => DropdownMenuItem<String>(
-                        value: e.key,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(e.key),
-                            Icon(e.value),
-                          ],
-                        ),
-                      ),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    repeatValue = value!;
-                    if (!_edited) {
-                      _edited = true;
-                    }
-                  });
-                },
-              ),
-            ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     const Text("Ripeti"),
+          //     Switch(
+          //       value: _repeat,
+          //       onChanged: (value) {
+          //         setState(() {
+          //           _repeat = value;
+          //           if (!_edited) {
+          //             _edited = true;
+          //           }
+          //         });
+          //       },
+          //     ),
+          //   ],
+          // ),
+
           TextFormField(
             decoration: inputDecoration(localizations(context).descriptionInput),
             keyboardType: TextInputType.multiline,
