@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/tasks/task_details_bottom_sheet.dart';
 import 'package:house_wallet/pages/tasks/tasks_tab.dart';
 import 'package:intl/intl.dart';
 
@@ -9,6 +10,7 @@ DateFormat taskDateFormat(BuildContext context) => DateFormat("dd/MM", Localizat
 
 final tasks = <Task>[
   Task(
+    title: "Task 1",
     from: DateTime(2023, 5, 18),
     to: DateTime(2023, 5, 20),
     repeating: true,
@@ -18,6 +20,7 @@ final tasks = <Task>[
     ],
   ),
   Task(
+    title: "Task 2",
     from: DateTime(2023, 5, 20),
     to: DateTime(2023, 6, 2),
     repeating: false,
@@ -29,6 +32,7 @@ final tasks = <Task>[
     ],
   ),
   Task(
+    title: "Task 3",
     from: DateTime(2023, 5, 20),
     to: DateTime(2023, 5, 22),
     repeating: false,
@@ -48,6 +52,14 @@ class TabData {
 
 class TasksPage extends StatelessWidget {
   const TasksPage({super.key});
+
+  void _addTask(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => const TaskDetailsBottomSheet(),
+    );
+  }
 
   List<TabData> _tabs(BuildContext context) {
     return [
@@ -79,7 +91,7 @@ class TasksPage extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           heroTag: null,
-          onPressed: () {},
+          onPressed: () => _addTask(context),
           child: const Icon(Icons.add),
         ),
       ),
