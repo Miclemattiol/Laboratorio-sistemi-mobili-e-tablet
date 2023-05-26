@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:house_wallet/data/firestore.dart';
+import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/data/user_share.dart';
+import 'package:provider/provider.dart';
 
 class Payment {
   final String category;
@@ -74,19 +77,20 @@ class PaymentRef {
     required this.to,
   });
 
-  static Future<Iterable<FirestoreDocument<PaymentRef>>> Function(QuerySnapshot<Payment>) converter(Iterable<FirestoreDocument<Category>>? categories) {
+  static FirestoreConverter<Payment, PaymentRef> converter(BuildContext context, Iterable<FirestoreDocument<Category>>? categories) {
+    final houseRef = Provider.of<HouseDataRef>(context);
     final categoriesMap = Map<String, Category>.fromEntries((categories ?? []).map((category) => MapEntry(category.id, category.data)));
-    return firestoreConverterAsync((doc) async {
+    return firestoreConverter((doc) {
       final payment = doc.data();
       return PaymentRef(
         category: categoriesMap[payment.category],
         date: payment.date,
         description: payment.description,
-        from: await FirestoreData.getUser(payment.from),
+        from: houseRef.getUser(payment.from),
         imageUrl: payment.imageUrl,
         price: payment.price,
         title: payment.title,
-        to: Map.fromEntries(await Future.wait(payment.to.entries.map((entry) async => MapEntry(entry.key, UserShare(await FirestoreData.getUser(entry.key), entry.value))))),
+        to: payment.to.map((uid, share) => MapEntry(uid, UserShare(houseRef.getUser(uid), share))),
       );
     });
   }

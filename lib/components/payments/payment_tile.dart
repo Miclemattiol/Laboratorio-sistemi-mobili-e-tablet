@@ -5,24 +5,25 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 
 class PaymentTile extends StatelessWidget {
   final FirestoreDocument<PaymentRef> doc;
 
   const PaymentTile(this.doc, {Key? key}) : super(key: key);
 
-  num _calculateImpact(PaymentRef payment) {
+  num _calculateImpact(LoggedUser loggedUser, PaymentRef payment) {
     final totalShares = payment.to.values.fold<num>(0, (prev, element) => prev + element.share);
     final pricePerShare = payment.price / totalShares;
-    final myShare = payment.to[LoggedUser.uid]?.share;
+    final myShare = payment.to[loggedUser.uid]?.share;
 
-    if (payment.from.uid == LoggedUser.uid) {
-      if (payment.to.containsKey(LoggedUser.uid)) {
+    if (payment.from.uid == loggedUser.uid) {
+      if (payment.to.containsKey(loggedUser.uid)) {
         return pricePerShare * (totalShares - myShare!);
       } else {
         return payment.price;
       }
-    } else if (payment.to.containsKey(LoggedUser.uid)) {
+    } else if (payment.to.containsKey(loggedUser.uid)) {
       return -pricePerShare * myShare!;
     } else {
       return 0;
@@ -43,7 +44,7 @@ class PaymentTile extends StatelessWidget {
         children: [
           Text(currencyFormat(context).format(payment.price)),
           Text(
-            localizations(context).paymentPaidImpact(currencyFormat(context).format(_calculateImpact(payment))),
+            localizations(context).paymentPaidImpact(currencyFormat(context).format(_calculateImpact(Provider.of<LoggedUser>(context), payment))),
             style: const TextStyle(fontSize: 10),
           ),
         ],

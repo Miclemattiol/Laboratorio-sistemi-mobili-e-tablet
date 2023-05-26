@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:house_wallet/data/firestore.dart';
+import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/user.dart';
+import 'package:provider/provider.dart';
 
 class Trade {
   final num amount;
@@ -55,14 +58,17 @@ class TradeRef {
     required this.description,
   });
 
-  static final converter = firestoreConverterAsync<Trade, TradeRef>((doc) async {
-    final trade = doc.data();
-    return TradeRef(
-      amount: trade.amount,
-      from: await FirestoreData.getUser(trade.from),
-      to: await FirestoreData.getUser(trade.to),
-      date: trade.date,
-      description: trade.description,
-    );
-  });
+  static FirestoreConverter<Trade, TradeRef> converter(BuildContext context) {
+    final houseRef = Provider.of<HouseDataRef>(context);
+    return firestoreConverter((doc) {
+      final trade = doc.data();
+      return TradeRef(
+        amount: trade.amount,
+        from: houseRef.getUser(trade.from),
+        to: houseRef.getUser(trade.to),
+        date: trade.date,
+        description: trade.description,
+      );
+    });
+  }
 }

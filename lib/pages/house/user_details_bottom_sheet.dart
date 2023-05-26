@@ -7,6 +7,7 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/house/send_money_dialog.dart';
+import 'package:provider/provider.dart';
 
 class UserDetailsBottomSheet extends StatelessWidget {
   final User user;
@@ -99,7 +100,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8),
           child: Text(localizations(context).userBalance(currencyFormat(context).format(10))), //TODO balance
         ),
-        if (user.uid == LoggedUser.uid) ...[
+        if (user.uid == Provider.of<LoggedUser>(context).uid) ...[
           ElevatedButton(
             onPressed: () => _leave(context),
             style: ElevatedButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),

@@ -1,5 +1,6 @@
 {
     "@@locale": "it",
+    "houseDataError": "Impossibile caricare i dati della casa, riprova più tardi",
     "loginPage": "Login",
     "emailInput": "Email",
     "emailInputErrorMissing": "Inserisci un indirizzo email",

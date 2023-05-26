@@ -7,14 +7,13 @@ import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/dropdown_list_tile.dart';
 import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:house_wallet/components/ui/user_avatar.dart';
-import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/image_picker.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/account/notifications_page.dart';
+import 'package:house_wallet/pages/main_page.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:provider/provider.dart';
-import 'package:shimmer/shimmer.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({super.key});
@@ -24,6 +23,7 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
+  late final loggedUser = Provider.of<LoggedUser>(context);
   final _formKey = GlobalKey<FormState>();
   bool _edited = false;
   bool _loading = false;
@@ -39,7 +39,7 @@ class _AccountPageState extends State<AccountPage> {
     final image = await pickImage(context);
     if (image == null) return;
 
-    final upload = FirebaseStorage.instance.ref("users/${LoggedUser.uid}-${DateTime.now().millisecondsSinceEpoch}.png").putFile(image);
+    final upload = FirebaseStorage.instance.ref("users/${loggedUser.uid}-${DateTime.now().millisecondsSinceEpoch}.png").putFile(image);
 
     setState(() => _uploadProgress = null);
     upload.snapshotEvents.listen((event) => setState(() => _uploadProgress = event.bytesTransferred / event.totalBytes));
@@ -48,7 +48,7 @@ class _AccountPageState extends State<AccountPage> {
       final imageUrl = await (await upload).ref.getDownloadURL();
       setState(() => _uploadProgress = null);
 
-      await FirestoreData.userFirestoreRef(LoggedUser.uid!).update({
+      await MainPage.userFirestoreRef(loggedUser.uid).update({
         "imageUrl": imageUrl
       });
 
@@ -78,7 +78,7 @@ class _AccountPageState extends State<AccountPage> {
     if (username == null || username == currentUsername) return;
 
     try {
-      await FirestoreData.userFirestoreRef(LoggedUser.uid!).update({
+      await MainPage.userFirestoreRef(loggedUser.uid).update({
         "username": username,
       });
 
@@ -95,7 +95,7 @@ class _AccountPageState extends State<AccountPage> {
     _formKey.currentState!.save();
 
     try {
-      await FirestoreData.userFirestoreRef(LoggedUser.uid!).update({
+      await MainPage.userFirestoreRef(loggedUser.uid).update({
         "iban": _ibanValue,
         "payPal": _payPalValue
       });
@@ -122,7 +122,7 @@ class _AccountPageState extends State<AccountPage> {
     )) return;
 
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(email: LoggedUser.user!.email!);
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: loggedUser.authUser.email!);
 
       if (mounted) {
         CustomDialog.alert(
@@ -154,6 +154,7 @@ class _AccountPageState extends State<AccountPage> {
 
   @override
   Widget build(BuildContext context) {
+    final user = loggedUser.getUserData(context);
     return Form(
       key: _formKey,
       child: Scaffold(
@@ -174,161 +175,104 @@ class _AccountPageState extends State<AccountPage> {
                 ]
               : null,
         ),
-        body: StreamBuilder(
-          stream: FirestoreData.userFirestoreRef(LoggedUser.uid!).snapshots().map((doc) => doc.data()),
-          builder: (context, snapshot) {
-            final user = snapshot.data;
-
-            if (user == null) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Shimmer.fromColors(
-                  baseColor: Theme.of(context).disabledColor,
-                  highlightColor: Theme.of(context).disabledColor.withOpacity(.1),
-                  child: Column(
-                    children: [
-                      PadColumn(
-                        spacing: 16,
-                        padding: const EdgeInsets.all(16),
-                        children: [
-                          PadRow(
-                            spacing: 16,
-                            children: [
-                              Container(width: 128, height: 128, decoration: ImageAvatar.border(context).copyWith(color: Colors.white)),
-                              Expanded(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Padding(padding: const EdgeInsets.only(bottom: 8), child: Container(width: 128, height: 32, color: Colors.white)),
-                                    Container(width: 64, height: 16, color: Colors.white),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          Container(width: double.infinity, height: 48, color: Colors.white),
-                          Container(width: double.infinity, height: 48, color: Colors.white),
-                          Container(width: double.infinity, height: 48, color: Colors.white),
-                          Container(width: double.infinity, height: 48, color: Colors.white),
-                        ],
-                      ),
-                    ],
-                  ),
-                );
-              } else {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Text(
-                      "${localizations(context).accountPageError} (${snapshot.error})",
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall,
-                    ),
-                  ),
-                );
-              }
-            }
-
-            return ListView(
+        body: ListView(
+          children: [
+            PadColumn(
+              spacing: 16,
+              padding: const EdgeInsets.all(16),
               children: [
-                PadColumn(
+                PadRow(
                   spacing: 16,
-                  padding: const EdgeInsets.all(16),
                   children: [
-                    PadRow(
-                      spacing: 16,
+                    Stack(
                       children: [
-                        Stack(
-                          children: [
-                            GestureDetector(
-                              onTap: () => _changeProfilePicture(user.imageUrl),
-                              child: ImageAvatar(user.imageUrl, fallback: const Icon(Icons.person), size: 128),
-                            ),
-                            if (_uploadProgress != null)
-                              Container(
-                                width: 128,
-                                height: 128,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: ImageAvatar.border(context).copyWith(color: Colors.black26),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(48),
-                                  child: CircularProgressIndicator(value: _uploadProgress),
-                                ),
-                              )
-                          ],
+                        GestureDetector(
+                          onTap: () => _changeProfilePicture(user.imageUrl),
+                          child: ImageAvatar(user.imageUrl, fallback: const Icon(Icons.person), size: 128),
                         ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FittedBox(
-                                fit: BoxFit.fitWidth,
-                                child: Row(
-                                  children: [
-                                    Text(user.username, style: Theme.of(context).textTheme.headlineMedium),
-                                    IconButton(
-                                      icon: const Icon(Icons.edit),
-                                      tooltip: localizations(context).changeUsernameDialogTitle,
-                                      onPressed: () => _changeUsername(user.username),
-                                    )
-                                  ],
-                                ),
-                              ),
-                              Text(LoggedUser.user!.email!),
-                            ],
-                          ),
-                        )
+                        if (_uploadProgress != null)
+                          Container(
+                            width: 128,
+                            height: 128,
+                            clipBehavior: Clip.antiAlias,
+                            decoration: ImageAvatar.border(context).copyWith(color: Colors.black26),
+                            child: Padding(
+                              padding: const EdgeInsets.all(48),
+                              child: CircularProgressIndicator(value: _uploadProgress),
+                            ),
+                          )
                       ],
                     ),
-                    TextFormField(
-                      initialValue: user.iban,
-                      decoration: inputDecoration(localizations(context).ibanInput),
-                      enabled: !_loading,
-                      onChanged: (_) {
-                        if (!_edited) setState(() => _edited = true);
-                      },
-                      onSaved: (iban) => _ibanValue = (iban ?? "").trim().isEmpty ? null : iban?.trim(),
-                    ),
-                    TextFormField(
-                      initialValue: user.payPal,
-                      decoration: inputDecoration(localizations(context).paypalInput),
-                      enabled: !_loading,
-                      onChanged: (_) {
-                        if (!_edited) setState(() => _edited = true);
-                      },
-                      onSaved: (payPal) => _payPalValue = (payPal ?? "").trim().isEmpty ? null : payPal?.trim(),
-                    ),
+                    Expanded(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          FittedBox(
+                            fit: BoxFit.fitWidth,
+                            child: Row(
+                              children: [
+                                Text(user.username, style: Theme.of(context).textTheme.headlineMedium),
+                                IconButton(
+                                  icon: const Icon(Icons.edit),
+                                  tooltip: localizations(context).changeUsernameDialogTitle,
+                                  onPressed: () => _changeUsername(user.username),
+                                )
+                              ],
+                            ),
+                          ),
+                          Text(loggedUser.authUser.email!),
+                        ],
+                      ),
+                    )
                   ],
                 ),
-                ListTile(
-                  title: Text(localizations(context).notificationsPage),
-                  onTap: () => Navigator.of(context).push(SlidingPageRoute(const NotificationsPage())),
-                  trailing: const Icon(Icons.keyboard_arrow_right),
+                TextFormField(
+                  initialValue: user.iban,
+                  decoration: inputDecoration(localizations(context).ibanInput),
+                  enabled: !_loading,
+                  onChanged: (_) {
+                    if (!_edited) setState(() => _edited = true);
+                  },
+                  onSaved: (iban) => _ibanValue = (iban ?? "").trim().isEmpty ? null : iban?.trim(),
                 ),
-                Consumer<ThemeNotifier>(
-                  builder: (context, themeNotifier, _) => DropdownListTile<ThemeMode>(
-                    initialValue: themeNotifier.value,
-                    title: Text(localizations(context).themeInput),
-                    values: [
-                      DropdownMenuItem(value: ThemeMode.system, child: Text(localizations(context).themeDevice)),
-                      DropdownMenuItem(value: ThemeMode.light, child: Text(localizations(context).themeLight)),
-                      DropdownMenuItem(value: ThemeMode.dark, child: Text(localizations(context).themeDark))
-                    ],
-                    onChanged: (newValue) => themeNotifier.value = newValue,
-                  ),
-                ),
-                ListTile(
-                  title: Text(localizations(context).changePasswordDialogTitle),
-                  onTap: _changePassword,
-                ),
-                ListTile(
-                  title: Text(localizations(context).logoutDialogTitle),
-                  onTap: _logout,
+                TextFormField(
+                  initialValue: user.payPal,
+                  decoration: inputDecoration(localizations(context).paypalInput),
+                  enabled: !_loading,
+                  onChanged: (_) {
+                    if (!_edited) setState(() => _edited = true);
+                  },
+                  onSaved: (payPal) => _payPalValue = (payPal ?? "").trim().isEmpty ? null : payPal?.trim(),
                 ),
               ],
-            );
-          },
+            ),
+            ListTile(
+              title: Text(localizations(context).notificationsPage),
+              onTap: () => Navigator.of(context).push(SlidingPageRoute(const NotificationsPage())),
+              trailing: const Icon(Icons.keyboard_arrow_right),
+            ),
+            Consumer<ThemeNotifier>(builder: (context, themeNotifier, _) {
+              return DropdownListTile<ThemeMode>(
+                initialValue: themeNotifier.value,
+                title: Text(localizations(context).themeInput),
+                values: [
+                  DropdownMenuItem(value: ThemeMode.system, child: Text(localizations(context).themeDevice)),
+                  DropdownMenuItem(value: ThemeMode.light, child: Text(localizations(context).themeLight)),
+                  DropdownMenuItem(value: ThemeMode.dark, child: Text(localizations(context).themeDark))
+                ],
+                onChanged: (newValue) => themeNotifier.value = newValue,
+              );
+            }),
+            ListTile(
+              title: Text(localizations(context).changePasswordDialogTitle),
+              onTap: _changePassword,
+            ),
+            ListTile(
+              title: Text(localizations(context).logoutDialogTitle),
+              onTap: _logout,
+            ),
+          ],
         ),
       ),
     );
