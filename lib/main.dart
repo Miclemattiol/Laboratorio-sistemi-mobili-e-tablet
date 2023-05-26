@@ -70,7 +70,20 @@ class _AppState extends State<App> {
 
     if (LoggedUser.houseId == null) {
       //TODO no group
-      return const Scaffold(body: Center(child: Text("TODO: User is not a member of any group!")));
+      return Scaffold(
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text("TODO: User is not a member of any group!"),
+              ElevatedButton(
+                onPressed: FirebaseAuth.instance.signOut,
+                child: const Text("Logout"),
+              )
+            ],
+          ),
+        ),
+      );
     } else {
       return const MainPage();
     }

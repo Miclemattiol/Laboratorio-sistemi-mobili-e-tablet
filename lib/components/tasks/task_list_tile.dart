@@ -15,7 +15,7 @@ class TaskListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: task.repeating ? const SizedBox(height: double.infinity, child: Icon(Icons.repeat)) : null,
-      title: Text(localizations(context).task),
+      title: Text(task.title),
       subtitle: Text(localizations(context).taskAssignedTo(task.assignedTo.join(", "))),
       trailing: PadColumn(
         mainAxisAlignment: MainAxisAlignment.center,

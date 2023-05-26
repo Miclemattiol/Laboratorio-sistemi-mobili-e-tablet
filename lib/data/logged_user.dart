@@ -14,5 +14,7 @@ class LoggedUser {
 
     final data = await FirebaseFirestore.instance.collection("/groups").where("users", arrayContains: LoggedUser.uid!).get();
     _houses = data.docs.map((doc) => doc.id).toList();
+    print(_houses);
+    
   }
 }

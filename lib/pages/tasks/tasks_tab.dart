@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/data/tasks/calendar.dart';
 import 'package:house_wallet/data/tasks/task.dart';
-import 'package:house_wallet/data/tasks/task_list_tile.dart';
+import 'package:house_wallet/components/tasks/task_list_tile.dart';
 
 class TasksTab extends StatelessWidget {
   final List<Task> tasks;

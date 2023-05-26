@@ -13,7 +13,7 @@ class TaskDetailsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarFix(
-        title: Text(localizations(context).task),
+        title: Text(task.title),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete),
