@@ -1,20 +1,10 @@
-import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/components/form/date_picker_form_field.dart';
+import 'package:house_wallet/components/ui/collapsible_container.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
-import 'package:house_wallet/components/ui/user_avatar.dart';
-import 'package:house_wallet/data/firestore.dart';
-import 'package:house_wallet/data/logged_user.dart';
-import 'package:house_wallet/data/payments/payment.dart';
-import 'package:house_wallet/image_picker.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/themes.dart';
-import 'package:intl/intl.dart';
 
 class TaskDetailsBottomSheet extends StatefulWidget {
   const TaskDetailsBottomSheet({super.key});
@@ -28,13 +18,25 @@ class TaskDetailsBottomSheet extends StatefulWidget {
 class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
   final _formKey = GlobalKey<FormState>();
 
-  String? _descriptionValue;
   bool _edited = false;
+  String? _titleValue;
+  String? _descriptionValue;
+  DateTime? _startDate;
+  DateTime? _endDate;
+  bool _repeat = false;
+  String repeatValue = repeatOptions.keys.first;
 
-  TextEditingController fromDateController = TextEditingController();
+  static Map<String, IconData> repeatOptions = {
+    "Daily": Icons.repeat,
+    "Weekly": Icons.repeat,
+    "Monthly": Icons.repeat,
+    "Yearly": Icons.repeat,
+  };
 
   _saveTask() async {
-    if (!_edited) return;
+    _formKey.currentState!.save();
+    if (!_formKey.currentState!.validate()) return;
+
     Navigator.of(context).pop();
   }
 
@@ -46,31 +48,129 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
         spacing: 16,
         body: [
           TextFormField(
-            decoration: inputDecoration("Title"),
+            decoration: inputDecoration(localizations(context).title),
+            onSaved: (newValue) {
+              _titleValue = newValue;
+            },
+            validator: (value) {
+              if (value == null || value.isEmpty) return localizations(context).paymentTitleInvalid;
+              return null;
+            },
           ),
-          PadRow(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 8,
+          DatePickerFormField.dateOnly(
+            decoration: inputDecoration("Data inizio"),
+            onSaved: (newValue) {
+              _startDate = newValue;
+            },
+            onChanged: (newValue) {
+              if (!_edited && newValue != null) {
+                _edited = true;
+              }
+            },
+            validator: (value) {
+              if (value == null) return localizations(context).taskDateInvalid;
+              return null;
+            },
+          ),
+          DatePickerFormField.dateOnly(
+            decoration: inputDecoration("Data fine"),
+            onSaved: (newValue) {
+              _endDate = newValue;
+            },
+            onChanged: (newValue) {
+              if (!_edited && newValue != null) {
+                _edited = true;
+              }
+            },
+            initialValue: _startDate,
+            validator: (value) {
+              if (value == null) {
+                return localizations(context).taskDateInvalid;
+              } else if (_startDate?.isAfter(value) ?? false) {
+                return localizations(context).taskEndDateBeforeStartDate;
+              }
+              return null;
+            },
+          ),
+          Column(
             children: [
-              const Text("Data inizio:", style: TextStyle(fontSize: 16)),
-              Expanded(
-                child: TextFormField(
-                  decoration: inputDecoration("Data inizio:"),
-                  controller: fromDateController,
-                  readOnly: true,
-                  onTap: () async {
-                    final date = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2101));
-                    if (date == null) return;
-                    String formattedDate = DateFormat('dd/MM/yyyy').format(date);
-                    fromDateController.text = formattedDate;
-                    setState(() {
-                      fromDateController.text = formattedDate;
+              SwitchListTile(
+                title: const Text("Ripeti"),
+                contentPadding: EdgeInsets.zero,
+                value: _repeat,
+                onChanged: (value) {
+                  setState(() {
+                    _repeat = value;
+                    if (!_edited) {
                       _edited = true;
-                    });
-                  },
+                    }
+                  });
+                },
+              ),
+              CollapsibleContainer(
+                collapsed: !_repeat,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 10),
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: repeatValue,
+                      isExpanded: true,
+                      style: const TextStyle(fontWeight: FontWeight.normal, color: Colors.black), //TODO set color to theme
+                      items: repeatOptions.entries
+                          .map(
+                            (e) => DropdownMenuItem<String>(
+                              value: e.key,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(e.key),
+                                  Icon(e.value),
+                                ],
+                              ),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          repeatValue = value!;
+                          if (!_edited) {
+                            _edited = true;
+                          }
+                        });
+                      },
+                    ),
+                  ),
                 ),
               ),
             ],
+          ),
+          // Row(
+          //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //   children: [
+          //     const Text("Ripeti"),
+          //     Switch(
+          //       value: _repeat,
+          //       onChanged: (value) {
+          //         setState(() {
+          //           _repeat = value;
+          //           if (!_edited) {
+          //             _edited = true;
+          //           }
+          //         });
+          //       },
+          //     ),
+          //   ],
+          // ),
+
+          TextFormField(
+            decoration: inputDecoration(localizations(context).descriptionInput),
+            keyboardType: TextInputType.multiline,
+            minLines: 1,
+            maxLines: 5,
+            onChanged: (description) {
+              if (!_edited && description.trim().isNotEmpty) _edited = true;
+            },
+            onSaved: (description) => _descriptionValue = (description ?? "").trim().isEmpty ? null : description?.trim(),
           ),
         ],
         actions: [

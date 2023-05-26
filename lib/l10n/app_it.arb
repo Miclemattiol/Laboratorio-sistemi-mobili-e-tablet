@@ -108,6 +108,8 @@
             }
         }
     },
+    "taskDateInvalid": "Data non valida",
+    "taskEndDateBeforeStartDate": "La data di fine deve essere successiva alla data di inizio",
     "taskEdit": "Modifica incarico",
     "taskDelete": "Elimina incarico",
     "housePage": "Casa",
