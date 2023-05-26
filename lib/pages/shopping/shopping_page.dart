@@ -6,11 +6,12 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/shopping/shopping_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 
 class ShoppingPage extends StatelessWidget {
   const ShoppingPage({super.key});
 
-  static CollectionReference<ShoppingItem> get firestoreRef => FirebaseFirestore.instance.collection("/groups/${LoggedUser.houseId!}/shopping").withConverter(fromFirestore: ShoppingItem.fromFirestore, toFirestore: ShoppingItem.toFirestore);
+  static CollectionReference<ShoppingItem> firestoreRef(BuildContext context) => FirebaseFirestore.instance.collection("/groups/${Provider.of<LoggedUser>(context).houseId}/shopping").withConverter(fromFirestore: ShoppingItem.fromFirestore, toFirestore: ShoppingItem.toFirestore);
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class ShoppingPage extends StatelessWidget {
         children: [
           Expanded(
             child: StreamBuilder(
-              stream: ShoppingPage.firestoreRef.snapshots().asyncMap(ShoppingItemRef.converter),
+              stream: ShoppingPage.firestoreRef(context).snapshots().map(ShoppingItemRef.converter(context)),
               builder: (context, snapshot) {
                 final shoppingItems = snapshot.data;
 

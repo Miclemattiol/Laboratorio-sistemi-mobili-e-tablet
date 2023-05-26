@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:house_wallet/data/firestore.dart';
+import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/user_share.dart';
+import 'package:provider/provider.dart';
 
 class ShoppingItem {
   final num? price;
@@ -54,14 +57,17 @@ class ShoppingItemRef {
     required this.to,
   });
 
-  static final converter = firestoreConverterAsync<ShoppingItem, ShoppingItemRef>((doc) async {
-    final shoppingItem = doc.data();
-    return ShoppingItemRef(
-      price: shoppingItem.price,
-      quantity: shoppingItem.quantity,
-      supermarket: shoppingItem.supermarket,
-      title: shoppingItem.title,
-      to: Map.fromEntries(await Future.wait(shoppingItem.to.entries.map((entry) async => MapEntry(entry.key, UserShare(await FirestoreData.getUser(entry.key), entry.value))))),
-    );
-  });
+  static FirestoreConverter<ShoppingItem, ShoppingItemRef> converter(BuildContext context) {
+    final houseRef = Provider.of<HouseDataRef>(context);
+    return firestoreConverter((doc) {
+      final shoppingItem = doc.data();
+      return ShoppingItemRef(
+        price: shoppingItem.price,
+        quantity: shoppingItem.quantity,
+        supermarket: shoppingItem.supermarket,
+        title: shoppingItem.title,
+        to: shoppingItem.to.map((uid, share) => MapEntry(uid, UserShare(houseRef.getUser(uid), share))),
+      );
+    });
+  }
 }

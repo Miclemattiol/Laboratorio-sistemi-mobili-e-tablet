@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/shared_preferences.dart';
 import 'package:house_wallet/firebase_options.dart';
@@ -31,8 +32,7 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   try {
-    await LoggedUser.user?.reload();
-    await LoggedUser.updateData();
+    await FirebaseAuth.instance.currentUser?.reload();
   } catch (_) {}
 
   prefs = await SharedPreferences.getInstance();
@@ -40,55 +40,65 @@ void main() async {
   runApp(const App());
 }
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   const App({super.key});
 
-  @override
-  State<App> createState() => _AppState();
-}
+  Widget home(BuildContext context, AsyncSnapshot<LoggedUser?> snapshot) {
+    final user = snapshot.data;
 
-class _AppState extends State<App> {
-  bool _loggedIn = LoggedUser.user != null;
+    if (snapshot.hasError) {
+      return Scaffold(
+        body: PadColumn(
+          spacing: 8,
+          padding: const EdgeInsets.all(16),
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(child: Text("Error while parsing user data! (${snapshot.error})", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center)),
+            ElevatedButton(onPressed: FirebaseAuth.instance.signOut, child: Text(localizations(context).logoutButton))
+          ],
+        ),
+      );
+    }
 
-  @override
-  void initState() {
-    super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((user) async {
-      final loggedIn = user != null;
-      if (loggedIn == _loggedIn) return;
+    if (user == null) return const LoginPage();
 
-      if (loggedIn) {
-        await LoggedUser.updateData();
-      }
-
-      setState(() => _loggedIn = loggedIn);
-    });
-  }
-
-  Widget get home {
-    if (!_loggedIn) return const LoginPage();
-
-    if (LoggedUser.houseId == null) {
+    if (user.houses.isEmpty) {
       //TODO no group
-      return const Scaffold(body: Center(child: Text("TODO: User is not a member of any group!")));
+      return Scaffold(
+        body: PadColumn(
+          spacing: 8,
+          padding: const EdgeInsets.all(16),
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(child: Text("User is not a member of any group!", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center)),
+            ElevatedButton(onPressed: FirebaseAuth.instance.signOut, child: Text(localizations(context).logoutButton))
+          ],
+        ),
+      );
     } else {
-      return const MainPage();
+      return Provider.value(
+        value: user,
+        child: const MainPage(),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => ThemeNotifier(prefs.theme),
-      child: Consumer<ThemeNotifier>(
-        builder: (context, themeNotifier, _) {
-          return KeyboardDismisser(
-            child: MaterialApp(
+    return KeyboardDismisser(
+      child: ChangeNotifierProvider(
+        create: (context) => ThemeNotifier(prefs.theme),
+        child: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges().asyncMap(LoggedUser.converter),
+          builder: (context, snapshot) {
+            return MaterialApp(
               title: "HouseWallet",
               theme: lightTheme,
               darkTheme: darkTheme,
-              themeMode: themeNotifier.value,
-              home: home,
+              themeMode: Provider.of<ThemeNotifier>(context).value,
+              home: Builder(builder: (context) => home(context, snapshot)),
               localizationsDelegates: const [
                 AppLocalizations.delegate,
                 GlobalMaterialLocalizations.delegate,
@@ -102,9 +112,9 @@ class _AppState extends State<App> {
               navigatorObservers: [
                 ClearFocusOnPush()
               ],
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

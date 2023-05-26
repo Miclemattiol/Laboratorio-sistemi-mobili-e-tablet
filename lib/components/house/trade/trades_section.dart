@@ -6,13 +6,14 @@ import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house/trade.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/main.dart';
+import 'package:provider/provider.dart';
 
 class TradesSection extends StatelessWidget {
   final AsyncSnapshot<Iterable<FirestoreDocument<TradeRef>>> snapshot;
 
   const TradesSection(this.snapshot, {super.key});
 
-  static CollectionReference<Trade> get firestoreRef => FirebaseFirestore.instance.collection("/groups/${LoggedUser.houseId!}/trades").withConverter(fromFirestore: Trade.fromFirestore, toFirestore: Trade.toFirestore);
+  static CollectionReference<Trade> firestoreRef(BuildContext context) => FirebaseFirestore.instance.collection("/groups/${Provider.of<LoggedUser>(context).houseId}/trades").withConverter(fromFirestore: Trade.fromFirestore, toFirestore: Trade.toFirestore);
 
   @override
   Widget build(BuildContext context) {

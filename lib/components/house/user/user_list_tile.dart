@@ -3,6 +3,7 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/house/user_details_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
 class UserListTile extends StatelessWidget {
@@ -38,7 +39,7 @@ class UserListTile extends StatelessWidget {
         onForegroundImageError: (exception, stackTrace) {},
         child: const Icon(Icons.person, size: 20),
       ),
-      title: Text(user!.uid == LoggedUser.uid ? localizations(context).userYou(user!.username) : user!.username),
+      title: Text(user!.uid == Provider.of<LoggedUser>(context).uid ? localizations(context).userYou(user!.username) : user!.username),
       onTap: () => _openUserDetails(context),
     );
   }

@@ -8,6 +8,7 @@ import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
+import 'package:provider/provider.dart';
 
 final payments = <Payment>[];
 
@@ -15,8 +16,8 @@ final payments = <Payment>[];
 class PaymentsPage extends StatelessWidget {
   const PaymentsPage({super.key});
 
-  static CollectionReference<Payment> get paymentsFirestoreRef => FirebaseFirestore.instance.collection("/groups/${LoggedUser.houseId!}/transactions").withConverter(fromFirestore: Payment.fromFirestore, toFirestore: Payment.toFirestore);
-  static CollectionReference<Category> get categoriesFirestoreRef => FirebaseFirestore.instance.collection("/groups/${LoggedUser.houseId!}/categories").withConverter(fromFirestore: Category.fromFirestore, toFirestore: Category.toFirestore);
+  static CollectionReference<Payment> paymentsFirestoreRef(BuildContext context) => FirebaseFirestore.instance.collection("/groups/${Provider.of<LoggedUser>(context).houseId}/transactions").withConverter(fromFirestore: Payment.fromFirestore, toFirestore: Payment.toFirestore);
+  static CollectionReference<Category> categoriesFirestoreRef(BuildContext context) => FirebaseFirestore.instance.collection("/groups/${Provider.of<LoggedUser>(context).houseId}/categories").withConverter(fromFirestore: Category.fromFirestore, toFirestore: Category.toFirestore);
 
   void _addPayment(BuildContext context) {
     showModalBottomSheet(
@@ -31,9 +32,9 @@ class PaymentsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBarFix(title: Text(localizations(context).paymentsPage)),
       body: StreamBuilder(
-        stream: categoriesFirestoreRef.snapshots().map(defaultFirestoreConverter),
+        stream: categoriesFirestoreRef(context).snapshots().map(defaultFirestoreConverter),
         builder: (context, snapshot) => StreamBuilder(
-          stream: paymentsFirestoreRef.snapshots().asyncMap(PaymentRef.converter(snapshot.data)),
+          stream: paymentsFirestoreRef(context).snapshots().map(PaymentRef.converter(context, snapshot.data)),
           builder: (context, snapshot) {
             final payments = snapshot.data?.toList();
 

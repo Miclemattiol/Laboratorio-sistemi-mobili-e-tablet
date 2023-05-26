@@ -1,18 +1,25 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
+import 'package:flutter/material.dart';
+import 'package:house_wallet/data/house_data.dart';
+import 'package:house_wallet/data/user.dart';
+import 'package:provider/provider.dart';
 
 class LoggedUser {
-  static User? get user => FirebaseAuth.instance.currentUser;
-  static String? get uid => FirebaseAuth.instance.currentUser?.uid;
-  static String? get houseId => _houses.isNotEmpty ? _houses.first : null;
+  final auth.User authUser;
+  final List<String> houses;
 
-  //TODO multiple houses?
-  static List<String> _houses = [];
+  const LoggedUser(this.authUser, this.houses);
 
-  static Future<void> updateData() async {
-    if (uid == null) return;
+  String get uid => authUser.uid;
+  String get houseId => houses.first;
 
-    final data = await FirebaseFirestore.instance.collection("/groups").where("users", arrayContains: LoggedUser.uid!).get();
-    _houses = data.docs.map((doc) => doc.id).toList();
+  User getUserData(BuildContext context) => Provider.of<HouseDataRef>(context).getUser(uid);
+
+  static Future<LoggedUser?> converter(auth.User? user) async {
+    if (user == null) return null;
+
+    final data = await FirebaseFirestore.instance.collection("/groups").where("users", arrayContains: user.uid).get();
+    return LoggedUser(user, data.docs.map((doc) => doc.id).toList());
   }
 }
