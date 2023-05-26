@@ -8,6 +8,7 @@ class DatePickerFormField extends StatelessWidget {
   final InputDecoration? decoration;
   final String? Function(DateTime?)? validator;
   final void Function(DateTime?)? onSaved;
+  final void Function(DateTime?)? onChanged;
   final bool enabled;
   final bool pickDate;
   final bool pickTime;
@@ -22,6 +23,7 @@ class DatePickerFormField extends StatelessWidget {
     this.decoration,
     this.validator,
     this.onSaved,
+    this.onChanged,
     this.enabled = true,
     super.key,
   })  : pickDate = true,
@@ -33,6 +35,7 @@ class DatePickerFormField extends StatelessWidget {
     this.decoration,
     this.validator,
     this.onSaved,
+    this.onChanged,
     this.enabled = true,
     super.key,
   })  : pickDate = true,
@@ -44,6 +47,7 @@ class DatePickerFormField extends StatelessWidget {
     this.decoration,
     this.validator,
     this.onSaved,
+    this.onChanged,
     this.enabled = true,
     super.key,
   })  : pickDate = false,
@@ -63,7 +67,7 @@ class DatePickerFormField extends StatelessWidget {
             locale: const Locale("it", "IT"),
           );
     if (date == null) return;
-
+    onChanged?.call(date);
     TimeOfDay? time = await (() async => !pickTime || !context.mounted
         ? const TimeOfDay(hour: 0, minute: 0)
         : await showTimePicker(
