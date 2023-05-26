@@ -19,7 +19,7 @@ class UserListTile extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (context) => UserDetailsBottomSheet(user!),
+      builder: (_) => UserDetailsBottomSheet(user!, loggedUser: Provider.of<LoggedUser>(context)),
     );
   }
 
