@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 class ShoppingPage extends StatelessWidget {
   const ShoppingPage({super.key});
 
-  static CollectionReference<ShoppingItem> firestoreRef(BuildContext context) => FirebaseFirestore.instance.collection("/groups/${Provider.of<LoggedUser>(context).houseId}/shopping").withConverter(fromFirestore: ShoppingItem.fromFirestore, toFirestore: ShoppingItem.toFirestore);
+  static CollectionReference<ShoppingItem> firestoreRef(String houseId) => FirebaseFirestore.instance.collection("/groups/$houseId/shopping").withConverter(fromFirestore: ShoppingItem.fromFirestore, toFirestore: ShoppingItem.toFirestore);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class ShoppingPage extends StatelessWidget {
         children: [
           Expanded(
             child: StreamBuilder(
-              stream: ShoppingPage.firestoreRef(context).snapshots().map(ShoppingItemRef.converter(context)),
+              stream: ShoppingPage.firestoreRef(Provider.of<LoggedUser>(context).houseId).snapshots().map(ShoppingItemRef.converter(context)),
               builder: (context, snapshot) {
                 final shoppingItems = snapshot.data;
 
@@ -51,10 +51,10 @@ class ShoppingPage extends StatelessWidget {
                       clipBehavior: Clip.antiAlias,
                       decoration: const BoxDecoration(
                         borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
-                        color: Color(0xFFE6D676),
-                      ), //TODO color theme
+                        color: Color(0xFFE6D676), //TODO color theme
+                      ),
                       child: Column(
-                        children: List.filled(20, shoppingItems.first).map(ShoppingItemTile.new).toList(),
+                        children: shoppingItems.map(ShoppingItemTile.new).toList(),
                       ),
                     ),
                   ),

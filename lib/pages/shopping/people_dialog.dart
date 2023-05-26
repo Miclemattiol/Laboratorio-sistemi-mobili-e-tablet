@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
+import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/themes.dart';
 
 class PeopleDialog extends StatefulWidget {
-  final Map<String, int>? initialValue;
+  final HouseDataRef house;
+  final Map<String, int> initialValues;
 
   const PeopleDialog({
-    required this.initialValue,
+    required this.house,
+    required this.initialValues,
     super.key,
   });
 
@@ -16,45 +21,60 @@ class PeopleDialog extends StatefulWidget {
   State<PeopleDialog> createState() => _PeopleDialogState();
 }
 
-class _PeopleDialogState extends State<PeopleDialog> {
-  GlobalKey<FormState> formKey = GlobalKey();
+class _PeopleDialogData {
+  int value;
+  bool enabled;
 
-  String? supermarketValue;
+  _PeopleDialogData(this.value, this.enabled);
+}
+
+class _PeopleDialogState extends State<PeopleDialog> {
+  late final users = widget.house.users.values.where((user) => user.uid.isNotEmpty);
+  late final Map<String, _PeopleDialogData> _values = Map.fromEntries(users.map((user) => MapEntry(user.uid, _PeopleDialogData(widget.initialValues[user.uid] ?? 1, widget.initialValues.containsKey(user.uid)))));
+
+  void _submit() {
+    final Map<String, int> values = Map.fromEntries(_values.entries.where((entry) => entry.value.enabled).map((entry) => MapEntry(entry.key, entry.value.value)));
+    Navigator.of(context).pop<Map<String, int>?>(values);
+  }
 
   @override
   Widget build(BuildContext context) {
-    void submit() {
-      formKey.currentState!.save();
-      Navigator.of(context).pop<String?>(supermarketValue);
-    }
-
-    return Form(
-      key: formKey,
-      child: FutureBuilder(
-          future: Future.delayed(const Duration(seconds: 1)),
-          builder: (context, snapshot) {
-            //TODO
-            if (true || snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-
-            return CustomDialog(
-              dismissible: false,
-              padding: const EdgeInsets.all(24),
-              crossAxisAlignment: CrossAxisAlignment.center,
-              body: [
-                TextFormField(
-                  autofocus: true,
-                  decoration: inputDecoration(localizations(context).supermarketChipTooltip),
-                  onSaved: (newValue) => supermarketValue = (newValue ?? "").trim().isEmpty ? null : newValue?.trim(),
-                ),
-              ],
-              actions: [
-                ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).buttonCancel)),
-                ModalButton(onPressed: submit, child: Text(localizations(context).buttonOk)),
-              ],
-            );
-          }),
+    return CustomDialog(
+      dismissible: false,
+      padding: const EdgeInsets.all(24),
+      crossAxisAlignment: CrossAxisAlignment.center,
+      body: users.map((user) {
+        return PadRow(
+          spacing: 8,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Checkbox(
+              value: _values[user.uid]!.enabled,
+              onChanged: (value) => setState(() => _values[user.uid]!.enabled = value!),
+              visualDensity: VisualDensity.compact,
+            ),
+            Expanded(child: Text(user.username, overflow: TextOverflow.ellipsis, softWrap: false)),
+            SizedBox(
+              width: 48,
+              child: NumberFormField<int>(
+                initialValue: _values[user.uid]!.value,
+                enabled: _values[user.uid]!.enabled,
+                textAlign: TextAlign.center,
+                decoration: inputDecoration().copyWith(contentPadding: EdgeInsets.zero),
+                onChanged: (value) => setState(() {
+                  if (value != null) {
+                    _values[user.uid]!.value = value;
+                  }
+                }),
+              ),
+            )
+          ],
+        );
+      }).toList(),
+      actions: [
+        ModalButton(onPressed: () => Navigator.of(context).pop<Map<String, int>?>(), child: Text(localizations(context).buttonCancel)),
+        ModalButton(onPressed: _submit, child: Text(localizations(context).buttonOk)),
+      ],
     );
   }
 }

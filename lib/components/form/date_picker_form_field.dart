@@ -6,9 +6,9 @@ class DatePickerFormField extends StatelessWidget {
   final DateTime? initialValue;
   final AutovalidateMode? autovalidateMode;
   final InputDecoration? decoration;
-  final String? Function(DateTime?)? validator;
-  final void Function(DateTime?)? onSaved;
-  final void Function(DateTime?)? onChanged;
+  final String? Function(DateTime? value)? validator;
+  final void Function(DateTime? value)? onSaved;
+  final void Function(DateTime value)? onChanged;
   final bool enabled;
   final bool pickDate;
   final bool pickTime;

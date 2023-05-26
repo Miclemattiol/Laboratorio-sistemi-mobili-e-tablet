@@ -22,14 +22,14 @@ class PageData {
 class MainPage extends StatelessWidget {
   const MainPage({super.key});
 
-  static DocumentReference<HouseData> houseFirestoreRef(BuildContext context) => FirebaseFirestore.instance.doc("/groups/${Provider.of<LoggedUser>(context).houseId}/").withConverter(fromFirestore: HouseData.fromFirestore, toFirestore: HouseData.toFirestore);
+  static DocumentReference<HouseData> houseFirestoreRef(String houseId) => FirebaseFirestore.instance.doc("/groups/$houseId/").withConverter(fromFirestore: HouseData.fromFirestore, toFirestore: HouseData.toFirestore);
   static CollectionReference<User> get usersFirestoreRef => FirebaseFirestore.instance.collection("/users").withConverter(fromFirestore: User.fromFirestore, toFirestore: User.toFirestore);
   static DocumentReference<User> userFirestoreRef(String userId) => usersFirestoreRef.doc(userId);
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: MainPage.houseFirestoreRef(context).snapshots().map((doc) => doc.data()),
+      stream: MainPage.houseFirestoreRef(Provider.of<LoggedUser>(context).houseId).snapshots().map((doc) => doc.data()),
       builder: (context, snapshot) {
         final house = snapshot.data;
         return StreamBuilder(

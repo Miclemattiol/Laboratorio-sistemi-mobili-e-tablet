@@ -14,21 +14,27 @@ import 'package:house_wallet/image_picker.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/themes.dart';
-import 'package:provider/provider.dart';
 
 class PaymentDetailsBottomSheet extends StatefulWidget {
+  final LoggedUser loggedUser;
   final FirestoreDocument<PaymentRef>? payment;
 
-  const PaymentDetailsBottomSheet({super.key}) : payment = null;
+  const PaymentDetailsBottomSheet({
+    required this.loggedUser,
+    super.key,
+  }) : payment = null;
 
-  const PaymentDetailsBottomSheet.edit(this.payment, {super.key});
+  const PaymentDetailsBottomSheet.edit(
+    this.payment, {
+    required this.loggedUser,
+    super.key,
+  });
 
   @override
   State<PaymentDetailsBottomSheet> createState() => _PaymentDetailsBottomSheetState();
 }
 
 class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
-  late final loggedUser = Provider.of<LoggedUser>(context);
   final _formKey = GlobalKey<FormState>();
   double? _uploadProgress;
   bool _edited = false;
@@ -48,10 +54,10 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
     });
   }
 
-  Future<void> _setImagePicture(DocumentReference p) async {
+  Future<void> _setImagePicture(DocumentReference doc) async {
     if (_imageFile == null) return;
 
-    final upload = FirebaseStorage.instance.ref("groups/${loggedUser.houseId}/${p.id}.png").putFile(_imageFile!);
+    final upload = FirebaseStorage.instance.ref("groups/${widget.loggedUser.houseId}/${doc.id}.png").putFile(_imageFile!);
 
     setState(() => _uploadProgress = null);
     upload.snapshotEvents.listen((event) => setState(() => _uploadProgress = event.bytesTransferred / event.totalBytes));
@@ -60,7 +66,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
       final imageUrl = await (await upload).ref.getDownloadURL();
       setState(() => _uploadProgress = null);
 
-      await p.update({
+      await doc.update({
         "imageUrl": imageUrl
       });
     } on FirebaseException catch (e) {
@@ -83,15 +89,15 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
         price: _priceValue!,
         imageUrl: "",
         date: DateTime.now(),
-        from: loggedUser.uid,
+        from: widget.loggedUser.uid,
         to: {
-          loggedUser.uid: 1
+          widget.loggedUser.uid: 1
         },
       );
 
       DocumentReference ref;
       if (widget.payment == null) {
-        ref = await PaymentsPage.paymentsFirestoreRef(context).add(payment);
+        ref = await PaymentsPage.paymentsFirestoreRef(widget.loggedUser.houseId).add(payment);
       } else {
         await widget.payment!.reference.update(Payment.toFirestore(payment));
         ref = widget.payment!.reference;

@@ -13,8 +13,9 @@ class HousePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loggedUser = Provider.of<LoggedUser>(context);
     return StreamBuilder(
-      stream: TradesSection.firestoreRef(context).where("accepted", isEqualTo: false).where("to", isEqualTo: Provider.of<LoggedUser>(context).uid).snapshots().map(TradeRef.converter(context)),
+      stream: TradesSection.firestoreRef(loggedUser.houseId).where("accepted", isEqualTo: false).where("to", isEqualTo: loggedUser.uid).snapshots().map(TradeRef.converter(context)),
       builder: (context, snapshot) {
         return Scaffold(
           appBar: AppBarFix(title: Text(localizations(context).housePage)),

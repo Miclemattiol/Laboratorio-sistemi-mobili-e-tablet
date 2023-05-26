@@ -6,7 +6,7 @@ import 'package:house_wallet/data/shopping/shopping_item.dart';
 class ShoppingItemTile extends StatefulWidget {
   final FirestoreDocument<ShoppingItemRef> doc;
 
-  ShoppingItemTile(this.doc) /*  : super(key: Key(doc.id)) */; //TODO uncomment
+  ShoppingItemTile(this.doc) : super(key: Key(doc.id));
 
   @override
   State<ShoppingItemTile> createState() => _ShoppingItemTileState();
@@ -39,7 +39,7 @@ class _ShoppingItemTileState extends State<ShoppingItemTile> {
         activeColor: Colors.black,
         onChanged: (newValue) => setState(() => _checked = newValue!),
       ),
-      trailing: IconButton(onPressed: () {}, icon: const Icon(Icons.delete)),
+      trailing: IconButton(onPressed: () => widget.doc.reference.delete(), icon: const Icon(Icons.delete)),
     );
   }
 }

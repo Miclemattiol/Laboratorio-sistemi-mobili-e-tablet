@@ -63,7 +63,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
               _startDate = newValue;
             },
             onChanged: (newValue) {
-              if (!_edited && newValue != null) {
+              if (!_edited) {
                 _edited = true;
               }
             },
@@ -78,7 +78,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
               _endDate = newValue;
             },
             onChanged: (newValue) {
-              if (!_edited && newValue != null) {
+              if (!_edited) {
                 _edited = true;
               }
             },

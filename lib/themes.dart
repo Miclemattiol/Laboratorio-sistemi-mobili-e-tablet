@@ -11,7 +11,7 @@ class ThemeNotifier extends ValueNotifier<ThemeMode> {
   }
 }
 
-InputDecoration inputDecoration(String labelText) {
+InputDecoration inputDecoration([String? labelText]) {
   return InputDecoration(
     border: const OutlineInputBorder(),
     labelText: labelText,

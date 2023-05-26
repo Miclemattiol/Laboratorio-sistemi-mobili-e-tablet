@@ -17,36 +17,26 @@ class SupermarketDialog extends StatefulWidget {
 }
 
 class _SupermarketDialogState extends State<SupermarketDialog> {
-  GlobalKey<FormState> formKey = GlobalKey();
-
-  String? _supermarketValue;
+  late String? _supermarketValue = widget.initialValue;
 
   @override
   Widget build(BuildContext context) {
-    void submit() {
-      formKey.currentState!.save();
-      Navigator.of(context).pop<String?>(_supermarketValue);
-    }
-
-    return Form(
-      key: formKey,
-      child: CustomDialog(
-        dismissible: false,
-        padding: const EdgeInsets.all(24),
-        crossAxisAlignment: CrossAxisAlignment.center,
-        body: [
-          TextFormField(
-            autofocus: true,
-            initialValue: widget.initialValue,
-            decoration: inputDecoration(localizations(context).supermarketChipTooltip),
-            onSaved: (newValue) => _supermarketValue = newValue?.trim(),
-          ),
-        ],
-        actions: [
-          ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).buttonCancel)),
-          ModalButton(onPressed: submit, child: Text(localizations(context).buttonOk)),
-        ],
-      ),
+    return CustomDialog(
+      dismissible: false,
+      padding: const EdgeInsets.all(24),
+      crossAxisAlignment: CrossAxisAlignment.center,
+      body: [
+        TextFormField(
+          autofocus: true,
+          initialValue: widget.initialValue,
+          decoration: inputDecoration(localizations(context).supermarketChipTooltip),
+          onChanged: (value) => _supermarketValue = value.trim(),
+        ),
+      ],
+      actions: [
+        ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).buttonCancel)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<String?>(_supermarketValue), child: Text(localizations(context).buttonOk)),
+      ],
     );
   }
 }
