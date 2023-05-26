@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class NumberFormField<T extends num> extends StatelessWidget {
+  final bool autofocus;
   final T? initialValue;
   final AutovalidateMode? autovalidateMode;
   final InputDecoration? decoration;
@@ -12,6 +13,7 @@ class NumberFormField<T extends num> extends StatelessWidget {
   final bool decimal;
 
   const NumberFormField({
+    this.autofocus = false,
     this.initialValue,
     this.autovalidateMode,
     this.decoration,
@@ -55,6 +57,7 @@ class NumberFormField<T extends num> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      autofocus: autofocus,
       initialValue: initialValue?.toString(),
       autovalidateMode: autovalidateMode,
       decoration: decoration,

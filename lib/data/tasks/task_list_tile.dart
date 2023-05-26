@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
-import 'package:house_wallet/components/sliding_page_route.dart';
+import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/tasks/task_details_page.dart';

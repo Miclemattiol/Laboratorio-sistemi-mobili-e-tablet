@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/components/shopping/details_item_chip.dart';
 import 'package:house_wallet/components/ui/collapsible_container.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
-import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/shopping/price_quantity_dialog.dart';
+import 'package:house_wallet/pages/shopping/supermarket_dialog.dart';
 
 class ShoppingBottomSheet extends StatefulWidget {
   const ShoppingBottomSheet({super.key});
@@ -14,24 +15,22 @@ class ShoppingBottomSheet extends StatefulWidget {
 
 class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
   bool _detailsCollapsed = true;
-  ShoppingItem _shoppingItem = const ShoppingItem(price: null, quantity: null, supermarket: null, title: "", to: {});
 
-  String? _peopleLabel() {
-    //TODO
-    if (_shoppingItem.to.isEmpty) return null;
-
-    return "TODO";
-  }
+  PriceQuantity? _priceQuantityValue;
+  String? _supermarketValue;
+  String? _titleValue;
+  Map<String, int> _toValue = {};
 
   String? _priceQuantityLabel() {
-    if (_shoppingItem.quantity == null && _shoppingItem.price == null) return null;
+    if (_priceQuantityValue?.quantity == null && _priceQuantityValue?.price == null) return null;
 
     String label = "";
-    if (_shoppingItem.quantity != null) {
-      label += "${_shoppingItem.quantity}x ";
+    if (_priceQuantityValue!.quantity != null) {
+      label += "x${_priceQuantityValue!.quantity}";
     }
-    if (_shoppingItem.price != null) {
-      label += currencyFormat(context).format(_shoppingItem.price);
+    if (_priceQuantityValue!.price != null) {
+      if (label.isNotEmpty) label += "  •  ";
+      label += currencyFormat(context).format(_priceQuantityValue!.price);
     }
     return label.trim();
   }
@@ -52,6 +51,7 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
           children: [
             Expanded(
               child: TextField(
+                onChanged: (value) => _titleValue = value,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.add),
                   hintText: localizations(context).addNewInput,
@@ -80,27 +80,30 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
                 DetailsItemChip(
                   icon: Icons.groups,
                   tooltip: localizations(context).peopleChipTooltip,
-                  label: _peopleLabel(),
-                  onTap: () {
-                    final to = Map<String, int>.from(_shoppingItem.to);
-                    to["a"] = 10;
-                    setState(() => _shoppingItem = _shoppingItem.copyWith(to: to));
+                  label: _toValue.isEmpty ? null : localizations(context).peopleChipLabel(_toValue.length),
+                  onTap: () async {
+                    //TODO
+                    /* final to = await showDialog(context: context, builder: (context) => PeopleDialog(initialValue: _toValue)); */
                   },
                 ),
                 DetailsItemChip(
                   icon: Icons.shopping_basket,
                   tooltip: localizations(context).supermarketChipTooltip,
-                  label: _shoppingItem.supermarket,
-                  onTap: () {
-                    setState(() => _shoppingItem = _shoppingItem.copyWith(supermarket: "Test"));
+                  label: _supermarketValue,
+                  onTap: () async {
+                    final supermarket = await showDialog<String>(context: context, builder: (context) => SupermarketDialog(initialValue: _supermarketValue));
+                    if (supermarket == null) return;
+                    setState(() => _supermarketValue = supermarket.isEmpty ? null : supermarket);
                   },
                 ),
                 DetailsItemChip(
                   icon: Icons.attach_money,
                   tooltip: localizations(context).priceQuantityChipTooltip,
                   label: _priceQuantityLabel(),
-                  onTap: () {
-                    setState(() => _shoppingItem = _shoppingItem.copyWith(price: 10));
+                  onTap: () async {
+                    final priceQuantity = await showDialog<PriceQuantity>(context: context, builder: (context) => PriceQuantityDialog(initialValue: _priceQuantityValue));
+                    if (priceQuantity == null) return;
+                    setState(() => _priceQuantityValue = (priceQuantity.price == null && priceQuantity.quantity == null) ? null : priceQuantity);
                   },
                 ),
               ],

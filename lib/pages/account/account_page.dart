@@ -2,11 +2,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
-import 'package:house_wallet/components/sliding_page_route.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/dropdown_list_tile.dart';
-import 'package:house_wallet/components/user_avatar.dart';
+import 'package:house_wallet/components/ui/sliding_page_route.dart';
+import 'package:house_wallet/components/ui/user_avatar.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/image_picker.dart';
@@ -193,7 +193,7 @@ class _AccountPageState extends State<AccountPage> {
                           PadRow(
                             spacing: 16,
                             children: [
-                              Container(width: 128, height: 128, decoration: UserAvatar.border(context).copyWith(color: Colors.white)),
+                              Container(width: 128, height: 128, decoration: ImageAvatar.border(context).copyWith(color: Colors.white)),
                               Expanded(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -242,14 +242,14 @@ class _AccountPageState extends State<AccountPage> {
                           children: [
                             GestureDetector(
                               onTap: () => _changeProfilePicture(user.imageUrl),
-                              child: UserAvatar(user.imageUrl, size: 128),
+                              child: ImageAvatar(user.imageUrl, fallback: const Icon(Icons.person), size: 128),
                             ),
                             if (_uploadProgress != null)
                               Container(
                                 width: 128,
                                 height: 128,
                                 clipBehavior: Clip.antiAlias,
-                                decoration: UserAvatar.border(context).copyWith(color: Colors.black26),
+                                decoration: ImageAvatar.border(context).copyWith(color: Colors.black26),
                                 child: Padding(
                                   padding: const EdgeInsets.all(48),
                                   child: CircularProgressIndicator(value: _uploadProgress),

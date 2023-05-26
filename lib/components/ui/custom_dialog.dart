@@ -93,6 +93,7 @@ class CustomDialog extends StatelessWidget {
       builder: (context) => Form(
         key: formKey,
         child: CustomDialog(
+          dismissible: false,
           padding: const EdgeInsets.all(24),
           crossAxisAlignment: CrossAxisAlignment.center,
           body: [
@@ -101,6 +102,7 @@ class CustomDialog extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 8),
               child: TextFormField(
+                autofocus: true,
                 initialValue: initialValue,
                 decoration: inputDecoration(inputLabel),
                 onSaved: (newValue) => value = onSaved?.call(newValue) ?? newValue,

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
-import 'package:house_wallet/components/ui/payment_image.dart';
+import 'package:house_wallet/components/ui/user_avatar.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payments/payment.dart';
@@ -120,14 +120,14 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
                   children: [
                     GestureDetector(
                       onTap: _chooseImage,
-                      child: _imageFile != null ? PaymentImage.file(_imageFile, size: 64) : PaymentImage(widget.payment?.data.imageUrl, size: 64),
+                      child: _imageFile != null ? ImageAvatar.file(_imageFile!, fallback: const Icon(Icons.image)) : ImageAvatar(widget.payment?.data.imageUrl, fallback: const Icon(Icons.image)),
                     ),
                     if (_uploadProgress != null)
                       Container(
                         width: 64,
                         height: 64,
                         clipBehavior: Clip.antiAlias,
-                        decoration: PaymentImage.border(context).copyWith(color: Colors.black26),
+                        decoration: ImageAvatar.border(context).copyWith(color: Colors.black26),
                         child: Padding(
                           padding: const EdgeInsets.all(48),
                           child: CircularProgressIndicator(value: _uploadProgress),

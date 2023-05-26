@@ -68,6 +68,14 @@
     "addNewInput": "Aggiungi nuovo...",
     "showDetailsTooltip": "Mostra dettagli aggiuntivi",
     "hideDetailsTooltip": "Nascondi dettagli aggiuntivi",
+    "peopleChipLabel": "{count, plural, =1{1 persona} other{{count} persone}}",
+    "@peopleChipLabel": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
     "peopleChipTooltip": "Divisione dei prezzi",
     "supermarketChipTooltip": "Supermercato",
     "priceQuantityChipTooltip": "Prezzo e quantità",
@@ -177,5 +185,6 @@
     "copied": "Copiato!",
     "error": "Errore",
     "title": "Titolo",
-    "price": "Prezzo"
+    "price": "Prezzo",
+    "quantity": "Quantità"
 }

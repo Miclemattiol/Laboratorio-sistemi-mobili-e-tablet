@@ -17,22 +17,6 @@ class ShoppingItem {
     required this.to,
   });
 
-  ShoppingItem copyWith({
-    num? price,
-    int? quantity,
-    String? supermarket,
-    String? title,
-    Map<String, int>? to,
-  }) {
-    return ShoppingItem(
-      price: price ?? this.price,
-      quantity: quantity ?? this.quantity,
-      supermarket: supermarket ?? this.supermarket,
-      title: title ?? this.title,
-      to: to ?? this.to,
-    );
-  }
-
   factory ShoppingItem.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc, [SnapshotOptions? _]) {
     final data = doc.data()!;
     return ShoppingItem(
