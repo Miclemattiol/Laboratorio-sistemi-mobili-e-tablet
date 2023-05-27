@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/user.dart';
-import 'package:provider/provider.dart';
 
 class Trade {
   final num amount;
@@ -59,7 +58,7 @@ class TradeRef {
   });
 
   static FirestoreConverter<Trade, TradeRef> converter(BuildContext context) {
-    final houseRef = Provider.of<HouseDataRef>(context);
+    final houseRef = HouseDataRef.of(context);
     return firestoreConverter((doc) {
       final trade = doc.data();
       return TradeRef(

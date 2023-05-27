@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/main.dart';
+import 'package:provider/provider.dart';
 
 class ThemeNotifier extends ValueNotifier<ThemeMode> {
+  static ThemeNotifier of(BuildContext context, {bool listen = true}) => Provider.of<ThemeNotifier>(context, listen: listen);
+
   ThemeNotifier(super.value);
 
   @override

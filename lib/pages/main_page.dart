@@ -29,7 +29,7 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: MainPage.houseFirestoreRef(Provider.of<LoggedUser>(context).houseId).snapshots().map((doc) => doc.data()),
+      stream: MainPage.houseFirestoreRef(LoggedUser.of(context).houseId).snapshots().map((doc) => doc.data()),
       builder: (context, snapshot) {
         final house = snapshot.data;
         return StreamBuilder(

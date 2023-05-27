@@ -6,14 +6,13 @@ import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/data/house/trade.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/main.dart';
-import 'package:provider/provider.dart';
 
 class HousePage extends StatelessWidget {
   const HousePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final loggedUser = Provider.of<LoggedUser>(context);
+    final loggedUser = LoggedUser.of(context);
     return StreamBuilder(
       stream: TradesSection.firestoreRef(loggedUser.houseId).where("accepted", isEqualTo: false).where("to", isEqualTo: loggedUser.uid).snapshots().map(TradeRef.converter(context)),
       builder: (context, snapshot) {

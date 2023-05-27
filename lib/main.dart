@@ -97,7 +97,7 @@ class App extends StatelessWidget {
               title: "HouseWallet",
               theme: lightTheme,
               darkTheme: darkTheme,
-              themeMode: Provider.of<ThemeNotifier>(context).value,
+              themeMode: ThemeNotifier.of(context).value,
               home: Builder(builder: (context) => home(context, snapshot)),
               localizationsDelegates: const [
                 AppLocalizations.delegate,

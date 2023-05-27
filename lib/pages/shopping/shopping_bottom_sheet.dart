@@ -11,7 +11,6 @@ import 'package:house_wallet/pages/shopping/people_dialog.dart';
 import 'package:house_wallet/pages/shopping/price_quantity_dialog.dart';
 import 'package:house_wallet/pages/shopping/shopping_page.dart';
 import 'package:house_wallet/pages/shopping/supermarket_dialog.dart';
-import 'package:provider/provider.dart';
 
 class ShoppingBottomSheet extends StatefulWidget {
   const ShoppingBottomSheet({super.key});
@@ -35,7 +34,7 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
     if ((_titleValue ?? "").isEmpty) return;
 
     try {
-      await ShoppingPage.firestoreRef(Provider.of<LoggedUser>(context, listen: false).houseId).add(ShoppingItem(
+      await ShoppingPage.firestoreRef(LoggedUser.of(context, listen: false).houseId).add(ShoppingItem(
         price: _priceQuantityValue?.price,
         quantity: _priceQuantityValue?.quantity,
         supermarket: _supermarketValue,
@@ -121,7 +120,7 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
                   tooltip: localizations(context).peopleChipTooltip,
                   label: _toValue.isEmpty ? null : localizations(context).peopleChipLabel(_toValue.length),
                   onTap: () async {
-                    final to = await showDialog<Map<String, int>>(context: context, builder: (_) => PeopleDialog(house: Provider.of<HouseDataRef>(context), initialValues: _toValue));
+                    final to = await showDialog<Map<String, int>>(context: context, builder: (_) => PeopleDialog(house: HouseDataRef.of(context), initialValues: _toValue));
                     if (to == null) return;
                     setState(() => _toValue = to);
                   },

@@ -6,7 +6,6 @@ import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/tasks/task_details_page.dart';
 import 'package:house_wallet/pages/tasks/tasks_page.dart';
-import 'package:provider/provider.dart';
 
 class TaskListTile extends StatelessWidget {
   final Task task;
@@ -20,7 +19,7 @@ class TaskListTile extends StatelessWidget {
       title: Text(task.title),
       subtitle: Text(localizations(context).taskAssignedTo(task.assignedTo
           .map(
-            (e) => Provider.of<HouseDataRef>(context).getUser(e).username,
+            (e) => HouseDataRef.of(context).getUser(e).username,
           )
           .join(", "))),
       trailing: PadColumn(

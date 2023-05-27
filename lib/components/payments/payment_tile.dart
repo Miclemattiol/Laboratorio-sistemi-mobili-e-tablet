@@ -5,7 +5,6 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
-import 'package:provider/provider.dart';
 
 class PaymentTile extends StatelessWidget {
   final FirestoreDocument<PaymentRef> doc;
@@ -44,7 +43,7 @@ class PaymentTile extends StatelessWidget {
         children: [
           Text(currencyFormat(context).format(payment.price)),
           Text(
-            localizations(context).paymentPaidImpact(currencyFormat(context).format(_calculateImpact(Provider.of<LoggedUser>(context), payment))),
+            localizations(context).paymentPaidImpact(currencyFormat(context).format(_calculateImpact(LoggedUser.of(context), payment))),
             style: const TextStyle(fontSize: 10),
           ),
         ],
@@ -52,7 +51,7 @@ class PaymentTile extends StatelessWidget {
       onTap: () => showModalBottomSheet(
         context: context,
         isScrollControlled: true,
-        builder: (_) => PaymentDetailsBottomSheet.edit(doc, loggedUser: Provider.of<LoggedUser>(context)),
+        builder: (_) => PaymentDetailsBottomSheet.edit(doc, loggedUser: LoggedUser.of(context)),
       ),
     );
   }

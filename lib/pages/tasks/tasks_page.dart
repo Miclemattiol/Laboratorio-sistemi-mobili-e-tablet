@@ -6,7 +6,6 @@ import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/tasks/task_details_bottom_sheet.dart';
 import 'package:house_wallet/pages/tasks/tasks_tab.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 DateFormat taskDateFormat(BuildContext context) => DateFormat("dd/MM", Localizations.localeOf(context).languageCode);
 
@@ -67,7 +66,7 @@ class TasksPage extends StatelessWidget {
     return [
       TabData(
         label: localizations(context).myTasksTab,
-        widget: TasksTab.myTasks(tasks.where((task) => task.assignedTo.contains(Provider.of<LoggedUser>(context).uid)).toList()),
+        widget: TasksTab.myTasks(tasks.where((task) => task.assignedTo.contains(LoggedUser.of(context).uid)).toList()),
       ),
       TabData(
         label: localizations(context).allTasksTab,

@@ -6,6 +6,8 @@ import 'package:house_wallet/data/user.dart';
 import 'package:provider/provider.dart';
 
 class LoggedUser {
+  static LoggedUser of(BuildContext context, {bool listen = true}) => Provider.of<LoggedUser>(context, listen: listen);
+
   final auth.User authUser;
   final List<String> houses;
 
@@ -14,7 +16,7 @@ class LoggedUser {
   String get uid => authUser.uid;
   String get houseId => houses.first;
 
-  User getUserData(BuildContext context) => Provider.of<HouseDataRef>(context).getUser(uid);
+  User getUserData(BuildContext context) => HouseDataRef.of(context).getUser(uid);
 
   static Future<LoggedUser?> converter(auth.User? user) async {
     if (user == null) return null;

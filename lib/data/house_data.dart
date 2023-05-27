@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/user.dart';
+import 'package:provider/provider.dart';
 
 class HouseData {
   final String owner;
@@ -28,6 +30,8 @@ class HouseData {
 }
 
 class HouseDataRef {
+  static HouseDataRef of(BuildContext context, {bool listen = true}) => Provider.of<HouseDataRef>(context, listen: listen);
+
   final User owner;
   final Map<String, User> users;
 

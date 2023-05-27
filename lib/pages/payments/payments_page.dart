@@ -8,7 +8,6 @@ import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
-import 'package:provider/provider.dart';
 
 final payments = <Payment>[];
 
@@ -23,13 +22,13 @@ class PaymentsPage extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (_) => PaymentDetailsBottomSheet(loggedUser: Provider.of<LoggedUser>(context)),
+      builder: (_) => PaymentDetailsBottomSheet(loggedUser: LoggedUser.of(context)),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final loggedUser = Provider.of<LoggedUser>(context);
+    final loggedUser = LoggedUser.of(context);
     return Scaffold(
       appBar: AppBarFix(title: Text(localizations(context).paymentsPage)),
       body: StreamBuilder(

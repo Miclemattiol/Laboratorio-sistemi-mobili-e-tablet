@@ -23,7 +23,7 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  late final loggedUser = Provider.of<LoggedUser>(context);
+  late final loggedUser = LoggedUser.of(context);
   final _formKey = GlobalKey<FormState>();
   bool _edited = false;
   bool _loading = false;
