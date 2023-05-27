@@ -5,8 +5,8 @@ import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/dropdown_list_tile.dart';
+import 'package:house_wallet/components/ui/image_avatar.dart';
 import 'package:house_wallet/components/ui/sliding_page_route.dart';
-import 'package:house_wallet/components/ui/user_avatar.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/image_picker_bottom_sheet.dart';
 import 'package:house_wallet/main.dart';
@@ -36,7 +36,7 @@ class _AccountPageState extends State<AccountPage> {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final appLocalizations = localizations(context);
 
-    final image = await ImagePickerBottomSheet.pickImage(context, imageUrl: currentImage);
+    final image = await ImagePickerBottomSheet.pickImage(context, image: currentImage);
     if (image == null) return;
 
     final upload = FirebaseStorage.instance.ref("users/${loggedUser.uid}-${DateTime.now().millisecondsSinceEpoch}.png").putFile(image);
@@ -184,24 +184,12 @@ class _AccountPageState extends State<AccountPage> {
                 PadRow(
                   spacing: 16,
                   children: [
-                    Stack(
-                      children: [
-                        GestureDetector(
-                          onTap: () => _changeProfilePicture(user.imageUrl),
-                          child: ImageAvatar(user.imageUrl, fallback: const Icon(Icons.person), size: 128),
-                        ),
-                        if (_uploadProgress != null)
-                          Container(
-                            width: 128,
-                            height: 128,
-                            clipBehavior: Clip.antiAlias,
-                            decoration: ImageAvatar.border(context).copyWith(color: Colors.black26),
-                            child: Padding(
-                              padding: const EdgeInsets.all(48),
-                              child: CircularProgressIndicator(value: _uploadProgress),
-                            ),
-                          )
-                      ],
+                    ImageAvatar(
+                      user.imageUrl,
+                      fallback: const Icon(Icons.person),
+                      size: 128,
+                      onTap: () => _changeProfilePicture(user.imageUrl),
+                      progress: _uploadProgress,
                     ),
                     Expanded(
                       child: Column(

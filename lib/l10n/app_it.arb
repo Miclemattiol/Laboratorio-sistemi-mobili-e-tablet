@@ -47,7 +47,6 @@
     "logoutButton": "Logout",
     "paymentsPage": "Transazioni",
     "priceInvalid": "Prezzo non valido",
-    "paymentTitleInvalid": "Titolo non valido",
     "paymentPaidFrom": "Pagato da {from}",
     "paymentDate": "Data pagamento",
     "@paymentPaidFrom": {
@@ -84,6 +83,7 @@
     "myTasksTab": "Le mie attività",
     "allTasksTab": "Tutte le attività",
     "task": "Incarico",
+    "taskAssignedToNobody": "non assegnato a nessuno",
     "taskAssignedTo": "per {to}",
     "@taskAssignedTo": {
         "placeholders": {
@@ -108,17 +108,22 @@
             }
         }
     },
-    "taskDateInvalid": "Data non valida",
-    "taskEndDateBeforeStartDate": "La data di fine deve essere successiva alla data di inizio",
+    "taskStartDateInput": "Data di inizio",
+    "taskStartDateInputErrorBeforeEndDate": "La data di inizio deve essere precedente alla data di fine",
+    "taskEndDateInput": "Data di fine",
+    "taskEndDateInputErrorBeforeStartDate": "La data di fine deve essere successiva alla data di inizio",
+    "taskDateInputErrorMissing": "Data non valida",
+    "taskRepeat": "Ripeti",
     "taskRepeatDaily": "Ogni giorno",
     "taskRepeatWeekly": "Ogni settimana",
     "taskRepeatMonthly": "Ogni mese",
     "taskRepeatYearly": "Ogni anno",
     "taskRepeatCustom": "Personalizzato",
     "taskRepeatCustomPrompt": "Intervallo personalizzato",
-    "taskRepeatCustomInvalid": "Intervallo non valido",
-    "taskEdit": "Modifica incarico",
-    "taskDelete": "Elimina incarico",
+    "taskIntervalErrorMissing": "Inserisci un intervallo",
+    "taskEditTooltip": "Modifica incarico",
+    "taskDeleteConfirmDialogTitle": "Elimina incarico",
+    "taskDeleteConfirmDialogContent": "Sei sicuro di voler eliminare l'incarico?",
     "housePage": "Casa",
     "activityLogPage": "Registro attività",
     "tradesSection": "Scambi",

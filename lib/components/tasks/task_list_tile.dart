@@ -17,13 +17,9 @@ class TaskListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: task.data.repeating != -1 ? const SizedBox(height: double.infinity, child: Icon(Icons.repeat)) : null,
+      leading: task.data.repeating == null ? null : const SizedBox(height: double.infinity, child: Icon(Icons.repeat)),
       title: Text(task.data.title),
-      subtitle: Text(localizations(context).taskAssignedTo(task.data.assignedTo
-          .map(
-            (user) => user.username,
-          )
-          .join(", "))),
+      subtitle: Text(task.data.assignedTo.isEmpty ? localizations(context).taskAssignedToNobody : localizations(context).taskAssignedTo(task.data.assignedTo.map((user) => user.username).join(", "))),
       trailing: PadColumn(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -33,16 +29,7 @@ class TaskListTile extends StatelessWidget {
           Text(localizations(context).taskToDate(taskDateFormat(context).format(task.data.to)))
         ],
       ),
-      onTap: () => Navigator.of(context).push(
-        SlidingPageRoute(
-          TaskDetailsPage(
-            task,
-            house: HouseDataRef.of(context, listen: false),
-            loggedUser: LoggedUser.of(context, listen: false),
-          ),
-          fullscreenDialog: true,
-        ),
-      ), //TODO live update
+      onTap: () => Navigator.of(context).push(SlidingPageRoute(TaskDetailsPage(task, house: HouseDataRef.of(context, listen: false), loggedUser: LoggedUser.of(context, listen: false)), fullscreenDialog: true)),
     );
   }
 }

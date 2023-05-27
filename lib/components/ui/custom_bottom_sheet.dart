@@ -4,6 +4,7 @@ import 'package:house_wallet/components/ui/modal_button.dart';
 
 class CustomBottomSheet extends StatelessWidget {
   final List<Widget> body;
+  final bool dismissible;
   final BoxDecoration? decoration;
   final double spacing;
   final EdgeInsetsGeometry padding;
@@ -14,6 +15,7 @@ class CustomBottomSheet extends StatelessWidget {
 
   const CustomBottomSheet({
     required this.body,
+    this.dismissible = true,
     this.decoration,
     this.spacing = 8,
     this.padding = const EdgeInsets.all(16),
@@ -34,25 +36,28 @@ class CustomBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: (decoration ?? const BoxDecoration()).copyWith(borderRadius: decoration?.borderRadius ?? borderRadius(context)),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              PadColumn(
-                spacing: spacing,
-                padding: padding,
-                mainAxisSize: mainAxisSize,
-                mainAxisAlignment: mainAxisAlignment,
-                crossAxisAlignment: crossAxisAlignment,
-                children: body,
-              ),
-              if (actions != null) PadRow(spacing: 1, children: actions!.map((button) => Expanded(child: button)).toList())
-            ],
+    return WillPopScope(
+      onWillPop: () async => dismissible,
+      child: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Container(
+            clipBehavior: Clip.antiAlias,
+            decoration: (decoration ?? const BoxDecoration()).copyWith(borderRadius: decoration?.borderRadius ?? borderRadius(context)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                PadColumn(
+                  spacing: spacing,
+                  padding: padding,
+                  mainAxisSize: mainAxisSize,
+                  mainAxisAlignment: mainAxisAlignment,
+                  crossAxisAlignment: crossAxisAlignment,
+                  children: body,
+                ),
+                if (actions != null) PadRow(spacing: 1, children: actions!.map((button) => Expanded(child: button)).toList())
+              ],
+            ),
           ),
         ),
       ),

@@ -44,13 +44,13 @@ class _ShoppingItemDetailsBottomSheetState extends State<ShoppingItemDetailsBott
 
     setState(() => _loading = true);
     try {
-      await widget.shoppingItem.reference.update({
-        "price": _priceValue,
-        "quantity": _quantityValue,
-        "supermarket": _supermarketValue,
-        "title": _titleValue!,
-        "to": _toValue!,
-      });
+      await widget.shoppingItem.reference.update(ShoppingItem.toFirestore(ShoppingItem(
+        price: _priceValue,
+        quantity: _quantityValue,
+        supermarket: _supermarketValue,
+        title: _titleValue!,
+        to: _toValue!,
+      )));
       navigator.pop();
     } on FirebaseException catch (error) {
       CustomDialog.alert(
@@ -67,6 +67,7 @@ class _ShoppingItemDetailsBottomSheetState extends State<ShoppingItemDetailsBott
     return Form(
       key: _formKey,
       child: CustomBottomSheet(
+        dismissible: !_loading,
         spacing: 16,
         body: [
           PadRow(

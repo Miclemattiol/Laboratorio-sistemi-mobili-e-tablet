@@ -23,6 +23,7 @@ class _ShoppingItemTileState extends State<ShoppingItemTile> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      enableDrag: false,
       builder: (context) => ShoppingItemDetailsBottomSheet(widget.shoppingItem, house: house),
     );
   }

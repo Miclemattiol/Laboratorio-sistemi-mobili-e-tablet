@@ -23,6 +23,7 @@ class PaymentsPage extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      enableDrag: false,
       builder: (context) => PaymentDetailsBottomSheet(loggedUser: loggedUser, house: house),
     );
   }

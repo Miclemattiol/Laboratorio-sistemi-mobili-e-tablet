@@ -70,6 +70,7 @@ class PaymentTile extends StatelessWidget {
           showModalBottomSheet(
             context: context,
             isScrollControlled: true,
+            enableDrag: false,
             builder: (context) => PaymentDetailsBottomSheet.edit(doc, loggedUser: loggedUser, house: house),
           );
         },

@@ -7,17 +7,19 @@ import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerBottomSheet extends StatelessWidget {
-  final String? imageURL;
+  final dynamic image;
 
-  const ImagePickerBottomSheet._({this.imageURL});
+  const ImagePickerBottomSheet._({
+    this.image,
+  }) : assert(image is File || image is String?);
 
-  static Future<File?> pickImage(BuildContext context, {String? imageUrl}) async {
+  static Future<File?> pickImage(BuildContext context, {dynamic image}) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
 
     final source = await showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (context) => ImagePickerBottomSheet._(imageURL: imageUrl),
+      builder: (context) => ImagePickerBottomSheet._(image: image),
     );
     if (source == null) return null;
 
@@ -32,20 +34,23 @@ class ImagePickerBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final image = (this.image is String && (this.image as String).isEmpty) ? null : this.image;
     return CustomBottomSheet(
       padding: EdgeInsets.zero,
       spacing: 0,
       body: [
-        if (imageURL != null)
+        if (image != null)
           AnimatedSize(
             duration: const Duration(milliseconds: 200),
             child: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
-              child: CachedNetworkImage(
-                imageUrl: imageURL!,
-                placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                errorWidget: (context, url, error) => const SizedBox.shrink(),
-              ),
+              child: image is File
+                  ? Image.file(image)
+                  : CachedNetworkImage(
+                      imageUrl: image as String,
+                      placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => const SizedBox.shrink(),
+                    ),
             ),
           ),
         ListTile(

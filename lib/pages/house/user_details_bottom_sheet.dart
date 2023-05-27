@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
-import 'package:house_wallet/components/ui/user_avatar.dart';
+import 'package:house_wallet/components/ui/image_avatar.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';

@@ -93,10 +93,10 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
           ),
           TextFormField(
             enabled: !_loading,
-            decoration: inputDecoration(localizations(context).descriptionInput),
-            keyboardType: TextInputType.multiline,
             minLines: 1,
             maxLines: 5,
+            decoration: inputDecoration(localizations(context).descriptionInput),
+            keyboardType: TextInputType.multiline,
             onSaved: (description) => _descriptionValue = (description ?? "").trim().isEmpty ? null : description?.trim(),
           ),
           if (widget.user.iban != null) CopyFormField(widget.user.iban!, decoration: inputDecoration(localizations(context).ibanInput)),

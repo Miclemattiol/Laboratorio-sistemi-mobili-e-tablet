@@ -9,9 +9,9 @@ import 'package:house_wallet/data/user_share.dart';
 class Payment {
   final String category;
   final DateTime date;
-  final String description;
+  final String? description;
   final String from;
-  final String imageUrl;
+  final String? imageUrl;
   final num price;
   final String title;
   final Map<String, int> to;
@@ -58,9 +58,9 @@ class Payment {
 class PaymentRef {
   final Category? category;
   final DateTime date;
-  final String description;
+  final String? description;
   final User from;
-  final String imageUrl;
+  final String? imageUrl;
   final num price;
   final String title;
   final Map<String, UserShare> to;
