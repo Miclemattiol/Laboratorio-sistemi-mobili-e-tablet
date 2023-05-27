@@ -49,6 +49,7 @@
     "priceInvalid": "Prezzo non valido",
     "paymentTitleInvalid": "Titolo non valido",
     "paymentPaidFrom": "Pagato da {from}",
+    "paymentDate": "Data pagamento",
     "@paymentPaidFrom": {
         "placeholders": {
             "from": {
