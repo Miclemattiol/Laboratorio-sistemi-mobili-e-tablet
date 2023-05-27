@@ -74,8 +74,8 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
       await doc.update({
         "imageUrl": imageUrl
       });
-    } on FirebaseException catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${e.message})")));
+    } on FirebaseException catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${error.message})")));
     }
   }
 
@@ -110,8 +110,8 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
       await _setImagePicture(ref);
 
       navigator.pop();
-    } on FirebaseException catch (e) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${e.message})")));
+    } on FirebaseException catch (error) {
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${error.message})")));
     }
   }
 
@@ -152,7 +152,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
               Expanded(
                 child: TextFormField(
                   initialValue: widget.payment?.data.title ?? "",
-                  decoration: inputDecoration(localizations(context).title).copyWith(errorStyle: const TextStyle(fontSize: 10)),
+                  decoration: inputDecoration(localizations(context).title, true),
                   onChanged: (title) {
                     if (!_edited && title.trim().isNotEmpty) _edited = true;
                   },
@@ -160,11 +160,11 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
                   validator: (value) => value?.trim().isEmpty == true ? localizations(context).paymentTitleInvalid : null,
                 ),
               ),
-              SizedBox(
-                width: 120,
+              ConstrainedBox(
+                constraints: multiInputRowConstraints(context),
                 child: NumberFormField<num>(
                   initialValue: widget.payment?.data.price,
-                  decoration: inputDecoration(localizations(context).price).copyWith(errorStyle: const TextStyle(fontSize: 10)),
+                  decoration: inputDecoration(localizations(context).price, true),
                   onChanged: (price) {
                     if (!_edited && price != null) _edited = true;
                   },

@@ -26,9 +26,9 @@ class _LoginPageState extends State<LoginPage> {
     setState(() => _loading = true);
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailValue!, password: _passwordValue!);
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(() {
-        switch (e.code) {
+        switch (error.code) {
           case "user-disabled":
             return localizations(context).loginErrorUserDisabled;
           case "user-not-found":
@@ -38,7 +38,7 @@ class _LoginPageState extends State<LoginPage> {
           case "too-many-requests":
             return localizations(context).loginErrorTooManyRequests;
           default:
-            return e.message == null ? localizations(context).loginErrorOther : localizations(context).loginErrorOtherDetails(e.message!);
+            return error.message == null ? localizations(context).loginErrorOther : localizations(context).loginErrorOtherDetails(error.message!);
         }
       }())));
       setState(() => _loading = false);

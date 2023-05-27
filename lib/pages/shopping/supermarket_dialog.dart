@@ -29,7 +29,7 @@ class _SupermarketDialogState extends State<SupermarketDialog> {
         TextFormField(
           autofocus: true,
           initialValue: widget.initialValue,
-          decoration: inputDecoration(localizations(context).supermarketChipTooltip),
+          decoration: inputDecoration(localizations(context).supermarket),
           onChanged: (value) => _supermarketValue = value.trim(),
         ),
       ],

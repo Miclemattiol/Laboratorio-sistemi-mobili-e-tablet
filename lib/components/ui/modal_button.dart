@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 
 class ModalButton extends StatelessWidget {
   final ButtonStyle? style;
+  final bool enabled;
   final void Function()? onPressed;
   final Widget child;
 
   const ModalButton({
     this.style,
+    this.enabled = true,
     required this.onPressed,
     required this.child,
     super.key,
@@ -31,7 +33,7 @@ class ModalButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       style: (style ?? TextButton.styleFrom()).merge(_defaultStyle(context)),
-      onPressed: onPressed,
+      onPressed: enabled ? onPressed : null,
       child: child,
     );
   }

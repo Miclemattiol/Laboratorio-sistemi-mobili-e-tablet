@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/collapsible_container.dart';
 import 'package:house_wallet/data/firestore.dart';
+import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
+import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/shopping/shopping_item_details_bottom_sheet.dart';
 
 class ShoppingItemTile extends StatefulWidget {
-  final FirestoreDocument<ShoppingItemRef> doc;
+  final FirestoreDocument<ShoppingItemRef> shoppingItem;
 
-  ShoppingItemTile(this.doc) : super(key: Key(doc.id));
+  ShoppingItemTile(this.shoppingItem) : super(key: Key(shoppingItem.id));
 
   @override
   State<ShoppingItemTile> createState() => _ShoppingItemTileState();
@@ -15,9 +18,17 @@ class ShoppingItemTile extends StatefulWidget {
 class _ShoppingItemTileState extends State<ShoppingItemTile> {
   bool _checked = false;
 
+  void _openShoppingItemDetails(BuildContext context) {
+    final house = HouseDataRef.of(context, listen: false);
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => ShoppingItemDetailsBottomSheet(widget.shoppingItem, house: house),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final shoppingItem = widget.doc.data;
     return ListTile(
       dense: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 4),
@@ -25,7 +36,7 @@ class _ShoppingItemTileState extends State<ShoppingItemTile> {
       title: Stack(
         alignment: Alignment.centerLeft,
         children: [
-          Text(shoppingItem.title),
+          Text(widget.shoppingItem.data.title),
           CollapsibleContainer(
             collapsed: !_checked,
             axis: Axis.horizontal,
@@ -39,7 +50,12 @@ class _ShoppingItemTileState extends State<ShoppingItemTile> {
         activeColor: Colors.black,
         onChanged: (newValue) => setState(() => _checked = newValue!),
       ),
-      trailing: IconButton(onPressed: () => widget.doc.reference.delete(), icon: const Icon(Icons.delete)),
+      trailing: IconButton(
+        tooltip: localizations(context).delete,
+        onPressed: () => widget.shoppingItem.reference.delete(),
+        icon: const Icon(Icons.delete),
+      ),
+      onTap: () => _openShoppingItemDetails(context),
     );
   }
 }

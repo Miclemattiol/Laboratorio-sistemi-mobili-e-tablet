@@ -77,9 +77,8 @@
             }
         }
     },
-    "peopleChipTooltip": "Divisione dei prezzi",
-    "supermarketChipTooltip": "Supermercato",
     "priceQuantityChipTooltip": "Prezzo e quantità",
+    "titleInputErrorMissing": "Inserisci il titolo",
     "tasksPage": "Incarichi",
     "myTasksTab": "Le mie attività",
     "allTasksTab": "Tutte le attività",
@@ -191,6 +190,10 @@
     "copied": "Copiato!",
     "error": "Errore",
     "title": "Titolo",
+    "supermarket": "Supermercato",
+    "people": "Persone",
+    "peopleShares": "Divisione dei prezzi",
     "price": "Prezzo",
-    "quantity": "Quantità"
+    "quantity": "Quantità",
+    "delete": "Elimina"
 }

@@ -7,18 +7,18 @@ import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/themes.dart';
 
-class PeopleShareDialog extends StatefulWidget {
+class PeopleSharesDialog extends StatefulWidget {
   final HouseDataRef house;
   final Map<String, int>? initialValues;
 
-  const PeopleShareDialog({
+  const PeopleSharesDialog({
     required this.house,
     this.initialValues,
     super.key,
   });
 
   @override
-  State<PeopleShareDialog> createState() => _PeopleShareDialogState();
+  State<PeopleSharesDialog> createState() => _PeopleSharesDialogState();
 }
 
 class _UserShare {
@@ -28,7 +28,7 @@ class _UserShare {
   _UserShare(this.value, this.enabled);
 }
 
-class _PeopleShareDialogState extends State<PeopleShareDialog> {
+class _PeopleSharesDialogState extends State<PeopleSharesDialog> {
   late final users = widget.house.users.values.where((user) => user.uid.isNotEmpty);
   late final initialValues = widget.initialValues ?? {};
   late final Map<String, _UserShare> _values = Map.fromEntries(users.map((user) => MapEntry(user.uid, _UserShare(initialValues[user.uid] ?? 1, initialValues.containsKey(user.uid)))));

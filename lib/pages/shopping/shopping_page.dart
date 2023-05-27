@@ -20,6 +20,16 @@ class ShoppingPage extends StatelessWidget {
         shadowColor: Colors.black,
         elevation: 3,
         scrolledUnderElevation: 3,
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)), //TODO acquisto
+          PopupMenuButton(
+            itemBuilder: (context) => [
+              //TODO ricette
+              const PopupMenuItem(child: Text("TODO 1")),
+              const PopupMenuItem(enabled: false, child: Text("TODO 2"))
+            ],
+          ),
+        ],
       ),
       body: Column(
         children: [
@@ -61,7 +71,7 @@ class ShoppingPage extends StatelessWidget {
               },
             ),
           ),
-          ShoppingBottomSheet(house: HouseDataRef.of(context))
+          const ShoppingBottomSheet()
         ],
       ),
     );

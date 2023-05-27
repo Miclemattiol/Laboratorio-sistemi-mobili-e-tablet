@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
@@ -33,31 +34,46 @@ class PaymentTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final payment = doc.data;
-    return ListTile(
-      title: Text(payment.title),
-      subtitle: Text(localizations(context).paymentPaidFrom(payment.from.username)),
-      leading: const SizedBox(height: double.infinity, child: Icon(Icons.shopping_cart)),
-      trailing: PadColumn(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        spacing: 4,
+    return Slidable(
+      key: Key(doc.id),
+      endActionPane: ActionPane(
+        extentRatio: .2,
+        motion: const ScrollMotion(),
         children: [
-          Text(currencyFormat(context).format(payment.price)),
-          Text(
-            localizations(context).paymentPaidImpact(currencyFormat(context).format(_calculateImpact(LoggedUser.of(context), payment))),
-            style: const TextStyle(fontSize: 10),
+          SlidableAction(
+            onPressed: (context) => doc.reference.delete(),
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
           ),
         ],
       ),
-      onTap: () {
-        final loggedUser = LoggedUser.of(context, listen: false);
-        final house = HouseDataRef.of(context, listen: false);
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          builder: (context) => PaymentDetailsBottomSheet.edit(doc, loggedUser: loggedUser, house: house),
-        );
-      },
+      child: ListTile(
+        title: Text(payment.title),
+        subtitle: Text(localizations(context).paymentPaidFrom(payment.from.username)),
+        leading: const SizedBox(height: double.infinity, child: Icon(Icons.shopping_cart)),
+        trailing: PadColumn(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          spacing: 4,
+          children: [
+            Text(currencyFormat(context).format(payment.price)),
+            Text(
+              localizations(context).paymentPaidImpact(currencyFormat(context).format(_calculateImpact(LoggedUser.of(context), payment))),
+              style: const TextStyle(fontSize: 10),
+            ),
+          ],
+        ),
+        onTap: () {
+          final loggedUser = LoggedUser.of(context, listen: false);
+          final house = HouseDataRef.of(context, listen: false);
+          showModalBottomSheet(
+            context: context,
+            isScrollControlled: true,
+            builder: (context) => PaymentDetailsBottomSheet.edit(doc, loggedUser: loggedUser, house: house),
+          );
+        },
+      ),
     );
   }
 }

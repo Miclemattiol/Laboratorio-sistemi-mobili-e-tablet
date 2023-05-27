@@ -93,8 +93,8 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
       }
 
       navigator.pop();
-    } on FirebaseException catch (e) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${e.message})")));
+    } on FirebaseException catch (error) {
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${error.message})")));
     }
   }
 

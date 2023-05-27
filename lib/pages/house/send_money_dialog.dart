@@ -57,11 +57,11 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
         description: _descriptionValue,
       ));
       navigator.pop(true);
-    } on FirebaseException catch (e) {
+    } on FirebaseException catch (error) {
       CustomDialog.alert(
         context: context,
         title: localizations(context).error,
-        content: "${localizations(context).userDialogContentError} (${e.message})",
+        content: "${localizations(context).userDialogContentError} (${error.message})",
       );
       setState(() => _loading = false);
     }

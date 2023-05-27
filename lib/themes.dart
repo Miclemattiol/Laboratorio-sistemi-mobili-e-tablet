@@ -14,13 +14,16 @@ class ThemeNotifier extends ValueNotifier<ThemeMode> {
   }
 }
 
-InputDecoration inputDecoration([String? labelText]) {
+InputDecoration inputDecoration([String? labelText, bool smallErrorText = false]) {
   return InputDecoration(
     border: const OutlineInputBorder(),
     labelText: labelText,
     contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+    errorStyle: smallErrorText ? const TextStyle(fontSize: 10) : null,
   );
 }
+
+BoxConstraints multiInputRowConstraints(BuildContext context) => BoxConstraints(minWidth: 96, maxWidth: MediaQuery.of(context).size.width / 4);
 
 //TODO themes
 ThemeData get lightTheme {
@@ -31,6 +34,9 @@ ThemeData get lightTheme {
     colorScheme: colorScheme,
     listTileTheme: const ListTileThemeData(iconColor: Colors.black),
     iconTheme: const IconThemeData(color: Colors.black),
+    appBarTheme: const AppBarTheme(
+      actionsIconTheme: IconThemeData(color: Colors.black),
+    ),
     textTheme: const TextTheme(
       headlineMedium: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
       headlineSmall: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
