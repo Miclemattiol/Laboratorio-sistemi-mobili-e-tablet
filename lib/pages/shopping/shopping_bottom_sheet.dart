@@ -6,13 +6,15 @@ import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/shopping/people_dialog.dart';
+import 'package:house_wallet/pages/shopping/people_share_dialog.dart';
 import 'package:house_wallet/pages/shopping/price_quantity_dialog.dart';
 import 'package:house_wallet/pages/shopping/shopping_page.dart';
 import 'package:house_wallet/pages/shopping/supermarket_dialog.dart';
 
 class ShoppingBottomSheet extends StatefulWidget {
-  const ShoppingBottomSheet({super.key});
+  final HouseDataRef house;
+
+  const ShoppingBottomSheet({required this.house, super.key});
 
   @override
   State<ShoppingBottomSheet> createState() => _ShoppingBottomSheetState();
@@ -33,7 +35,7 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
     if ((_titleValue ?? "").isEmpty) return;
 
     try {
-      await ShoppingPage.firestoreRef(HouseDataRef.of(context, listen: false).id).add(ShoppingItem(
+      await ShoppingPage.firestoreRef(widget.house.id).add(ShoppingItem(
         price: _priceQuantityValue?.price,
         quantity: _priceQuantityValue?.quantity,
         supermarket: _supermarketValue,
@@ -119,7 +121,8 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
                   tooltip: localizations(context).peopleChipTooltip,
                   label: _toValue.isEmpty ? null : localizations(context).peopleChipLabel(_toValue.length),
                   onTap: () async {
-                    final to = await showDialog<Map<String, int>>(context: context, builder: (_) => PeopleDialog(house: HouseDataRef.of(context), initialValues: _toValue));
+                    final house = HouseDataRef.of(context, listen: false);
+                    final to = await showDialog<Map<String, int>>(context: context, builder: (_) => PeopleShareDialog(house: house, initialValues: _toValue));
                     if (to == null) return;
                     setState(() => _toValue = to);
                   },

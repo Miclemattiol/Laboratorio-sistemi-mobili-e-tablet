@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/components/ui/user_avatar.dart';
@@ -11,7 +12,7 @@ import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payments/payment.dart';
-import 'package:house_wallet/image_picker.dart';
+import 'package:house_wallet/image_picker_bottom_sheet.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/themes.dart';
@@ -46,10 +47,10 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
   File? _imageFile;
   String? _titleValue;
   String? _descriptionValue;
-  double? _priceValue;
+  num? _priceValue;
 
   void _chooseImage() async {
-    final image = await pickImage(context); //TODO add String? imageURL to visualize image
+    final image = await ImagePickerBottomSheet.pickImage(context, imageUrl: widget.payment?.data.imageUrl);
     if (image == null) return;
 
     setState(() {
@@ -161,23 +162,14 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
               ),
               SizedBox(
                 width: 120,
-                child: TextFormField(
-                  initialValue: widget.payment?.data.price.toStringAsFixed(2) ?? "",
+                child: NumberFormField<num>(
+                  initialValue: widget.payment?.data.price,
                   decoration: inputDecoration(localizations(context).price).copyWith(errorStyle: const TextStyle(fontSize: 10)),
-                  keyboardType: TextInputType.number,
                   onChanged: (price) {
-                    if (!_edited && price.trim().isNotEmpty) _edited = true;
+                    if (!_edited && price != null) _edited = true;
                   },
-                  onSaved: (price) => _priceValue = (price ?? "").trim().isEmpty ? null : double.parse(price!),
-                  validator: (value) {
-                    try {
-                      final price = double.parse(value!); //TODO use NumberFormField
-                      if (price <= 0) return localizations(context).priceInvalid;
-                      return null;
-                    } catch (e) {
-                      return localizations(context).priceInvalid;
-                    }
-                  },
+                  onSaved: (price) => _priceValue = price,
+                  validator: (price) => (price == null || price <= 0) ? localizations(context).priceInvalid : null,
                 ),
               ),
             ],

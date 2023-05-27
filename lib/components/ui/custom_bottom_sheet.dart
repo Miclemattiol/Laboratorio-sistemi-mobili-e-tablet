@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 
-//TODO when opened, don't cover entire screen
 class CustomBottomSheet extends StatelessWidget {
   final List<Widget> body;
   final BoxDecoration? decoration;
@@ -36,27 +35,25 @@ class CustomBottomSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
+      child: SingleChildScrollView(
+          child: Container(
         clipBehavior: Clip.antiAlias,
         decoration: (decoration ?? const BoxDecoration()).copyWith(borderRadius: decoration?.borderRadius ?? borderRadius(context)),
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              PadColumn(
-                spacing: spacing,
-                padding: padding,
-                mainAxisSize: mainAxisSize,
-                mainAxisAlignment: mainAxisAlignment,
-                crossAxisAlignment: crossAxisAlignment,
-                children: body,
-              ),
-              if (actions != null) PadRow(spacing: 1, children: actions!.map((button) => Expanded(child: button)).toList())
-            ],
-          ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            PadColumn(
+              spacing: spacing,
+              padding: padding,
+              mainAxisSize: mainAxisSize,
+              mainAxisAlignment: mainAxisAlignment,
+              crossAxisAlignment: crossAxisAlignment,
+              children: body,
+            ),
+            if (actions != null) PadRow(spacing: 1, children: actions!.map((button) => Expanded(child: button)).toList())
+          ],
         ),
-      ),
+      )),
     );
   }
 }
