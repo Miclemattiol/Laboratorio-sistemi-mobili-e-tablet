@@ -1,28 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
+import 'package:house_wallet/data/firestore.dart';
+import 'package:house_wallet/data/house_data.dart';
+import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/tasks/calendar.dart';
 import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/tasks/task_details_bottom_sheet.dart';
 
 class TaskDetailsPage extends StatelessWidget {
-  final Task task;
+  final FirestoreDocument<TaskRef> task;
+  final LoggedUser loggedUser;
+  final HouseDataRef house;
 
-  const TaskDetailsPage(this.task, {super.key});
+  const TaskDetailsPage(this.task, {super.key, required this.loggedUser, required this.house});
 
   void _editTask(BuildContext context) {
-    // showModalBottomSheet(
-    //   context: context,
-    //   isScrollControlled: true,
-    //   builder: (context) => TaskDetailsBottomSheet.edit(task),
-    // );
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => TaskDetailsBottomSheet.edit(task, loggedUser: loggedUser, house: house),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarFix(
-        title: Text(task.title),
+        title: Text(task.data.title),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete),
@@ -45,7 +50,7 @@ class TaskDetailsPage extends StatelessWidget {
         const Calendar(),
         Padding(
           padding: const EdgeInsets.all(16),
-          child: Text(task.description ?? ""),
+          child: Text(task.data.description ?? ""),
         )
       ]),
     );

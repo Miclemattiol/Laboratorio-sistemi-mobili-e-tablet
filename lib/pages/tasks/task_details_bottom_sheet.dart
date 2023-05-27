@@ -13,6 +13,47 @@ import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/tasks/tasks_page.dart';
 import 'package:house_wallet/themes.dart';
 
+enum RepeatOptions {
+  //Never, // -1
+  Daily, // 0
+  Weekly, // 1
+  Monthly, // 2
+  Yearly, // 3
+  Custom, // 4
+}
+
+extension RepeatOptionsValues on RepeatOptions {
+  IconData get icon {
+    switch (this) {
+      case RepeatOptions.Daily:
+        return Icons.repeat_one;
+      case RepeatOptions.Weekly:
+        return Icons.repeat;
+      case RepeatOptions.Monthly:
+        return Icons.calendar_month_outlined;
+      case RepeatOptions.Yearly:
+        return Icons.calendar_today_outlined;
+      case RepeatOptions.Custom:
+        return Icons.edit_calendar_outlined;
+    }
+  }
+
+  String getName(BuildContext context) {
+    switch (this) {
+      case RepeatOptions.Daily:
+        return localizations(context).taskRepeatDaily;
+      case RepeatOptions.Weekly:
+        return localizations(context).taskRepeatWeekly;
+      case RepeatOptions.Monthly:
+        return localizations(context).taskRepeatMonthly;
+      case RepeatOptions.Yearly:
+        return localizations(context).taskRepeatYearly;
+      case RepeatOptions.Custom:
+        return localizations(context).taskRepeatCustom;
+    }
+  }
+}
+
 class TaskDetailsBottomSheet extends StatefulWidget {
   final LoggedUser loggedUser;
   final HouseDataRef house;
@@ -37,7 +78,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
     if (widget.task != null) {
       _repeat = widget.task?.data.repeating != null && widget.task!.data.repeating != -1;
       if (_repeat) {
-        repeatValue = repeatOptions.keys.toList()[widget.task!.data.repeating];
+        repeatValue = RepeatOptions.values[widget.task!.data.repeating];
       }
     }
   }
@@ -50,18 +91,9 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
   DateTime? _startDate;
   DateTime? _endDate;
   bool _repeat = false;
-  late String repeatValue = repeatOptions.keys.first;
+  RepeatOptions repeatValue = RepeatOptions.values.first;
   DateTime? _startDateChangedValue;
   int? _intervalValue;
-
-  late Map<String, IconData> repeatOptions = {
-    //Never                                       //-1
-    localizations(context).taskRepeatDaily: Icons.repeat_one, //0
-    localizations(context).taskRepeatWeekly: Icons.repeat, //1
-    localizations(context).taskRepeatMonthly: Icons.calendar_month_outlined, //2
-    localizations(context).taskRepeatYearly: Icons.calendar_today_outlined, //3
-    localizations(context).taskRepeatCustom: Icons.edit_calendar_outlined, //4
-  };
 
   _saveTask() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
@@ -70,19 +102,15 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
     try {
-      int repeating = repeatOptions.keys.toList().indexOf(repeatValue);
-
       Task task = Task(
         title: _titleValue!,
         description: _descriptionValue,
         from: _startDate!,
         to: _endDate!,
-        repeating: _repeat ? repeating : -1,
-        interval: repeating == repeatOptions.keys.length - 1 ? _intervalValue : null,
+        repeating: _repeat ? repeatValue.index : -1,
+        interval: repeatValue.index == RepeatOptions.values.length - 1 ? _intervalValue : null,
         assignedTo: [],
       );
-
-      print("Task: ${task.title} - ${task.description} - ${task.from} - ${task.to} - ${task.repeating} - ${task.interval} - ${task.assignedTo}");
 
       task; //TODO: save task
 
@@ -156,7 +184,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
           Column(
             children: [
               SwitchListTile(
-                title: const Text("Ripeti"),
+                title: const Text("Ripeti"), //todo translate
                 contentPadding: EdgeInsets.zero,
                 value: _repeat,
                 onChanged: (value) {
@@ -173,19 +201,19 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: DropdownButtonHideUnderline(
-                    child: DropdownButton<String>(
+                    child: DropdownButton<RepeatOptions>(
                       value: repeatValue,
                       isExpanded: true,
                       style: const TextStyle(fontWeight: FontWeight.normal, color: Colors.black), //TODO set color to theme
-                      items: repeatOptions.entries
+                      items: RepeatOptions.values
                           .map(
-                            (e) => DropdownMenuItem<String>(
-                              value: e.key,
+                            (option) => DropdownMenuItem<RepeatOptions>(
+                              value: option,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(e.key),
-                                  Icon(e.value),
+                                  Text(option.getName(context)),
+                                  Icon(option.icon),
                                 ],
                               ),
                             ),
@@ -204,7 +232,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
                 ),
               ),
               CollapsibleContainer(
-                collapsed: !_repeat || repeatValue != localizations(context).taskRepeatCustom,
+                collapsed: !_repeat || repeatValue != RepeatOptions.Custom,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: NumberFormField<int>(
