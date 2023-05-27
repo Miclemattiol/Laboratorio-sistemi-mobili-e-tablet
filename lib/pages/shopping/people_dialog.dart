@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
-import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/themes.dart';
 
 class PeopleDialog extends StatefulWidget {
   final HouseDataRef house;
-  final Map<String, int> initialValues;
+  final Set<String> initialValue;
 
   const PeopleDialog({
     required this.house,
-    required this.initialValues,
+    required this.initialValue,
     super.key,
   });
 
@@ -21,21 +19,9 @@ class PeopleDialog extends StatefulWidget {
   State<PeopleDialog> createState() => _PeopleDialogState();
 }
 
-class _PeopleDialogData {
-  int value;
-  bool enabled;
-
-  _PeopleDialogData(this.value, this.enabled);
-}
-
 class _PeopleDialogState extends State<PeopleDialog> {
   late final users = widget.house.users.values.where((user) => user.uid.isNotEmpty);
-  late final Map<String, _PeopleDialogData> _values = Map.fromEntries(users.map((user) => MapEntry(user.uid, _PeopleDialogData(widget.initialValues[user.uid] ?? 1, widget.initialValues.containsKey(user.uid)))));
-
-  void _submit() {
-    final Map<String, int> values = Map.fromEntries(_values.entries.where((entry) => entry.value.enabled).map((entry) => MapEntry(entry.key, entry.value.value)));
-    Navigator.of(context).pop<Map<String, int>?>(values);
-  }
+  late final Set<String> _value = Set.from(widget.initialValue);
 
   @override
   Widget build(BuildContext context) {
@@ -49,31 +35,17 @@ class _PeopleDialogState extends State<PeopleDialog> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Checkbox(
-              value: _values[user.uid]!.enabled,
-              onChanged: (value) => setState(() => _values[user.uid]!.enabled = value!),
+              value: _value.contains(user.uid),
+              onChanged: (value) => setState(() => value! ? _value.add(user.uid) : _value.remove(user.uid)),
               visualDensity: VisualDensity.compact,
             ),
             Expanded(child: Text(user.username, overflow: TextOverflow.ellipsis, softWrap: false)),
-            SizedBox(
-              width: 48,
-              child: NumberFormField<int>(
-                initialValue: _values[user.uid]!.value,
-                enabled: _values[user.uid]!.enabled,
-                textAlign: TextAlign.center,
-                decoration: inputDecoration().copyWith(contentPadding: EdgeInsets.zero),
-                onChanged: (value) => setState(() {
-                  if (value != null) {
-                    _values[user.uid]!.value = value;
-                  }
-                }),
-              ),
-            )
           ],
         );
       }).toList(),
       actions: [
-        ModalButton(onPressed: () => Navigator.of(context).pop<Map<String, int>?>(), child: Text(localizations(context).buttonCancel)),
-        ModalButton(onPressed: _submit, child: Text(localizations(context).buttonOk)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<Set<String>?>(), child: Text(localizations(context).buttonCancel)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<Set<String>?>(_value), child: Text(localizations(context).buttonOk)),
       ],
     );
   }

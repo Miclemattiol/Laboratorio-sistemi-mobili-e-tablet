@@ -15,7 +15,7 @@ class LoggedUser {
 
   String get uid => authUser.uid;
 
-  User getUserData(BuildContext context) => HouseDataRef.of(context).getUser(uid);
+  User getUserData(BuildContext context, {bool listen = true}) => HouseDataRef.of(context, listen: listen).getUser(uid);
 
   static Query<Map<String, dynamic>> _groupsFirestoreRef(String uid) => FirebaseFirestore.instance.collection("/groups").where("users", arrayContains: uid);
 

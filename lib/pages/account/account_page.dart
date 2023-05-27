@@ -8,7 +8,7 @@ import 'package:house_wallet/components/ui/dropdown_list_tile.dart';
 import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:house_wallet/components/ui/user_avatar.dart';
 import 'package:house_wallet/data/logged_user.dart';
-import 'package:house_wallet/image_picker.dart';
+import 'package:house_wallet/image_picker_bottom_sheet.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/account/notifications_page.dart';
 import 'package:house_wallet/pages/main_page.dart';
@@ -36,7 +36,7 @@ class _AccountPageState extends State<AccountPage> {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final appLocalizations = localizations(context);
 
-    final image = await pickImage(context);
+    final image = await ImagePickerBottomSheet.pickImage(context, imageUrl: currentImage);
     if (image == null) return;
 
     final upload = FirebaseStorage.instance.ref("users/${loggedUser.uid}-${DateTime.now().millisecondsSinceEpoch}.png").putFile(image);

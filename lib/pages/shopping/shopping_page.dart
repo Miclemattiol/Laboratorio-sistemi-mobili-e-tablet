@@ -61,7 +61,7 @@ class ShoppingPage extends StatelessWidget {
               },
             ),
           ),
-          const ShoppingBottomSheet()
+          ShoppingBottomSheet(house: HouseDataRef.of(context))
         ],
       ),
     );
