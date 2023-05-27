@@ -1,11 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
+import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/tasks/task_details_bottom_sheet.dart';
 import 'package:house_wallet/pages/tasks/tasks_tab.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 DateFormat taskDateFormat(BuildContext context) => DateFormat("dd/MM", Localizations.localeOf(context).languageCode);
 
@@ -54,11 +57,18 @@ class TabData {
 class TasksPage extends StatelessWidget {
   const TasksPage({super.key});
 
+  static CollectionReference<Task> tasksFirestoreRef(String houseId) => FirebaseFirestore.instance.collection("/groups/$houseId/tasks").withConverter(fromFirestore: Task.fromFirestore, toFirestore: Task.toFirestore);
+
   void _addTask(BuildContext context) {
+    final loggedUser = LoggedUser.of(context, listen: false);
+    final house = HouseDataRef.of(context, listen: false);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (context) => const TaskDetailsBottomSheet(),
+      builder: (context) => TaskDetailsBottomSheet(
+        loggedUser: loggedUser,
+        house: house,
+      ),
     );
   }
 
