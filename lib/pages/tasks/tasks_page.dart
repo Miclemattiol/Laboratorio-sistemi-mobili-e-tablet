@@ -43,6 +43,7 @@ class TasksPage extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      enableDrag: false,
       builder: (context) => TaskDetailsBottomSheet(loggedUser: loggedUser, house: house),
     );
   }
