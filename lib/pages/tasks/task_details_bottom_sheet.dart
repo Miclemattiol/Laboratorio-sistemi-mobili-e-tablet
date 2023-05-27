@@ -112,8 +112,6 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
         assignedTo: [],
       );
 
-      task; //TODO: save task
-
       if (widget.task == null) {
         await TasksPage.tasksFirestoreRef(widget.house.id).add(task);
       } else {
@@ -204,7 +202,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
                     child: DropdownButton<RepeatOptions>(
                       value: repeatValue,
                       isExpanded: true,
-                      style: const TextStyle(fontWeight: FontWeight.normal, color: Colors.black), //TODO set color to theme
+                      style: Theme.of(context).textTheme.bodyMedium,
                       items: RepeatOptions.values
                           .map(
                             (option) => DropdownMenuItem<RepeatOptions>(

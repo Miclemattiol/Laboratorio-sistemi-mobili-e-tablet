@@ -120,7 +120,7 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
         ],
         actions: [
           ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel)),
-          ModalButton(onPressed: () => _addTrade(context), child: Text(localizations(context).buttonPay)), //TODO create trade
+          ModalButton(onPressed: () => _addTrade(context), child: Text(localizations(context).buttonPay)),
         ],
       ),
     );

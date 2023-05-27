@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/components/form/date_picker_form_field.dart';
 import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
@@ -48,6 +49,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
   String? _titleValue;
   String? _descriptionValue;
   num? _priceValue;
+  DateTime? _transactonDateValue;
 
   void _chooseImage() async {
     final image = await ImagePickerBottomSheet.pickImage(context, imageUrl: widget.payment?.data.imageUrl);
@@ -93,7 +95,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
         description: _descriptionValue ?? "",
         price: _priceValue!,
         imageUrl: "",
-        date: DateTime.now(),
+        date: _transactonDateValue!,
         from: widget.loggedUser.uid,
         to: {
           widget.loggedUser.uid: 1
@@ -175,10 +177,16 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
             ],
           ),
           TextFormField(
+            //TODO select category
             decoration: inputDecoration("TODO"),
           ),
-          TextFormField(
-            decoration: inputDecoration("TODO"),
+          DatePickerFormField(
+            initialValue: widget.payment?.data.date ?? DateTime.now(),
+            decoration: inputDecoration(localizations(context).paymentDate),
+            onChanged: (date) {
+              if (!_edited) _edited = true;
+            },
+            onSaved: (date) => _transactonDateValue = date,
           ),
           TextFormField(
             initialValue: widget.payment?.data.description ?? "",

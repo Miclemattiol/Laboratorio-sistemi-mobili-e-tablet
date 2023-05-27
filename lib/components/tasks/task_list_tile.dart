@@ -33,13 +33,16 @@ class TaskListTile extends StatelessWidget {
           Text(localizations(context).taskToDate(taskDateFormat(context).format(task.data.to)))
         ],
       ),
-      onTap: () => Navigator.of(context).push(SlidingPageRoute(
+      onTap: () => Navigator.of(context).push(
+        SlidingPageRoute(
           TaskDetailsPage(
             task,
             house: HouseDataRef.of(context, listen: false),
             loggedUser: LoggedUser.of(context, listen: false),
           ),
-          fullscreenDialog: true)),
+          fullscreenDialog: true,
+        ),
+      ), //TODO live update
     );
   }
 }
