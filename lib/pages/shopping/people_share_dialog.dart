@@ -9,11 +9,11 @@ import 'package:house_wallet/themes.dart';
 
 class PeopleShareDialog extends StatefulWidget {
   final HouseDataRef house;
-  final Map<String, int> initialValues;
+  final Map<String, int>? initialValues;
 
   const PeopleShareDialog({
     required this.house,
-    required this.initialValues,
+    this.initialValues,
     super.key,
   });
 
@@ -30,10 +30,11 @@ class _UserShare {
 
 class _PeopleShareDialogState extends State<PeopleShareDialog> {
   late final users = widget.house.users.values.where((user) => user.uid.isNotEmpty);
-  late final Map<String, _UserShare> _values = Map.fromEntries(users.map((user) => MapEntry(user.uid, _UserShare(widget.initialValues[user.uid] ?? 1, widget.initialValues.containsKey(user.uid)))));
+  late final initialValues = widget.initialValues ?? {};
+  late final Map<String, _UserShare> _values = Map.fromEntries(users.map((user) => MapEntry(user.uid, _UserShare(initialValues[user.uid] ?? 1, initialValues.containsKey(user.uid)))));
 
   void _submit() {
-    final Map<String, int> values = Map.fromEntries(_values.entries.where((entry) => entry.value.enabled).map((entry) => MapEntry(entry.key, entry.value.value)));
+    final Map<String, int> values = Map.fromEntries(_values.entries.where((entry) => entry.value.enabled && entry.value.value != 0).map((entry) => MapEntry(entry.key, entry.value.value)));
     Navigator.of(context).pop<Map<String, int>?>(values);
   }
 

@@ -7,11 +7,11 @@ import 'package:house_wallet/main.dart';
 
 class PeopleDialog extends StatefulWidget {
   final HouseDataRef house;
-  final Set<String> initialValue;
+  final Set<String>? initialValue;
 
   const PeopleDialog({
     required this.house,
-    required this.initialValue,
+    this.initialValue,
     super.key,
   });
 
@@ -21,7 +21,7 @@ class PeopleDialog extends StatefulWidget {
 
 class _PeopleDialogState extends State<PeopleDialog> {
   late final users = widget.house.users.values.where((user) => user.uid.isNotEmpty);
-  late final Set<String> _value = Set.from(widget.initialValue);
+  late final Set<String> _value = Set.from(widget.initialValue ?? {});
 
   @override
   Widget build(BuildContext context) {
