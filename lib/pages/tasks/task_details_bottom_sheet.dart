@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:house_wallet/components/form/date_picker_form_field.dart';
 import 'package:house_wallet/components/ui/collapsible_container.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
@@ -27,6 +28,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
   bool _repeat = false;
   late String repeatValue = repeatOptions.keys.first;
   DateTime? _startDateChangedValue;
+  final TextEditingController _intervalController = TextEditingController(text: "");
 
   late Map<String, IconData> repeatOptions = {
     //Never                                       //-1
@@ -49,6 +51,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
       from: _startDate!,
       to: _endDate!,
       repeating: repeating,
+      interval: repeating == repeatOptions.keys.length - 1 ? int.parse(_intervalController.text) : null,
       assignedTo: [],
     );
 
@@ -167,9 +170,27 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
                   child: TextFormField(
                     decoration: inputDecoration(localizations(context).taskRepeatCustomPrompt),
                     keyboardType: TextInputType.number,
+                    controller: _intervalController,
                     validator: (value) {
-                      if (value == null || value.isEmpty) return localizations(context).taskRepeatCustomInvalid;
+                      if (value == null || value.trim().isEmpty || int.parse(value) != double.parse(value)) return localizations(context).taskRepeatCustomInvalid;
                       return null;
+                    },
+                    onChanged: (value) {
+                      setState(() {
+                        late final String v;
+                        try {
+                          v = double.parse(value.replaceAll(RegExp(r'[-,]'), "")).truncate().toString();
+                        } catch (e) {
+                          v = "";
+                        }
+                        _intervalController.value = TextEditingValue(
+                          text: v,
+                          selection: TextSelection.fromPosition(TextPosition(offset: v.length)),
+                        );
+                        if (!_edited && value.trim().isNotEmpty) {
+                          _edited = true;
+                        }
+                      });
                     },
                   ),
                 ),
