@@ -30,6 +30,7 @@ class Task {
       from: (data["from"] as Timestamp).toDate(),
       to: (data["to"] as Timestamp).toDate(),
       repeating: data["repeating"],
+      interval: data["interval"] ,
       description: data["description"],
       assignedTo: List.from(data["assignedTo"]),
     );
@@ -41,6 +42,7 @@ class Task {
       "from": Timestamp.fromDate(trade.from),
       "to": Timestamp.fromDate(trade.to),
       "repeating": trade.repeating,
+      "interval": trade.interval,
       "description": trade.description,
       "assignedTo": trade.assignedTo,
     };
@@ -74,6 +76,7 @@ class TaskRef {
         title: task.title,
         from: task.from,
         to: task.to,
+        interval: task.interval,
         repeating: task.repeating,
         description: task.description,
         assignedTo: task.assignedTo.map((user) => houseRef.getUser(user)).toList(),

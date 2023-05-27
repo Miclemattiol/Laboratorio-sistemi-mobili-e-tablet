@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:house_wallet/components/form/date_picker_form_field.dart';
@@ -5,20 +6,43 @@ import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/ui/collapsible_container.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
+import 'package:house_wallet/data/firestore.dart';
+import 'package:house_wallet/data/house_data.dart';
+import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/tasks/tasks_page.dart';
 import 'package:house_wallet/themes.dart';
 
 class TaskDetailsBottomSheet extends StatefulWidget {
-  const TaskDetailsBottomSheet({super.key});
+  final LoggedUser loggedUser;
+  final HouseDataRef house;
+  final FirestoreDocument<TaskRef>? task;
 
-  const TaskDetailsBottomSheet.edit({super.key});
+  const TaskDetailsBottomSheet({
+    required this.loggedUser,
+    required this.house,
+    super.key,
+  }) : task = null;
+
+  const TaskDetailsBottomSheet.edit(this.task, {required this.loggedUser, required this.house, super.key});
 
   @override
   State<TaskDetailsBottomSheet> createState() => _TaskDetailsBottomSheetState();
 }
 
 class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.task != null) {
+      _repeat = widget.task?.data.repeating != null && widget.task!.data.repeating != -1;
+      if (_repeat) {
+        repeatValue = repeatOptions.keys.toList()[widget.task!.data.repeating];
+      }
+    }
+  }
+
   final _formKey = GlobalKey<FormState>();
 
   bool _edited = false;
@@ -41,26 +65,38 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
   };
 
   _saveTask() async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final navigator = Navigator.of(context);
+
     if (!_formKey.currentState!.validate()) return;
     _formKey.currentState!.save();
+    try {
+      int repeating = repeatOptions.keys.toList().indexOf(repeatValue);
 
-    int repeating = repeatOptions.keys.toList().indexOf(repeatValue);
+      Task task = Task(
+        title: _titleValue!,
+        description: _descriptionValue,
+        from: _startDate!,
+        to: _endDate!,
+        repeating: _repeat ? repeating : -1,
+        interval: repeating == repeatOptions.keys.length - 1 ? _intervalValue : null,
+        assignedTo: [],
+      );
 
-    Task task = Task(
-      title: _titleValue!,
-      description: _descriptionValue,
-      from: _startDate!,
-      to: _endDate!,
-      repeating: _repeat ? repeating : -1,
-      interval: repeating == repeatOptions.keys.length - 1 ? _intervalValue : null,
-      assignedTo: [],
-    );
+      print("Task: ${task.title} - ${task.description} - ${task.from} - ${task.to} - ${task.repeating} - ${task.interval} - ${task.assignedTo}");
 
-    print("Task: ${task.title} - ${task.description} - ${task.from} - ${task.to} - ${task.repeating} - ${task.interval} - ${task.assignedTo}");
+      task; //TODO: save task
 
-    task; //TODO: save task
+      if (widget.task == null) {
+        await TasksPage.tasksFirestoreRef(widget.house.id).add(task);
+      } else {
+        await widget.task!.reference.update(Task.toFirestore(task));
+      }
 
-    Navigator.of(context).pop();
+      navigator.pop();
+    } on FirebaseException catch (e) {
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${e.message})")));
+    }
   }
 
   @override
@@ -71,6 +107,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
         spacing: 16,
         body: [
           TextFormField(
+            initialValue: widget.task?.data.title,
             decoration: inputDecoration(localizations(context).title),
             onSaved: (newValue) {
               _titleValue = newValue;
@@ -81,6 +118,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
             },
           ),
           DatePickerFormField.dateOnly(
+            initialValue: widget.task?.data.from,
             decoration: inputDecoration("Data inizio"),
             onSaved: (newValue) {
               _startDate = newValue;
@@ -97,6 +135,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
             },
           ),
           DatePickerFormField.dateOnly(
+            initialValue: widget.task?.data.to,
             decoration: inputDecoration("Data fine"),
             onSaved: (newValue) {
               _endDate = newValue;
@@ -106,7 +145,6 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
                 _edited = true;
               }
             },
-            initialValue: _startDate,
             validator: (value) {
               if (value == null) {
                 return localizations(context).taskDateInvalid;
@@ -171,6 +209,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10),
                   child: NumberFormField<int>(
+                    initialValue: widget.task?.data.interval,
                     decoration: inputDecoration(localizations(context).taskRepeatCustomPrompt),
                     validator: (value) {
                       if (value == null || value < 1) return localizations(context).taskRepeatCustomInvalid;
@@ -192,6 +231,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
             ],
           ),
           TextFormField(
+            initialValue: widget.task?.data.description,
             decoration: inputDecoration(localizations(context).descriptionInput),
             keyboardType: TextInputType.multiline,
             minLines: 1,
