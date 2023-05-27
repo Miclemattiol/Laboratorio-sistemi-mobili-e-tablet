@@ -11,17 +11,24 @@ class LoggedUser {
   final auth.User authUser;
   final List<String> houses;
 
-  const LoggedUser(this.authUser, this.houses);
+  const LoggedUser._(this.authUser, this.houses);
 
   String get uid => authUser.uid;
-  String get houseId => houses.first;
 
   User getUserData(BuildContext context) => HouseDataRef.of(context).getUser(uid);
 
-  static Future<LoggedUser?> converter(auth.User? user) async {
-    if (user == null) return null;
+  static Query<Map<String, dynamic>> _groupsFirestoreRef(String uid) => FirebaseFirestore.instance.collection("/groups").where("users", arrayContains: uid);
 
-    final data = await FirebaseFirestore.instance.collection("/groups").where("users", arrayContains: user.uid).get();
-    return LoggedUser(user, data.docs.map((doc) => doc.id).toList());
+  static Widget stream({required Widget Function(BuildContext context, AsyncSnapshot<LoggedUser?> snapshot) builder}) {
+    return StreamBuilder(
+      stream: auth.FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        final user = snapshot.data;
+        return StreamBuilder<LoggedUser?>(
+          stream: user == null ? Stream.value(null) : _groupsFirestoreRef(user.uid).snapshots().map((groups) => LoggedUser._(user, groups.docs.map((doc) => doc.id).toList())),
+          builder: builder,
+        );
+      },
+    );
   }
 }

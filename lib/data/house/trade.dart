@@ -36,7 +36,7 @@ class Trade {
       "amount": trade.amount,
       "from": trade.from,
       "to": trade.to,
-      "date": trade.date,
+      "date": FieldValue.serverTimestamp(),
       "description": trade.description,
     };
   }

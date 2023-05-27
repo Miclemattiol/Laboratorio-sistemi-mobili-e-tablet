@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/shopping/shopping_item_tile.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
-import 'package:house_wallet/data/logged_user.dart';
+import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/shopping/shopping_bottom_sheet.dart';
@@ -25,7 +25,7 @@ class ShoppingPage extends StatelessWidget {
         children: [
           Expanded(
             child: StreamBuilder(
-              stream: ShoppingPage.firestoreRef(LoggedUser.of(context).houseId).snapshots().map(ShoppingItemRef.converter(context)),
+              stream: ShoppingPage.firestoreRef(HouseDataRef.of(context).id).snapshots().map(ShoppingItemRef.converter(context)),
               builder: (context, snapshot) {
                 final shoppingItems = snapshot.data;
 

@@ -4,7 +4,6 @@ import 'package:house_wallet/components/shopping/details_item_chip.dart';
 import 'package:house_wallet/components/ui/collapsible_container.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/data/house_data.dart';
-import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/shopping/people_dialog.dart';
@@ -34,7 +33,7 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
     if ((_titleValue ?? "").isEmpty) return;
 
     try {
-      await ShoppingPage.firestoreRef(LoggedUser.of(context, listen: false).houseId).add(ShoppingItem(
+      await ShoppingPage.firestoreRef(HouseDataRef.of(context, listen: false).id).add(ShoppingItem(
         price: _priceQuantityValue?.price,
         quantity: _priceQuantityValue?.quantity,
         supermarket: _supermarketValue,

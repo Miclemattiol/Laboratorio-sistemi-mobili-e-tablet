@@ -8,6 +8,7 @@ import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/components/ui/user_avatar.dart';
 import 'package:house_wallet/data/firestore.dart';
+import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/image_picker.dart';
@@ -17,16 +18,19 @@ import 'package:house_wallet/themes.dart';
 
 class PaymentDetailsBottomSheet extends StatefulWidget {
   final LoggedUser loggedUser;
+  final HouseDataRef house;
   final FirestoreDocument<PaymentRef>? payment;
 
   const PaymentDetailsBottomSheet({
     required this.loggedUser,
+    required this.house,
     super.key,
   }) : payment = null;
 
   const PaymentDetailsBottomSheet.edit(
     this.payment, {
     required this.loggedUser,
+    required this.house,
     super.key,
   });
 
@@ -57,7 +61,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
   Future<void> _setImagePicture(DocumentReference doc) async {
     if (_imageFile == null) return;
 
-    final upload = FirebaseStorage.instance.ref("groups/${widget.loggedUser.houseId}/${doc.id}.png").putFile(_imageFile!);
+    final upload = FirebaseStorage.instance.ref("groups/${widget.house.id}/${doc.id}.png").putFile(_imageFile!);
 
     setState(() => _uploadProgress = null);
     upload.snapshotEvents.listen((event) => setState(() => _uploadProgress = event.bytesTransferred / event.totalBytes));
@@ -97,7 +101,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
 
       DocumentReference ref;
       if (widget.payment == null) {
-        ref = await PaymentsPage.paymentsFirestoreRef(widget.loggedUser.houseId).add(payment);
+        ref = await PaymentsPage.paymentsFirestoreRef(widget.house.id).add(payment);
       } else {
         await widget.payment!.reference.update(Payment.toFirestore(payment));
         ref = widget.payment!.reference;
@@ -167,7 +171,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
                   onSaved: (price) => _priceValue = (price ?? "").trim().isEmpty ? null : double.parse(price!),
                   validator: (value) {
                     try {
-                      final price = double.parse(value!);
+                      final price = double.parse(value!); //TODO use NumberFormField
                       if (price <= 0) return localizations(context).priceInvalid;
                       return null;
                     } catch (e) {
