@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/data/firestore.dart';
+import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/main.dart';
@@ -48,11 +49,15 @@ class PaymentTile extends StatelessWidget {
           ),
         ],
       ),
-      onTap: () => showModalBottomSheet(
-        context: context,
-        isScrollControlled: true,
-        builder: (_) => PaymentDetailsBottomSheet.edit(doc, loggedUser: LoggedUser.of(context)),
-      ),
+      onTap: () {
+        final loggedUser = LoggedUser.of(context, listen: false);
+        final house = HouseDataRef.of(context, listen: false);
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          builder: (context) => PaymentDetailsBottomSheet.edit(doc, loggedUser: loggedUser, house: house),
+        );
+      },
     );
   }
 }

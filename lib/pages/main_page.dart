@@ -28,8 +28,9 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final loggedUser = LoggedUser.of(context);
     return StreamBuilder(
-      stream: MainPage.houseFirestoreRef(LoggedUser.of(context).houseId).snapshots().map((doc) => doc.data()),
+      stream: MainPage.houseFirestoreRef(loggedUser.houses.first).snapshots().map((doc) => doc.data()),
       builder: (context, snapshot) {
         final house = snapshot.data;
         return StreamBuilder(
@@ -113,19 +114,45 @@ class _MainPageStackState extends State<_MainPageStack> {
   Widget build(BuildContext context) {
     final pages = _pages();
     _selectedIndex = _selectedIndex.clamp(0, pages.length - 1);
-    return Scaffold(
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: pages.map((page) => page.widget).toList(),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedIndex,
-        onTap: (index) {
-          prefs.setLastSection(index);
-          setState(() => _selectedIndex = index);
-        },
-        items: pages.map((page) => BottomNavigationBarItem(icon: Icon(page.icon), label: page.label)).toList(),
+    return ChangeNotifierProvider(
+      create: (context) => BadgesNotifier(),
+      builder: (context, child) => Scaffold(
+        body: IndexedStack(
+          index: _selectedIndex,
+          children: pages.map((page) => page.widget).toList(),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedIndex,
+          onTap: (index) {
+            prefs.setLastSection(index);
+            setState(() => _selectedIndex = index);
+          },
+          items: () {
+            final badges = BadgesNotifier.of(context).badges;
+            return pages.map((page) {
+              final badge = badges[page.widget.runtimeType] ?? 0;
+              return BottomNavigationBarItem(
+                icon: badge == 0 ? Icon(page.icon) : Badge(label: Text("$badge"), child: Icon(page.icon)),
+                label: page.label,
+              );
+            }).toList();
+          }(),
+        ),
       ),
     );
   }
+}
+
+class BadgesNotifier extends ChangeNotifier {
+  static BadgesNotifier of(BuildContext context, {bool listen = true}) => Provider.of<BadgesNotifier>(context, listen: listen);
+
+  final _badges = <Type, int>{};
+  Map<Type, int> get badges => Map.unmodifiable(_badges);
+
+  void setBadge(Type page, int? value) {
+    _badges[page] = value ?? 0;
+    notifyListeners();
+  }
+
+  BadgesNotifier();
 }

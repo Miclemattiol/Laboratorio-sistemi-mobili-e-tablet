@@ -15,17 +15,17 @@ class TradesSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = snapshot.data;
+    final trades = snapshot.data;
     return Section(
       title: localizations(context).tradesSection,
       children: () {
-        if (data == null) {
+        if (trades == null) {
           return [
-            Center(child: Text("Error (${snapshot.error})")) //TODO error message
+            ListTile(title: Text("${localizations(context).tradesSectionError} (${snapshot.error})"))
           ];
         }
 
-        return data.map(TradeListTile.new).toList();
+        return trades.map(TradeListTile.new).toList();
       }(),
     );
   }

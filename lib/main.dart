@@ -61,10 +61,17 @@ class App extends StatelessWidget {
       );
     }
 
-    if (user == null) return const LoginPage();
+    if (user == null) {
+      if (snapshot.connectionState == ConnectionState.waiting) {
+        return const Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        );
+      } else {
+        return const LoginPage();
+      }
+    }
 
     if (user.houses.isEmpty) {
-      //TODO no group
       return Scaffold(
         body: PadColumn(
           spacing: 8,
@@ -72,8 +79,8 @@ class App extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(child: Text("User is not a member of any group!", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center)),
-            ElevatedButton(onPressed: FirebaseAuth.instance.signOut, child: Text(localizations(context).logoutButton))
+            Center(child: Text("User is not a member of any group!", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center)), //TODO
+            ElevatedButton(onPressed: FirebaseAuth.instance.signOut, child: Text(localizations(context).logoutButton)),
           ],
         ),
       );
@@ -90,31 +97,28 @@ class App extends StatelessWidget {
     return KeyboardDismisser(
       child: ChangeNotifierProvider(
         create: (context) => ThemeNotifier(prefs.theme),
-        child: StreamBuilder(
-          stream: FirebaseAuth.instance.authStateChanges().asyncMap(LoggedUser.converter),
-          builder: (context, snapshot) {
-            return MaterialApp(
-              title: "HouseWallet",
-              theme: lightTheme,
-              darkTheme: darkTheme,
-              themeMode: ThemeNotifier.of(context).value,
-              home: Builder(builder: (context) => home(context, snapshot)),
-              localizationsDelegates: const [
-                AppLocalizations.delegate,
-                GlobalMaterialLocalizations.delegate,
-                GlobalCupertinoLocalizations.delegate,
-                GlobalWidgetsLocalizations.delegate,
-              ],
-              supportedLocales: const [
-                Locale("it"),
-                // Locale("en"), //TODO translations
-              ],
-              navigatorObservers: [
-                ClearFocusOnPush()
-              ],
-            );
-          },
-        ),
+        child: LoggedUser.stream(builder: (context, snapshot) {
+          return MaterialApp(
+            title: "HouseWallet",
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: ThemeNotifier.of(context).value,
+            home: Builder(builder: (context) => home(context, snapshot)),
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale("it"),
+              // Locale("en"), //TODO translations
+            ],
+            navigatorObservers: [
+              ClearFocusOnPush()
+            ],
+          );
+        }),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/components/payments/payment_tile.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/data/firestore.dart';
+import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
@@ -19,22 +20,24 @@ class PaymentsPage extends StatelessWidget {
   static CollectionReference<Category> categoriesFirestoreRef(String houseId) => FirebaseFirestore.instance.collection("/groups/$houseId/categories").withConverter(fromFirestore: Category.fromFirestore, toFirestore: Category.toFirestore);
 
   void _addPayment(BuildContext context) {
+    final loggedUser = LoggedUser.of(context, listen: false);
+    final house = HouseDataRef.of(context, listen: false);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (_) => PaymentDetailsBottomSheet(loggedUser: LoggedUser.of(context)),
+      builder: (context) => PaymentDetailsBottomSheet(loggedUser: loggedUser, house: house),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final loggedUser = LoggedUser.of(context);
+    final houseId = HouseDataRef.of(context).id;
     return Scaffold(
       appBar: AppBarFix(title: Text(localizations(context).paymentsPage)),
       body: StreamBuilder(
-        stream: categoriesFirestoreRef(loggedUser.houseId).snapshots().map(defaultFirestoreConverter),
+        stream: categoriesFirestoreRef(houseId).snapshots().map(defaultFirestoreConverter),
         builder: (context, snapshot) => StreamBuilder(
-          stream: paymentsFirestoreRef(loggedUser.houseId).snapshots().map(PaymentRef.converter(context, snapshot.data)),
+          stream: paymentsFirestoreRef(houseId).snapshots().map(PaymentRef.converter(context, snapshot.data)),
           builder: (context, snapshot) {
             final payments = snapshot.data?.toList();
 

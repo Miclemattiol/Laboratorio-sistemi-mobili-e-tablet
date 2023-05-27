@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
@@ -13,13 +14,28 @@ class UserListTile extends StatelessWidget {
   const UserListTile.invite({super.key}) : user = null;
 
   void _openUserDetails(BuildContext context) {
-    if (user == null) return;
-
+    final loggedUser = LoggedUser.of(context, listen: false);
+    final house = HouseDataRef.of(context, listen: false);
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (_) => UserDetailsBottomSheet(user!, loggedUser: LoggedUser.of(context)),
+      builder: (context) => UserDetailsBottomSheet(user!, loggedUser: loggedUser, house: house),
     );
+  }
+
+  String _username(context) {
+    final myUid = LoggedUser.of(context).uid;
+
+    String username = user!.username;
+
+    if (user!.uid == myUid) {
+      username += " ${localizations(context).userYou}";
+    }
+    if (user!.uid == HouseDataRef.of(context).owner.uid) {
+      username += " ${localizations(context).userOwner}";
+    }
+
+    return username;
   }
 
   @override
@@ -38,7 +54,7 @@ class UserListTile extends StatelessWidget {
         onForegroundImageError: (exception, stackTrace) {},
         child: const Icon(Icons.person, size: 20),
       ),
-      title: Text(user!.uid == LoggedUser.of(context).uid ? localizations(context).userYou(user!.username) : user!.username),
+      title: Text(_username(context)),
       onTap: () => _openUserDetails(context),
     );
   }
