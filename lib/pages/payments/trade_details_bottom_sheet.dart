@@ -37,7 +37,8 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
 
   num? _amountValue;
 
-  void _saveTrade() async { //TODO Quando li modifico scompaiono...
+  void _saveTrade() async {
+    //TODO Quando li modifico scompaiono...
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
@@ -51,7 +52,7 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
         description: _descriptionValue,
         amount: _amountValue!,
         date: _dateValue!,
-        from: widget.loggedUser.uid,
+        from: widget.trade.data.from.uid,
         to: widget.trade.data.to.uid,
       );
 
@@ -81,6 +82,11 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
             initialValue: widget.trade.data.amount.toDouble(),
             decoration: inputDecoration(localizations(context).quantity),
             onSaved: (amount) => _amountValue = amount,
+            validator: (amount) {
+              if (amount == null) return localizations(context).priceInputErrorMissing;
+              if (amount <= 0) return localizations(context).priceInvalid;
+              return null;
+            },
           ),
           DatePickerFormField(
             enabled: !_loading,

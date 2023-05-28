@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/form/date_picker_form_field.dart';
 import 'package:house_wallet/components/form/number_form_field.dart';
+import 'package:house_wallet/components/form/people_share_form_field.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/image_avatar.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
@@ -52,6 +53,8 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
   File? _imageValue;
   DateTime? _dateValue;
 
+  Map<String, int>? _toValue;
+
   Future<void> _setImagePicture(DocumentReference doc) async {
     if (_imageValue == null) return;
 
@@ -89,9 +92,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
         imageUrl: null,
         date: _dateValue!,
         from: widget.loggedUser.uid,
-        to: {
-          widget.loggedUser.uid: 1
-        },
+        to: _toValue!,
       );
 
       DocumentReference ref = await () async {
@@ -155,15 +156,41 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
               ),
             ],
           ),
-          TextFormField(
-            enabled: !_loading,
-            decoration: inputDecoration("Category (TODO)"),
+          PadRow(
+            spacing: 16,
+            children: [
+              Expanded(
+                child: PeopleSharesFormField(
+                  enabled: !_loading,
+                  house: widget.house,
+                  initialValue: widget.payment?.data.to.map((key, value) => MapEntry(key, value.share)),
+                  decoration: inputDecoration(localizations(context).peopleShares),
+                  onSaved: (to) => _toValue = to,
+                  validator: (value) {
+                    if (value.entries.isEmpty) return localizations(context).noPeopleSharesInputErrorMissing;
+                    return null;
+                  },
+                ),
+              ),
+              ConstrainedBox(
+                constraints: multiInputRowConstraints(context),
+                child: TextFormField(
+                  enabled: !_loading,
+                  decoration: inputDecoration("Category (TODO)"),
+                ),
+              ),
+            ],
           ),
           DatePickerFormField(
             enabled: !_loading,
             initialValue: widget.payment?.data.date ?? DateTime.now(),
             decoration: inputDecoration(localizations(context).paymentDate),
             onSaved: (date) => _dateValue = date,
+            validator: (value) {
+              if (value == null) return localizations(context).paymentDateInputErrorMissing;
+              if (value.isAfter(DateTime.now())) return localizations(context).paymentDateInputErrorFuture;
+              return null;
+            },
           ),
           TextFormField(
             enabled: !_loading,

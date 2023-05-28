@@ -47,6 +47,9 @@
     "logoutButton": "Logout",
     "paymentsPage": "Transazioni",
     "priceInvalid": "Prezzo non valido",
+    "paymentDateInputErrorMissing": "Inserisci la data del pagamento",
+    "paymentDateInputErrorFuture": "La data del pagamento deve essere precedente a quella odierna",
+    "noPeopleSharesInputErrorMissing": "La transazione deve includere almeno una persona",
     "paymentPaidFrom": "Pagato da {from}",
     "paymentDate": "Data pagamento",
     "@paymentPaidFrom": {
