@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
+import 'package:house_wallet/data/payment_trade.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/data/user_share.dart';
@@ -55,9 +56,8 @@ class Payment {
   }
 }
 
-class PaymentRef {
+class PaymentRef extends PaymentTrade {
   final Category? category;
-  final DateTime date;
   final String? description;
   final User from;
   final String? imageUrl;
@@ -67,7 +67,7 @@ class PaymentRef {
 
   const PaymentRef({
     required this.category,
-    required this.date,
+    required super.date,
     required this.description,
     required this.from,
     required this.imageUrl,

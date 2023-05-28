@@ -66,6 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                     if (!EmailValidator.validate(email.trim())) return localizations(context).emailInputErrorInvalid;
                     return null;
                   },
+                  keyboardType: TextInputType.emailAddress,
                   onSaved: (email) => _emailValue = email,
                 ),
                 TextFormField(

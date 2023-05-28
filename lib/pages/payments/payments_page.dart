@@ -1,14 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:house_wallet/components/house/trade/trades_section.dart';
 import 'package:house_wallet/components/payments/payment_tile.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/data/firestore.dart';
+import 'package:house_wallet/data/house/trade.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
+import 'package:rxdart/rxdart.dart';
 
 //TODO aggiungere anche gli scambi di denaro accettati
 class PaymentsPage extends StatelessWidget {
@@ -36,7 +39,15 @@ class PaymentsPage extends StatelessWidget {
       body: StreamBuilder(
         stream: categoriesFirestoreRef(houseId).snapshots().map(defaultFirestoreConverter),
         builder: (context, snapshot) => StreamBuilder(
-          stream: paymentsFirestoreRef(houseId).snapshots().map(PaymentRef.converter(context, snapshot.data)),
+          stream: Rx.combineLatest2(
+            paymentsFirestoreRef(houseId).snapshots().map(PaymentRef.converter(context, snapshot.data)),
+            TradesSection.firestoreRef(HouseDataRef.of(context).id).where("accepted", isEqualTo: true).snapshots().map(TradeRef.converter(context)),
+            (payments, trades) => [
+              ...payments,
+              ...trades
+            ].toList()
+              ..sort((payment, trade) => trade.data.date.compareTo(payment.data.date)),
+          ),
           builder: (context, snapshot) {
             final payments = snapshot.data?.toList();
 

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
+import 'package:house_wallet/data/payment_trade.dart';
 import 'package:house_wallet/data/user.dart';
 
 class Trade {
@@ -42,18 +43,17 @@ class Trade {
   }
 }
 
-class TradeRef {
+class TradeRef extends PaymentTrade {
   final num amount;
   final User from;
   final User to;
-  final DateTime date;
   final String? description;
 
   const TradeRef({
     required this.amount,
     required this.from,
     required this.to,
-    required this.date,
+    required super.date,
     required this.description,
   });
 

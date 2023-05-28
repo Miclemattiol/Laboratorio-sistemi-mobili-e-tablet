@@ -144,6 +144,24 @@
             }
         }
     },
+    "tradeTo": "a {from}",
+    "@tradeTo": {
+        "placeholders": {
+            "from": {
+                "type": "String"
+            }
+        }
+    },
+    "tradeFromMe": "Inviato denaro",
+    "tradeToMe": "Ricevuto denaro",
+    "tradeNotMe": "Inviato denaro a {to}",
+    "@tradeNotMe": {
+        "placeholders": {
+            "to": {
+                "type": "String"
+            }
+        }
+    },
     "tradeConfirmDialogTitle": "Conferma scambio",
     "tradeConfirmDialogContent": "Sei sicuro di voler confermare lo scambio?",
     "tradeDenyDialogTitle": "Rifiuta scambio",
