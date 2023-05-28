@@ -145,9 +145,9 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
               ),
               ConstrainedBox(
                 constraints: multiInputRowConstraints(context),
-                child: NumberFormField<num>(
+                child: NumberFormField<double>(
                   enabled: !_loading,
-                  initialValue: widget.payment?.data.price,
+                  initialValue: widget.payment?.data.price.toDouble(),
                   decoration: inputDecoration(localizations(context).price, true),
                   onSaved: (price) => _priceValue = price,
                   validator: (price) => (price == null || price <= 0) ? localizations(context).priceInvalid : null,
