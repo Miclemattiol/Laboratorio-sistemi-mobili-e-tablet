@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/form/date_picker_form_field.dart';
+import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/firestore.dart';
@@ -33,6 +34,8 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
 
   DateTime? _dateValue;
 
+  num? _amountValue;
+
   void _saveTrade() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
@@ -52,9 +55,15 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
         spacing: 16,
         body: [
           Text(
-            "Scambio",
+            localizations(context).tradeInformationTitle,
             style: Theme.of(context).textTheme.titleMedium,
-          ), //TODO localizations
+          ),
+          NumberFormField(
+            enabled: !_loading,
+            initialValue: widget.trade.data.amount,
+            decoration: inputDecoration(localizations(context).quantity),
+            onSaved: (amount) => _amountValue = amount,
+          ),
           DatePickerFormField(
             enabled: !_loading,
             initialValue: widget.trade.data.date,

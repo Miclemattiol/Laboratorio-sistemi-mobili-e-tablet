@@ -162,6 +162,7 @@
             }
         }
     },
+    "tradeInformationTitle": "Scambio",
     "tradeConfirmDialogTitle": "Conferma scambio",
     "tradeConfirmDialogContent": "Sei sicuro di voler confermare lo scambio?",
     "tradeDenyDialogTitle": "Rifiuta scambio",

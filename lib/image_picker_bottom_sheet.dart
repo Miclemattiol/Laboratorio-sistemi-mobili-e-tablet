@@ -43,15 +43,17 @@ class ImagePickerBottomSheet extends StatelessWidget {
           AnimatedSize(
             duration: const Duration(milliseconds: 200),
             child: ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
-              child: image is File
-                  ? Image.file(image)
-                  : CachedNetworkImage(
-                      imageUrl: image as String,
-                      placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) => const SizedBox.shrink(),
-                    ),
-            ),
+                constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: image is File
+                      ? Image.file(image)
+                      : CachedNetworkImage(
+                          imageUrl: image as String,
+                          placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                          errorWidget: (context, url, error) => const SizedBox.shrink(),
+                        ),
+                )),
           ),
         ListTile(
           leading: const Icon(Icons.camera_alt),

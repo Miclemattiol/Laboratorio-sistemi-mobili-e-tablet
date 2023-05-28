@@ -23,7 +23,7 @@ InputDecoration inputDecoration([String? labelText, bool smallErrorText = false]
   );
 }
 
-BoxConstraints multiInputRowConstraints(BuildContext context) => BoxConstraints(minWidth: 96, maxWidth: MediaQuery.of(context).size.width / 4);
+BoxConstraints multiInputRowConstraints(BuildContext context) => BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 4);
 
 //TODO themes
 ThemeData get lightTheme {
