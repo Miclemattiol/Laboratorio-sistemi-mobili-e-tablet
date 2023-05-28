@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/form/copy_form_field.dart';
 import 'package:house_wallet/components/form/number_form_field.dart';
@@ -41,6 +42,8 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
   double? _priceValue;
   String? _descriptionValue;
 
+  final TextEditingController _descriptionController = TextEditingController();
+
   void _addTrade(BuildContext context) async {
     final navigator = Navigator.of(context);
 
@@ -72,6 +75,7 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
 
     try {
       launchUrl(Uri.parse("https://paypal.me/${widget.user.payPal}"), mode: LaunchMode.externalApplication);
+      if (_descriptionController.text.isNotEmpty) Clipboard.setData(ClipboardData(text: _descriptionController.text));
     } catch (_) {}
   }
 
@@ -95,6 +99,7 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
             enabled: !_loading,
             minLines: 1,
             maxLines: 5,
+            controller: _descriptionController,
             decoration: inputDecoration(localizations(context).descriptionInput),
             keyboardType: TextInputType.multiline,
             onSaved: (description) => _descriptionValue = (description ?? "").trim().isEmpty ? null : description?.trim(),
