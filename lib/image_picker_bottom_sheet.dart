@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
+import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerBottomSheet extends StatelessWidget {
@@ -44,14 +45,17 @@ class ImagePickerBottomSheet extends StatelessWidget {
             duration: const Duration(milliseconds: 200),
             child: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
-              child: image is File //TODO when tapping open page with the image
-                  ? Image.file(image, fit: BoxFit.fitWidth)
-                  : CachedNetworkImage(
-                      fit: BoxFit.fitWidth,
-                      imageUrl: image as String,
-                      placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) => const SizedBox.shrink(),
-                    ),
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).push(SlidingPageRoute(_ImagePage(image), fullscreenDialog: true)),
+                child: image is File
+                    ? Image.file(image, fit: BoxFit.fitWidth)
+                    : CachedNetworkImage(
+                        fit: BoxFit.fitWidth,
+                        imageUrl: image as String,
+                        placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                        errorWidget: (context, url, error) => const SizedBox.shrink(),
+                      ),
+              ),
             ),
           ),
         ListTile(
@@ -65,6 +69,33 @@ class ImagePickerBottomSheet extends StatelessWidget {
           onTap: () => Navigator.of(context).pop<ImageSource>(ImageSource.gallery),
         ),
       ],
+    );
+  }
+}
+
+class _ImagePage extends StatelessWidget {
+  final dynamic image;
+
+  const _ImagePage(this.image) : assert(image is File || image is String);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: InteractiveViewer(
+        minScale: 1,
+        maxScale: 10,
+        child: Center(
+          child: image is File
+              ? Image.file(image)
+              : CachedNetworkImage(
+                  imageUrl: image as String,
+                  placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                  errorWidget: (context, url, error) => const SizedBox.shrink(),
+                ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
+      floatingActionButton: const CloseButton(),
     );
   }
 }
