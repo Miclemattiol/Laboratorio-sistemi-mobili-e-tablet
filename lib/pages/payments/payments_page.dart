@@ -10,6 +10,7 @@ import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
+import 'package:house_wallet/data/payments/payment_filter.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/categories_page.dart';
 import 'package:house_wallet/pages/payments/filter_bottom_sheet.dart';
@@ -18,11 +19,18 @@ import 'package:house_wallet/themes.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shimmer/shimmer.dart';
 
-class PaymentsPage extends StatelessWidget {
+class PaymentsPage extends StatefulWidget {
   const PaymentsPage({super.key});
 
   static CollectionReference<Payment> paymentsFirestoreRef(String houseId) => FirebaseFirestore.instance.collection("/groups/$houseId/transactions").withConverter(fromFirestore: Payment.fromFirestore, toFirestore: Payment.toFirestore);
   static CollectionReference<Category> categoriesFirestoreRef(String houseId) => FirebaseFirestore.instance.collection("/groups/$houseId/categories").withConverter(fromFirestore: Category.fromFirestore, toFirestore: Category.toFirestore);
+
+  @override
+  State<PaymentsPage> createState() => _PaymentsPageState();
+}
+
+class _PaymentsPageState extends State<PaymentsPage> {
+  final _paymentFilter = PaymentFilter();
 
   void _addPayment(BuildContext context) {
     final loggedUser = LoggedUser.of(context, listen: false);
@@ -36,11 +44,13 @@ class PaymentsPage extends StatelessWidget {
   }
 
   void _filter(BuildContext context) {
+    final house = HouseDataRef.of(context, listen: false);
+
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       enableDrag: false,
-      builder: (context) => const FilterBottomSheet(),
+      builder: (context) => FilterBottomSheet(house: house, filter: _paymentFilter,),
     );
   }
 
@@ -64,10 +74,10 @@ class PaymentsPage extends StatelessWidget {
         ],
       ),
       body: StreamBuilder(
-        stream: categoriesFirestoreRef(houseId).snapshots().map(defaultFirestoreConverter),
+        stream: PaymentsPage.categoriesFirestoreRef(houseId).snapshots().map(defaultFirestoreConverter),
         builder: (context, snapshot) => StreamBuilder(
           stream: Rx.combineLatest2(
-            paymentsFirestoreRef(houseId).snapshots().map(PaymentRef.converter(context, snapshot.data)),
+            PaymentsPage.paymentsFirestoreRef(houseId).snapshots().map(PaymentRef.converter(context, snapshot.data)),
             TradesSection.firestoreRef(HouseDataRef.of(context).id).where("accepted", isEqualTo: true).snapshots().map(TradeRef.converter(context)),
             (payments, trades) => [
               ...payments,
