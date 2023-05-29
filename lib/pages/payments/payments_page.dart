@@ -11,7 +11,9 @@ import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
+import 'package:house_wallet/themes.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:shimmer/shimmer.dart';
 
 class PaymentsPage extends StatelessWidget {
   const PaymentsPage({super.key});
@@ -34,7 +36,13 @@ class PaymentsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final houseId = HouseDataRef.of(context).id;
     return Scaffold(
-      appBar: AppBarFix(title: Text(localizations(context).paymentsPage)),
+      appBar: AppBarFix(
+        title: Text(localizations(context).paymentsPage),
+        actions: [
+          IconButton(onPressed: () {}, icon: const Icon(Icons.filter_alt)), //TODO acquisto, tooltip
+          IconButton(onPressed: () {}, icon: const Icon(Icons.segment)), //TODO categories, tooltip
+        ],
+      ),
       body: StreamBuilder(
         stream: categoriesFirestoreRef(houseId).snapshots().map(defaultFirestoreConverter),
         builder: (context, snapshot) => StreamBuilder(
@@ -48,15 +56,34 @@ class PaymentsPage extends StatelessWidget {
               ..sort((payment, trade) => trade.data.date.compareTo(payment.data.date)),
           ),
           builder: (context, snapshot) {
-            final payments = snapshot.data?.toList();
+            final payments = snapshot.data;
 
             if (payments == null) {
-              //TODO loading and error messages
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: Text("Loading"));
+                return Shimmer.fromColors(
+                  baseColor: Theme.of(context).disabledColor,
+                  highlightColor: Theme.of(context).disabledColor.withOpacity(.1),
+                  child: ListView(
+                    children: [
+                      PaymentTile.shimmer(titleWidth: 128, subtitleWidth: 96),
+                      PaymentTile.shimmer(titleWidth: 160, subtitleWidth: 96),
+                      PaymentTile.shimmer(titleWidth: 96, subtitleWidth: 80),
+                      PaymentTile.shimmer(titleWidth: 112, subtitleWidth: 40),
+                      PaymentTile.shimmer(titleWidth: 96, subtitleWidth: 32),
+                      PaymentTile.shimmer(titleWidth: 160, subtitleWidth: 96),
+                      PaymentTile.shimmer(titleWidth: 96, subtitleWidth: 80),
+                      PaymentTile.shimmer(titleWidth: 128, subtitleWidth: 96),
+                    ],
+                  ),
+                );
               } else {
-                return Center(child: Text("Error (${snapshot.error})"));
+                return centerErrorText(context: context, message: localizations(context).paymentsPageError, error: snapshot.error);
               }
+            }
+
+            //TODO empty list
+            if (payments.isEmpty) {
+              return const Center(child: Text("🗿", style: TextStyle(fontSize: 64)));
             }
 
             return ListView.separated(

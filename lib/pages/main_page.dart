@@ -9,6 +9,7 @@ import 'package:house_wallet/pages/house/house_page.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/pages/shopping/shopping_page.dart';
 import 'package:house_wallet/pages/tasks/tasks_page.dart';
+import 'package:house_wallet/themes.dart';
 import 'package:provider/provider.dart';
 
 class PageData {
@@ -40,22 +41,9 @@ class MainPage extends StatelessWidget {
 
             if (house == null) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Scaffold(
-                  body: Center(child: CircularProgressIndicator()),
-                );
+                return const Scaffold(body: Center(child: CircularProgressIndicator()));
               } else {
-                return Scaffold(
-                  body: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        "${localizations(context).houseDataError} (${snapshot.error})",
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headlineSmall,
-                      ),
-                    ),
-                  ),
-                );
+                return Scaffold(body: centerErrorText(context: context, message: localizations(context).houseDataError, error: snapshot.error));
               }
             }
 

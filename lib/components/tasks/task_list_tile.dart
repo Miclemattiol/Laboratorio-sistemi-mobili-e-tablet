@@ -14,6 +14,35 @@ class TaskListTile extends StatelessWidget {
 
   const TaskListTile(this.task, {super.key});
 
+  static Widget shimmer({required double titleWidth, required double subtitleWidth}) {
+    return PadRow(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      padding: const EdgeInsets.all(19) + const EdgeInsets.only(right: 5),
+      children: [
+        Container(width: 24, height: 24, color: Colors.white),
+        Expanded(
+          child: PadColumn(
+            padding: const EdgeInsets.symmetric(horizontal: 13),
+            spacing: 6,
+            children: [
+              Container(height: 14, width: titleWidth, color: Colors.white),
+              Container(height: 14, width: subtitleWidth, color: Colors.white)
+            ],
+          ),
+        ),
+        PadColumn(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          spacing: 4,
+          children: [
+            Container(height: 12, width: 50, color: Colors.white),
+            Container(height: 12, width: 50, color: Colors.white),
+          ],
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(

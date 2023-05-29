@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/collapsible_container.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
@@ -10,6 +11,26 @@ class ShoppingItemTile extends StatefulWidget {
   final FirestoreDocument<ShoppingItemRef> shoppingItem;
 
   ShoppingItemTile(this.shoppingItem) : super(key: Key(shoppingItem.id));
+
+  static Widget shimmer({required double titleWidth}) {
+    return PadRow(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      children: [
+        const Checkbox(value: false, onChanged: null),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(height: 14, width: titleWidth, color: Colors.white),
+            ),
+          ),
+        ),
+        const IconButton(onPressed: null, icon: Icon(Icons.delete))
+      ],
+    );
+  }
 
   @override
   State<ShoppingItemTile> createState() => _ShoppingItemTileState();

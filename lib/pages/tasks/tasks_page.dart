@@ -24,15 +24,15 @@ class TasksPage extends StatelessWidget {
 
   static CollectionReference<Task> tasksFirestoreRef(String houseId) => FirebaseFirestore.instance.collection("/groups/$houseId/tasks").withConverter(fromFirestore: Task.fromFirestore, toFirestore: Task.toFirestore);
 
-  List<TabData> _tabs(BuildContext context, Iterable<FirestoreDocument<TaskRef>> tasks) {
+  List<TabData> _tabs(BuildContext context, AsyncSnapshot<Iterable<FirestoreDocument<TaskRef>>> snapshot) {
     return [
       TabData(
         label: localizations(context).myTasksTab,
-        widget: TasksTab.myTasks(tasks.where((task) => task.data.assignedTo.contains(LoggedUser.of(context).getUserData(context))).toList()),
+        widget: TasksTab(snapshot: snapshot, myTasks: true),
       ),
       TabData(
         label: localizations(context).allTasksTab,
-        widget: TasksTab.allTasks(tasks.toList()),
+        widget: TasksTab(snapshot: snapshot, myTasks: false),
       ),
     ];
   }
@@ -54,18 +54,7 @@ class TasksPage extends StatelessWidget {
     return StreamBuilder(
       stream: tasksFirestoreRef(houseId).snapshots().map(TaskRef.converter(context)),
       builder: (context, snapshot) {
-        final tasks = snapshot.data;
-
-        if (tasks == null) {
-          //TODO loading and error messages
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: Text("Loading"));
-          } else {
-            return Center(child: Text("Error (${snapshot.error})"));
-          }
-        }
-
-        final tabs = _tabs(context, tasks);
+        final tabs = _tabs(context, snapshot);
         return DefaultTabController(
           length: tabs.length,
           child: Scaffold(

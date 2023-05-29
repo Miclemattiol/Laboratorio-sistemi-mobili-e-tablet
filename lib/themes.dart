@@ -14,6 +14,15 @@ class ThemeNotifier extends ValueNotifier<ThemeMode> {
   }
 }
 
+Widget centerErrorText({required BuildContext context, required String message, required Object? error}) {
+  return Center(
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Text("$message ($error)", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center),
+    ),
+  );
+}
+
 InputDecoration inputDecoration([String? labelText, bool smallErrorText = false]) {
   return InputDecoration(
     border: const OutlineInputBorder(),

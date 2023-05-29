@@ -9,7 +9,7 @@ class SlidingPageRoute extends PageRouteBuilder {
     AxisDirection? direction,
     super.fullscreenDialog,
   })  : direction = direction ?? (fullscreenDialog ? AxisDirection.up : AxisDirection.left),
-        super(pageBuilder: (context, animation, secondaryAnimation) => child, barrierColor: Colors.black12); //TODO use Theme?
+        super(pageBuilder: (context, animation, secondaryAnimation) => child, barrierColor: Colors.black12);
 
   Offset get _offset {
     switch (direction) {

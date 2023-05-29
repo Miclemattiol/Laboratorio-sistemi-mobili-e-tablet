@@ -46,6 +46,7 @@
     "changePasswordPage": "Cambia password",
     "logoutButton": "Logout",
     "paymentsPage": "Transazioni",
+    "paymentsPageError": "Impossibile caricare le transazioni",
     "priceInvalid": "Prezzo non valido",
     "paymentDateInputErrorMissing": "Inserisci la data del pagamento",
     "paymentDateInputErrorFuture": "La data del pagamento deve essere precedente a quella odierna",
@@ -69,6 +70,7 @@
     },
     "descriptionInput": "Descrizione",
     "shoppingPage": "Spesa",
+    "shoppingPageError": "Impossibile caricare la lista della spesa",
     "addNewInput": "Aggiungi nuovo...",
     "showDetailsTooltip": "Mostra dettagli aggiuntivi",
     "hideDetailsTooltip": "Nascondi dettagli aggiuntivi",
@@ -83,11 +85,12 @@
     "priceQuantityChipTooltip": "Prezzo e quantità",
     "titleInputErrorMissing": "Inserisci il titolo",
     "tasksPage": "Incarichi",
+    "tasksPageError": "Impossibile caricare gli incarichi",
     "myTasksTab": "Le mie attività",
     "allTasksTab": "Tutte le attività",
     "task": "Incarico",
     "taskAssignedToNobody": "non assegnato a nessuno",
-    "taskAssignedTo": "per {to}",
+    "taskAssignedTo": "assegnato a {to}",
     "@taskAssignedTo": {
         "placeholders": {
             "to": {
@@ -130,7 +133,7 @@
     "housePage": "Casa",
     "activityLogPage": "Registro attività",
     "tradesSection": "Scambi",
-    "tradesSectionError": "Impossibile caricare i dati degli scambi",
+    "tradesSectionError": "Impossibile caricare gli scambi",
     "tradeAmount": "Hai ricevuto {amount}",
     "@tradeAmount": {
         "placeholders": {
@@ -157,8 +160,8 @@
     },
     "tradeFromMe": "Inviato denaro",
     "tradeToMe": "Ricevuto denaro",
-    "tradeNotMe": "Inviato denaro a {to}",
-    "@tradeNotMe": {
+    "tradeOthers": "Inviato denaro a {to}",
+    "@tradeOthers": {
         "placeholders": {
             "to": {
                 "type": "String"
