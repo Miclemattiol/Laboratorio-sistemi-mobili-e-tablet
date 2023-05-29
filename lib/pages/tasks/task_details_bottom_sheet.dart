@@ -10,9 +10,7 @@ import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/tasks/task.dart';
-import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/shopping/people_dialog.dart';
 import 'package:house_wallet/pages/tasks/tasks_page.dart';
 import 'package:house_wallet/themes.dart';
 
