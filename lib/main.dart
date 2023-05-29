@@ -54,7 +54,7 @@ class App extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(child: Text("Error while parsing user data! (${snapshot.error})", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center)),
+            centerErrorText(context: context, message: localizations(context).accountPageError, error: snapshot.error),
             ElevatedButton(onPressed: FirebaseAuth.instance.signOut, child: Text(localizations(context).logoutButton))
           ],
         ),
@@ -79,7 +79,7 @@ class App extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Center(child: Text("User is not a member of any group!", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center)), //TODO
+            Center(child: Text("User is not a member of any group!", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center)), //TODO allow users to create groups
             ElevatedButton(onPressed: FirebaseAuth.instance.signOut, child: Text(localizations(context).logoutButton)),
           ],
         ),

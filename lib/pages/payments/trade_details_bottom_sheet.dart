@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/components/form/date_picker_form_field.dart';
 import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
+import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house/trade.dart';
@@ -36,7 +37,6 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
   DateTime? _dateValue;
 
   void _saveTrade() async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
     _formKey.currentState!.save();
@@ -52,7 +52,12 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
 
       navigator.pop();
     } on FirebaseException catch (error) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${error.message})")));
+      if (!context.mounted) return;
+      CustomDialog.alert(
+        context: context,
+        title: localizations(context).error,
+        content: "${localizations(context).saveChangesDialogContentError} (${error.message})",
+      );
       setState(() => _loading = false);
     }
   }
@@ -65,10 +70,6 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
         dismissible: !_loading,
         spacing: 16,
         body: [
-          Text(
-            localizations(context).tradeInformationTitle,
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
           NumberFormField<num>(
             enabled: !_loading,
             initialValue: widget.trade.data.amount.toDouble(),

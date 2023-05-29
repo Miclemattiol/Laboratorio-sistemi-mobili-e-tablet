@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
@@ -8,6 +7,7 @@ import 'package:house_wallet/components/form/date_picker_form_field.dart';
 import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/form/people_share_form_field.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
+import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/image_avatar.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/firestore.dart';
@@ -18,6 +18,7 @@ import 'package:house_wallet/image_picker_bottom_sheet.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:uuid/uuid.dart';
 
 class PaymentDetailsBottomSheet extends StatefulWidget {
   final LoggedUser loggedUser;
@@ -52,31 +53,20 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
   num? _priceValue;
   File? _imageValue;
   DateTime? _dateValue;
-
   Map<String, int>? _toValue;
 
-  Future<void> _setImagePicture(DocumentReference doc) async {
-    if (_imageValue == null) return;
-
-    final upload = FirebaseStorage.instance.ref("groups/${widget.house.id}/${doc.id}.png").putFile(_imageValue!);
+  Future<String> _uploadImage(File image) async {
+    final upload = FirebaseStorage.instance.ref("groups/${widget.house.id}/payments/${const Uuid().v1()}.png").putFile(image);
 
     setState(() => _uploadProgress = null);
     upload.snapshotEvents.listen((event) => setState(() => _uploadProgress = event.bytesTransferred / event.totalBytes));
 
-    try {
-      final imageUrl = await (await upload).ref.getDownloadURL();
-      setState(() => _uploadProgress = null);
-
-      await doc.update({
-        "imageUrl": imageUrl
-      });
-    } on FirebaseException catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${error.message})")));
-    }
+    final imageRef = (await upload).ref;
+    setState(() => _uploadProgress = null);
+    return imageRef.getDownloadURL();
   }
 
   void _savePayment() async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
     _formKey.currentState!.save();
@@ -84,30 +74,43 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
 
     setState(() => _loading = true);
     try {
-      final payment = Payment(
-        title: _titleValue!,
-        category: "evPQw3qSnmIHEeZKeOGW",
-        description: _descriptionValue,
-        price: _priceValue!,
-        imageUrl: null,
-        date: _dateValue!,
-        from: widget.loggedUser.uid,
-        to: _toValue!,
-      );
+      if (widget.payment == null) {
+        await PaymentsPage.paymentsFirestoreRef(widget.house.id).add(Payment(
+          title: _titleValue!,
+          category: "evPQw3qSnmIHEeZKeOGW",
+          description: _descriptionValue,
+          price: _priceValue!,
+          imageUrl: _imageValue == null ? null : await _uploadImage(_imageValue!),
+          date: _dateValue!,
+          from: widget.loggedUser.uid,
+          to: _toValue!,
+        ));
+      } else {
+        await widget.payment!.reference.update({
+          "title": _titleValue!,
+          /* "category": _categoryValue!, */ //TODO category
+          "description": _descriptionValue,
+          "price": _priceValue!,
+          "imageUrl": _imageValue == null ? widget.payment!.data.imageUrl : await _uploadImage(_imageValue!),
+          "date": _dateValue!,
+          "to": _toValue!,
+        });
 
-      DocumentReference ref = await () async {
-        if (widget.payment == null) {
-          return await PaymentsPage.paymentsFirestoreRef(widget.house.id).add(payment);
-        } else {
-          await widget.payment!.reference.update(Payment.toFirestore(payment));
-          return widget.payment!.reference;
+        if (_imageValue != null && widget.payment!.data.imageUrl != null) {
+          try {
+            await FirebaseStorage.instance.refFromURL(widget.payment!.data.imageUrl!).delete();
+          } catch (_) {}
         }
-      }();
-      await _setImagePicture(ref);
+      }
 
       navigator.pop();
     } on FirebaseException catch (error) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${error.message})")));
+      if (!context.mounted) return;
+      CustomDialog.alert(
+        context: context,
+        title: localizations(context).error,
+        content: "${localizations(context).saveChangesDialogContentError} (${error.message})",
+      );
       setState(() => _loading = false);
     }
   }
@@ -169,7 +172,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
           ),
           TextFormField(
             enabled: !_loading,
-            decoration: inputDecoration("Category (TODO)"),
+            decoration: inputDecoration("Category (TODO)"), //TODO category
           ),
           DatePickerFormField(
             enabled: !_loading,

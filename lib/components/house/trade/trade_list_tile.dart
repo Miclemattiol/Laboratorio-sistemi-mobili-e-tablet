@@ -6,7 +6,7 @@ import 'package:house_wallet/data/house/trade.dart';
 import 'package:house_wallet/main.dart';
 
 class TradeListTile extends StatelessWidget {
-  final FirestoreDocument<TradeRef> trade; //TODO show other data
+  final FirestoreDocument<TradeRef> trade; //TODO show description in some way
 
   TradeListTile(this.trade) : super(key: Key(trade.id));
 

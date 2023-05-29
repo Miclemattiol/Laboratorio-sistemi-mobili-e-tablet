@@ -44,16 +44,14 @@ class ImagePickerBottomSheet extends StatelessWidget {
             duration: const Duration(milliseconds: 200),
             child: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
-              child: Padding(
-                padding: const EdgeInsets.only(top: 8), //TODO perché 🗿
-                child: image is File
-                    ? Image.file(image)
-                    : CachedNetworkImage(
-                        imageUrl: image as String,
-                        placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                        errorWidget: (context, url, error) => const SizedBox.shrink(),
-                      ),
-              ),
+              child: image is File //TODO when tapping open page with the image
+                  ? Image.file(image, fit: BoxFit.fitWidth)
+                  : CachedNetworkImage(
+                      fit: BoxFit.fitWidth,
+                      imageUrl: image as String,
+                      placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => const SizedBox.shrink(),
+                    ),
             ),
           ),
         ListTile(

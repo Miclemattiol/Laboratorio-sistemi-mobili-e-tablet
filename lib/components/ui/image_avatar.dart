@@ -73,7 +73,7 @@ class ImageAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (progress == null) {
+    if (progress == null || progress == 0) {
       return _mainWidget();
     } else {
       return Stack(
