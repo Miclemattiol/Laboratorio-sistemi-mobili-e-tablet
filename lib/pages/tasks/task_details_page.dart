@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/components/tasks/partecipants_list.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/data/firestore.dart';
@@ -74,7 +75,21 @@ class TaskDetailsPage extends StatelessWidget {
               child: PadColumn(
                 spacing: 16,
                 children: [
-                  Text(task.data.description ?? ""),
+                  if (task.data.description != null)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Descrizione: ",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        Text(
+                          task.data.description!,
+                          textAlign: TextAlign.justify,
+                        ),
+                      ],
+                    ),
+                  PartecipantsList(partecipants: task.data.assignedTo.toSet()),
                 ],
               ),
             ))
