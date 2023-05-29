@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/components/shopping/details_item_chip.dart';
 import 'package:house_wallet/components/ui/collapsible_container.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
+import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
@@ -28,8 +29,6 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
   PriceQuantity? _priceQuantityValue;
 
   void _addShoppingItem() async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-
     if ((_titleValue ?? "").isEmpty) return;
 
     try {
@@ -51,7 +50,12 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
         _priceQuantityValue = null;
       });
     } on FirebaseException catch (error) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${error.message})")));
+      if (!context.mounted) return;
+      CustomDialog.alert(
+        context: context,
+        title: localizations(context).error,
+        content: "${localizations(context).saveChangesDialogContentError} (${error.message})",
+      );
     }
   }
 

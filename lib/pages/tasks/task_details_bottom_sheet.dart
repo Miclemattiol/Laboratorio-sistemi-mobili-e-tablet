@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/components/form/date_picker_form_field.dart';
 import 'package:house_wallet/components/form/repeat_interval_form_field.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
+import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
@@ -45,7 +46,6 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
   RepeatData? _repeatValue;
 
   _saveTask() async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
     _formKey.currentState!.save();
@@ -53,25 +53,36 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
 
     setState(() => _loading = true);
     try {
-      Task task = Task(
-        title: _titleValue!,
-        description: _descriptionValue,
-        from: _fromValue!,
-        to: _toValue!,
-        repeating: _repeatValue!.repeat,
-        interval: _repeatValue!.interval,
-        assignedTo: [],
-      );
-
       if (widget.task == null) {
-        await TasksPage.tasksFirestoreRef(widget.house.id).add(task);
+        await TasksPage.tasksFirestoreRef(widget.house.id).add(Task(
+          title: _titleValue!,
+          description: _descriptionValue,
+          from: _fromValue!,
+          to: _toValue!,
+          repeating: _repeatValue!.repeat,
+          interval: _repeatValue!.interval,
+          assignedTo: [],
+        ));
       } else {
-        await widget.task!.reference.update(Task.toFirestore(task));
+        await widget.task!.reference.update({
+          "title": _titleValue!,
+          "description": _descriptionValue,
+          "from": _fromValue!,
+          "to": _toValue!,
+          "repeating": _repeatValue!.repeat,
+          "interval": _repeatValue!.interval,
+          "assignedTo": [],
+        });
       }
 
       navigator.pop();
     } on FirebaseException catch (error) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${localizations(context).saveChangesDialogContentError}\n(${error.message})")));
+      if (!context.mounted) return;
+      CustomDialog.alert(
+        context: context,
+        title: localizations(context).error,
+        content: "${localizations(context).saveChangesDialogContentError} (${error.message})",
+      );
       setState(() => _loading = false);
     }
   }

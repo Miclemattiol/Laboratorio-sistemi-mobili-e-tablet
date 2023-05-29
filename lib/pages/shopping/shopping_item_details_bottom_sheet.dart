@@ -44,19 +44,20 @@ class _ShoppingItemDetailsBottomSheetState extends State<ShoppingItemDetailsBott
 
     setState(() => _loading = true);
     try {
-      await widget.shoppingItem.reference.update(ShoppingItem.toFirestore(ShoppingItem(
-        price: _priceValue,
-        quantity: _quantityValue,
-        supermarket: _supermarketValue,
-        title: _titleValue!,
-        to: _toValue!,
-      )));
+      await widget.shoppingItem.reference.update({
+        "price": _priceValue,
+        "quantity": _quantityValue,
+        "supermarket": _supermarketValue,
+        "title": _titleValue!,
+        "to": _toValue!,
+      });
       navigator.pop();
     } on FirebaseException catch (error) {
+      if (!context.mounted) return;
       CustomDialog.alert(
         context: context,
         title: localizations(context).error,
-        content: "${localizations(context).userDialogContentError} (${error.message})",
+        content: "${localizations(context).saveChangesDialogContentError} (${error.message})",
       );
       setState(() => _loading = false);
     }
