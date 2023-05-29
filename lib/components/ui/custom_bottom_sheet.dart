@@ -37,27 +37,30 @@ class CustomBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async => dismissible,
-      child: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Container(
-            clipBehavior: Clip.antiAlias,
-            decoration: (decoration ?? const BoxDecoration()).copyWith(borderRadius: decoration?.borderRadius ?? borderRadius(context)),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                PadColumn(
-                  spacing: spacing,
-                  padding: padding,
-                  mainAxisSize: mainAxisSize,
-                  mainAxisAlignment: mainAxisAlignment,
-                  crossAxisAlignment: crossAxisAlignment,
-                  children: body,
-                ),
-                if (actions != null) PadRow(spacing: 1, children: actions!.map((button) => Expanded(child: button)).toList())
-              ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * .9),
+      child: WillPopScope(
+        onWillPop: () async => dismissible,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+            child: Container(
+              clipBehavior: Clip.antiAlias,
+              decoration: (decoration ?? const BoxDecoration()).copyWith(borderRadius: decoration?.borderRadius ?? borderRadius(context)),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  PadColumn(
+                    spacing: spacing,
+                    padding: padding,
+                    mainAxisSize: mainAxisSize,
+                    mainAxisAlignment: mainAxisAlignment,
+                    crossAxisAlignment: crossAxisAlignment,
+                    children: body,
+                  ),
+                  if (actions != null) PadRow(spacing: 1, children: actions!.map((button) => Expanded(child: button)).toList())
+                ],
+              ),
             ),
           ),
         ),
