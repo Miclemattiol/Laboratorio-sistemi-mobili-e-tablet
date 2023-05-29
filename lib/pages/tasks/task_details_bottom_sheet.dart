@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/form/date_picker_form_field.dart';
+import 'package:house_wallet/components/form/people_form_field.dart';
 import 'package:house_wallet/components/form/repeat_interval_form_field.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
@@ -9,7 +10,9 @@ import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/tasks/task.dart';
+import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/shopping/people_dialog.dart';
 import 'package:house_wallet/pages/tasks/tasks_page.dart';
 import 'package:house_wallet/themes.dart';
 
@@ -44,6 +47,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
   DateTime? _fromValue;
   DateTime? _toValue;
   RepeatData? _repeatValue;
+  Set<String> _assignedToValue = {};
 
   _saveTask() async {
     final navigator = Navigator.of(context);
@@ -61,7 +65,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
           to: _toValue!,
           repeating: _repeatValue!.repeat,
           interval: _repeatValue!.interval,
-          assignedTo: [],
+          assignedTo: _assignedToValue,
         ));
       } else {
         await widget.task!.reference.update({
@@ -71,7 +75,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
           "to": _toValue!,
           "repeating": _repeatValue!.repeat,
           "interval": _repeatValue!.interval,
-          "assignedTo": [],
+          "assignedTo": _assignedToValue,
         });
       }
 
@@ -143,6 +147,13 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
               }
               return null;
             },
+          ),
+          PeopleFormField(
+            house: widget.house,
+            decoration: inputDecoration("Assigned to"), //TODO Localization
+            initialValue: widget.task?.data.assignedTo.map((user) => user.uid).toSet(),
+            onSaved: (assignedTo) => _assignedToValue = assignedTo,
+            validator: (assignedTo) => (assignedTo.isEmpty) ? "Please assign this task to someone" : null, //TODO Localization
           ),
           TextFormField(
             enabled: !_loading,

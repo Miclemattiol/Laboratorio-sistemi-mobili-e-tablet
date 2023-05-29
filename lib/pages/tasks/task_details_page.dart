@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/data/firestore.dart';
@@ -67,9 +68,16 @@ class TaskDetailsPage extends StatelessWidget {
       body: ListView(children: [
         const Calendar(),
         Padding(
-          padding: const EdgeInsets.all(16),
-          child: Text(task.data.description ?? ""),
-        )
+            padding: const EdgeInsets.all(16),
+            // child: Text(task.data.description ?? ""),
+            child: SingleChildScrollView(
+              child: PadColumn(
+                spacing: 16,
+                children: [
+                  Text(task.data.description ?? ""),
+                ],
+              ),
+            ))
       ]),
     );
   }
