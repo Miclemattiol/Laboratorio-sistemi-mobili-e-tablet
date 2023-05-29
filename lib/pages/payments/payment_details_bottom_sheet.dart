@@ -53,7 +53,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
   num? _priceValue;
   File? _imageValue;
   DateTime? _dateValue;
-  Map<String, int>? _toValue;
+  Map<String, int> _toValue = {};
 
   Future<String> _uploadImage(File image) async {
     final upload = FirebaseStorage.instance.ref("groups/${widget.house.id}/payments/${const Uuid().v1()}.png").putFile(image);
@@ -83,7 +83,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
           imageUrl: _imageValue == null ? null : await _uploadImage(_imageValue!),
           date: _dateValue!,
           from: widget.loggedUser.uid,
-          to: _toValue!,
+          to: _toValue,
         ));
       } else {
         await widget.payment!.reference.update({
@@ -93,7 +93,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
           "price": _priceValue!,
           "imageUrl": _imageValue == null ? widget.payment!.data.imageUrl : await _uploadImage(_imageValue!),
           "date": _dateValue!,
-          "to": _toValue!,
+          "to": _toValue,
         });
 
         if (_imageValue != null && widget.payment!.data.imageUrl != null) {

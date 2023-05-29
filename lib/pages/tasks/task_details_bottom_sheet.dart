@@ -10,9 +10,7 @@ import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/tasks/task.dart';
-import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/shopping/people_dialog.dart';
 import 'package:house_wallet/pages/tasks/tasks_page.dart';
 import 'package:house_wallet/themes.dart';
 
@@ -73,7 +71,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
           "description": _descriptionValue,
           "from": _fromValue!,
           "to": _toValue!,
-          "repeating": _repeatValue!.repeat,
+          "repeating": _repeatValue!.repeat?.index,
           "interval": _repeatValue!.interval,
           "assignedTo": _assignedToValue,
         });
@@ -150,10 +148,10 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
           ),
           PeopleFormField(
             house: widget.house,
-            decoration: inputDecoration("Assigned to"), //TODO Localization
+            decoration: inputDecoration(localizations(context).taskAssignedToInput),
             initialValue: widget.task?.data.assignedTo.map((user) => user.uid).toSet(),
             onSaved: (assignedTo) => _assignedToValue = assignedTo,
-            validator: (assignedTo) => (assignedTo.isEmpty) ? "Please assign this task to someone" : null, //TODO Localization
+            validator: (assignedTo) => (assignedTo.isEmpty) ? localizations(context).taskAssignedToInputMissing : null,
           ),
           TextFormField(
             enabled: !_loading,

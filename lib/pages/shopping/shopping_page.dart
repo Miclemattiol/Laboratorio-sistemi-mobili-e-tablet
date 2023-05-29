@@ -1,18 +1,36 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/shopping/shopping_item_tile.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
+import 'package:house_wallet/components/ui/custom_dialog.dart';
+import 'package:house_wallet/components/ui/sliding_page_route.dart';
+import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/shopping/buy_items_page.dart';
+import 'package:house_wallet/pages/shopping/recipes_page.dart';
 import 'package:house_wallet/pages/shopping/shopping_bottom_sheet.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:shimmer/shimmer.dart';
 
-class ShoppingPage extends StatelessWidget {
+enum _PopupMenu {
+  recipes,
+  quickAddRecipe
+}
+
+class ShoppingPage extends StatefulWidget {
   const ShoppingPage({super.key});
 
   static CollectionReference<ShoppingItem> firestoreRef(String houseId) => FirebaseFirestore.instance.collection("/groups/$houseId/shopping").withConverter(fromFirestore: ShoppingItem.fromFirestore, toFirestore: ShoppingItem.toFirestore);
+
+  @override
+  State<ShoppingPage> createState() => _ShoppingPageState();
+}
+
+class _ShoppingPageState extends State<ShoppingPage> {
+  final _checkedItems = <FirestoreDocument<ShoppingItemRef>>[];
 
   Widget _shoppingList(Widget child) {
     return SingleChildScrollView(
@@ -39,12 +57,46 @@ class ShoppingPage extends StatelessWidget {
         elevation: 3,
         scrolledUnderElevation: 3,
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.shopping_cart)), //TODO acquisto, tooltip
-          PopupMenuButton(
-            //TODO ricette
+          IconButton(
+            tooltip: localizations(context).buyItemsTooltip,
+            onPressed: _checkedItems.isEmpty ? null : () => Navigator.of(context).push(SlidingPageRoute(BuyItemsPage(_checkedItems), fullscreenDialog: true)),
+            icon: const Icon(Icons.shopping_cart),
+          ),
+          PopupMenuButton<_PopupMenu>(
+            onSelected: (value) {
+              switch (value) {
+                case _PopupMenu.recipes:
+                  Navigator.of(context).push(SlidingPageRoute(const RecipesPage(), fullscreenDialog: true));
+                  break;
+                case _PopupMenu.quickAddRecipe:
+                  CustomDialog.alert(context: context, title: "TODO", content: "TODO show dialog of recipe"); //TODO open add recipe dialog with pre-compiled data from _checkedItems
+                  break;
+              }
+            },
             itemBuilder: (context) => [
-              const PopupMenuItem(child: Text("TODO 1")),
-              const PopupMenuItem(enabled: false, child: Text("TODO 2"))
+              PopupMenuItem(
+                value: _PopupMenu.recipes,
+                child: PadRow(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  spacing: 16,
+                  children: [
+                    const Icon(Icons.assignment),
+                    Expanded(child: Text(localizations(context).recipesPage)),
+                  ],
+                ),
+              ),
+              PopupMenuItem(
+                value: _PopupMenu.quickAddRecipe,
+                enabled: _checkedItems.isNotEmpty,
+                child: PadRow(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  spacing: 16,
+                  children: [
+                    const Icon(Icons.add),
+                    Expanded(child: Text(localizations(context).quickRecipeTooltip)),
+                  ],
+                ),
+              ),
             ],
           ),
         ],
@@ -84,7 +136,23 @@ class ShoppingPage extends StatelessWidget {
                   return const Center(child: Text("🗿", style: TextStyle(fontSize: 64)));
                 }
 
-                return _shoppingList(Column(children: shoppingItems.map(ShoppingItemTile.new).toList()));
+                return _shoppingList(
+                  Column(
+                    children: shoppingItems.map((shoppingItem) {
+                      return ShoppingItemTile(
+                        shoppingItem,
+                        checked: _checkedItems.map((item) => item.id).contains(shoppingItem.id),
+                        setChecked: (value) => setState(() {
+                          if (value) {
+                            _checkedItems.add(shoppingItem);
+                          } else {
+                            _checkedItems.removeWhere((item) => item.id == shoppingItem.id);
+                          }
+                        }),
+                      );
+                    }).toList(),
+                  ),
+                );
               },
             ),
           ),

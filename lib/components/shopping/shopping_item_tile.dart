@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:house_wallet/components/ui/collapsible_container.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
-import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/shopping/shopping_item_details_bottom_sheet.dart';
 
-class ShoppingItemTile extends StatefulWidget {
+class ShoppingItemTile extends StatelessWidget {
   final FirestoreDocument<ShoppingItemRef> shoppingItem;
+  final bool checked;
+  final void Function(bool value) setChecked;
 
-  ShoppingItemTile(this.shoppingItem) : super(key: Key(shoppingItem.id));
+  ShoppingItemTile(
+    this.shoppingItem, {
+    required this.checked,
+    required this.setChecked,
+  }) : super(key: Key(shoppingItem.id));
 
   static Widget shimmer({required double titleWidth}) {
     return PadRow(
@@ -27,17 +33,9 @@ class ShoppingItemTile extends StatefulWidget {
             ),
           ),
         ),
-        const IconButton(onPressed: null, icon: Icon(Icons.delete))
       ],
     );
   }
-
-  @override
-  State<ShoppingItemTile> createState() => _ShoppingItemTileState();
-}
-
-class _ShoppingItemTileState extends State<ShoppingItemTile> {
-  bool _checked = false;
 
   void _openShoppingItemDetails(BuildContext context) {
     final house = HouseDataRef.of(context, listen: false);
@@ -45,39 +43,52 @@ class _ShoppingItemTileState extends State<ShoppingItemTile> {
       context: context,
       isScrollControlled: true,
       enableDrag: false,
-      builder: (context) => ShoppingItemDetailsBottomSheet(widget.shoppingItem, house: house),
+      builder: (context) => ShoppingItemDetailsBottomSheet(shoppingItem, house: house),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      dense: true,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-      horizontalTitleGap: 4,
-      title: Stack(
-        alignment: Alignment.centerLeft,
+    return Slidable(
+      key: Key(shoppingItem.id),
+      endActionPane: ActionPane(
+        extentRatio: .2,
+        motion: const ScrollMotion(),
         children: [
-          Text(widget.shoppingItem.data.title),
-          CollapsibleContainer(
-            collapsed: !_checked,
-            axis: Axis.horizontal,
-            curve: Curves.easeInOut,
-            child: Container(color: Colors.black, width: double.infinity, height: 1),
-          )
+          SlidableAction(
+            onPressed: (context) => shoppingItem.reference.delete(),
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white,
+            icon: Icons.delete,
+          ),
         ],
       ),
-      leading: Checkbox(
-        value: _checked,
-        activeColor: Colors.black,
-        onChanged: (newValue) => setState(() => _checked = newValue!),
+      child: ListTile(
+        dense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+        horizontalTitleGap: 4,
+        title: Padding(
+          padding: const EdgeInsets.only(right: 16),
+          child: Stack(
+            alignment: Alignment.centerLeft,
+            children: [
+              Text(shoppingItem.data.title),
+              CollapsibleContainer(
+                collapsed: !checked,
+                axis: Axis.horizontal,
+                curve: Curves.easeInOut,
+                child: Container(color: Colors.black, width: double.infinity, height: 1),
+              )
+            ],
+          ),
+        ),
+        leading: Checkbox(
+          value: checked,
+          activeColor: Colors.black,
+          onChanged: (value) => setChecked(value!),
+        ),
+        onTap: () => _openShoppingItemDetails(context),
       ),
-      trailing: IconButton(
-        tooltip: localizations(context).delete,
-        onPressed: () => widget.shoppingItem.reference.delete(),
-        icon: const Icon(Icons.delete),
-      ),
-      onTap: () => _openShoppingItemDetails(context),
     );
   }
 }

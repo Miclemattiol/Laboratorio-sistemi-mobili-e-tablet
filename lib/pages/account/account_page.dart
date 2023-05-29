@@ -160,20 +160,18 @@ class _AccountPageState extends State<AccountPage> {
       child: Scaffold(
         appBar: AppBarFix(
           title: Text(localizations(context).accountPage),
-          actions: _edited
-              ? [
-                  IconButton(
-                    onPressed: _discardChanges,
-                    icon: const Icon(Icons.undo),
-                    tooltip: localizations(context).discardChangesTooltip,
-                  ),
-                  IconButton(
-                    onPressed: _saveChanges,
-                    icon: const Icon(Icons.save),
-                    tooltip: localizations(context).saveChangesTooltip,
-                  )
-                ]
-              : null,
+          actions: [
+            IconButton(
+              onPressed: _edited ? _discardChanges : null,
+              icon: const Icon(Icons.undo),
+              tooltip: localizations(context).discardChangesTooltip,
+            ),
+            IconButton(
+              onPressed: _edited ? _saveChanges : null,
+              icon: const Icon(Icons.save),
+              tooltip: localizations(context).saveChangesTooltip,
+            )
+          ],
         ),
         body: ListView(
           children: [

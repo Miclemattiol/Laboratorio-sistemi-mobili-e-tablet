@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/components/house/trade/trades_section.dart';
 import 'package:house_wallet/components/payments/payment_tile.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
+import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house/trade.dart';
 import 'package:house_wallet/data/house_data.dart';
@@ -10,6 +11,8 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/payments/categories_page.dart';
+import 'package:house_wallet/pages/payments/filter_bottom_sheet.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:rxdart/rxdart.dart';
@@ -32,6 +35,15 @@ class PaymentsPage extends StatelessWidget {
     );
   }
 
+  void _filter(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      enableDrag: false,
+      builder: (context) => const FilterBottomSheet(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final houseId = HouseDataRef.of(context).id;
@@ -39,8 +51,16 @@ class PaymentsPage extends StatelessWidget {
       appBar: AppBarFix(
         title: Text(localizations(context).paymentsPage),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.filter_alt)), //TODO acquisto, tooltip
-          IconButton(onPressed: () {}, icon: const Icon(Icons.segment)), //TODO categories, tooltip
+          IconButton(
+            tooltip: localizations(context).filterTooltip,
+            onPressed: () => _filter(context),
+            icon: const Icon(Icons.filter_alt),
+          ),
+          IconButton(
+            tooltip: localizations(context).categoriesPage,
+            onPressed: () => Navigator.of(context).push(SlidingPageRoute(const CategoriesPage(), fullscreenDialog: true)),
+            icon: const Icon(Icons.segment),
+          ),
         ],
       ),
       body: StreamBuilder(
