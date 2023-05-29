@@ -156,30 +156,20 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
               ),
             ],
           ),
-          PadRow(
-            spacing: 16,
-            children: [
-              Expanded(
-                child: PeopleSharesFormField(
-                  enabled: !_loading,
-                  house: widget.house,
-                  initialValue: widget.payment?.data.to.map((key, value) => MapEntry(key, value.share)),
-                  decoration: inputDecoration(localizations(context).peopleShares),
-                  onSaved: (to) => _toValue = to,
-                  validator: (value) {
-                    if (value.entries.isEmpty) return localizations(context).noPeopleSharesInputErrorMissing;
-                    return null;
-                  },
-                ),
-              ),
-              ConstrainedBox(
-                constraints: multiInputRowConstraints(context),
-                child: TextFormField(
-                  enabled: !_loading,
-                  decoration: inputDecoration("Category (TODO)"),
-                ),
-              ),
-            ],
+          PeopleSharesFormField(
+            enabled: !_loading,
+            house: widget.house,
+            initialValue: widget.payment?.data.to.map((key, value) => MapEntry(key, value.share)),
+            decoration: inputDecoration(localizations(context).peopleShares),
+            onSaved: (to) => _toValue = to,
+            validator: (value) {
+              if (value.entries.isEmpty) return localizations(context).noPeopleSharesInputErrorMissing;
+              return null;
+            },
+          ),
+          TextFormField(
+            enabled: !_loading,
+            decoration: inputDecoration("Category (TODO)"),
           ),
           DatePickerFormField(
             enabled: !_loading,
