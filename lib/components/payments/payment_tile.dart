@@ -5,26 +5,46 @@ import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house/trade.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
-import 'package:house_wallet/data/payment_trade.dart';
+import 'package:house_wallet/data/payment_or_trade.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
 import 'package:house_wallet/pages/payments/trade_details_bottom_sheet.dart';
 
 class PaymentTile extends StatelessWidget {
-  final FirestoreDocument<PaymentTrade> doc;
+  final FirestoreDocument<PaymentOrTrade> doc;
 
   const PaymentTile(this.doc, {Key? key}) : super(key: key);
 
+  num _calculateImpact(LoggedUser loggedUser, PaymentRef payment) {
+    final totalShares = payment.to.values.fold<num>(0, (prev, element) => prev + element.share);
+    final pricePerShare = payment.price / totalShares;
+    final myShare = payment.to[loggedUser.uid]?.share;
+
+    if (payment.from.uid == loggedUser.uid) {
+      if (payment.to.containsKey(loggedUser.uid)) {
+        return pricePerShare * (totalShares - myShare!);
+      } else {
+        return payment.price;
+      }
+    } else if (payment.to.containsKey(loggedUser.uid)) {
+      return -pricePerShare * myShare!;
+    } else {
+      return 0;
+    }
+  }
+
   String _title(BuildContext context) {
     final payment = doc.data;
+    final myUid = LoggedUser.of(context).uid;
+
     if (payment is PaymentRef) {
       return payment.title;
     } else {
       final trade = payment as TradeRef;
-      if (trade.from.uid == LoggedUser.of(context).uid) {
+      if (trade.from.uid == myUid) {
         return localizations(context).tradeFromMe;
-      } else if (trade.to.uid == LoggedUser.of(context).uid) {
+      } else if (trade.to.uid == myUid) {
         return localizations(context).tradeToMe;
       } else {
         return localizations(context).tradeNotMe(trade.to.username); //TODO Dargli un nome migliore
@@ -34,14 +54,16 @@ class PaymentTile extends StatelessWidget {
 
   String _subtitle(BuildContext context) {
     final payment = doc.data;
+    final myUid = LoggedUser.of(context).uid;
+
     if (payment is PaymentRef) {
       return localizations(context).paymentPaidFrom(payment.from.username);
     } else {
       final trade = payment as TradeRef;
-      if (trade.from.uid == LoggedUser.of(context).uid) {
+      if (trade.from.uid == myUid) {
         return localizations(context).tradeTo(trade.to.username);
-      } else if (trade.to.uid == LoggedUser.of(context).uid) {
-        return localizations(context).tradeFrom(trade.from.username);
+      } else if (trade.to.uid == myUid) {
+        return localizations(context).tradeFrom(trade.from.username); //TODO same as the else branch?
       } else {
         return localizations(context).tradeFrom(trade.from.username);
       }
@@ -50,6 +72,7 @@ class PaymentTile extends StatelessWidget {
 
   Widget _trailing(BuildContext context) {
     final payment = doc.data;
+
     if (payment is PaymentRef) {
       return PadColumn(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -65,7 +88,6 @@ class PaymentTile extends StatelessWidget {
       );
     } else {
       final trade = payment as TradeRef;
-      trade;
       return Text(currencyFormat(context).format(trade.amount));
     }
   }
@@ -86,27 +108,27 @@ class PaymentTile extends StatelessWidget {
     }
   }
 
-  num _calculateImpact(LoggedUser loggedUser, PaymentRef payment) {
-    final totalShares = payment.to.values.fold<num>(0, (prev, element) => prev + element.share);
-    final pricePerShare = payment.price / totalShares;
-    final myShare = payment.to[loggedUser.uid]?.share;
+  void _onTap(BuildContext context) {
+    final payment = doc.data;
+    final loggedUser = LoggedUser.of(context, listen: false);
+    final house = HouseDataRef.of(context, listen: false);
 
-    if (payment.from.uid == loggedUser.uid) {
-      if (payment.to.containsKey(loggedUser.uid)) {
-        return pricePerShare * (totalShares - myShare!);
-      } else {
-        return payment.price;
-      }
-    } else if (payment.to.containsKey(loggedUser.uid)) {
-      return -pricePerShare * myShare!;
-    } else {
-      return 0;
-    }
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      enableDrag: false,
+      builder: (context) {
+        if (payment is PaymentRef) {
+          return PaymentDetailsBottomSheet.edit(doc as FirestoreDocument<PaymentRef>, loggedUser: loggedUser, house: house);
+        } else {
+          return TradeDetailsBottomSheet.edit(doc as FirestoreDocument<TradeRef>, loggedUser: loggedUser, house: house);
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final payment = doc.data;
     return Slidable(
       key: Key(doc.id),
       endActionPane: ActionPane(
@@ -126,25 +148,7 @@ class PaymentTile extends StatelessWidget {
         subtitle: Text(_subtitle(context)),
         leading: SizedBox(height: double.infinity, child: Icon(_leading(context))),
         trailing: _trailing(context),
-        onTap: () {
-          final loggedUser = LoggedUser.of(context, listen: false);
-          final house = HouseDataRef.of(context, listen: false);
-          if (payment is PaymentRef) {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              enableDrag: false,
-              builder: (context) => PaymentDetailsBottomSheet.edit(doc as FirestoreDocument<PaymentRef>, loggedUser: loggedUser, house: house),
-            );
-          } else {
-            showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              enableDrag: false,
-              builder: (context) => TradeDetailsBottomSheet.edit(doc as FirestoreDocument<TradeRef>, loggedUser: loggedUser, house: house),
-            );
-          }
-        },
+        onTap: () => _onTap(context),
       ),
     );
   }

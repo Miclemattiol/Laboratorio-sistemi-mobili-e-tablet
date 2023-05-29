@@ -32,31 +32,23 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
   bool _loading = false;
 
   String? _descriptionValue;
-
+  num? _amountValue;
   DateTime? _dateValue;
 
-  num? _amountValue;
-
   void _saveTrade() async {
-    //TODO Quando li modifico scompaiono...
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
 
     _formKey.currentState!.save();
     if (!_formKey.currentState!.validate()) return;
-    setState(() => _loading = true);
 
     setState(() => _loading = true);
     try {
-      final trade = Trade(
-        description: _descriptionValue,
-        amount: _amountValue!,
-        date: _dateValue!,
-        from: widget.trade.data.from.uid,
-        to: widget.trade.data.to.uid,
-      );
-
-      await widget.trade.reference.update(Trade.toFirestore(trade));
+      await widget.trade.reference.update({
+        "description": _descriptionValue,
+        "amount": _amountValue!,
+        "date": _dateValue!,
+      });
 
       navigator.pop();
     } on FirebaseException catch (error) {
@@ -77,10 +69,11 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
             localizations(context).tradeInformationTitle,
             style: Theme.of(context).textTheme.titleMedium,
           ),
-          NumberFormField<double>(
+          NumberFormField<num>(
             enabled: !_loading,
             initialValue: widget.trade.data.amount.toDouble(),
             decoration: inputDecoration(localizations(context).quantity),
+            decimal: true,
             onSaved: (amount) => _amountValue = amount,
             validator: (amount) {
               if (amount == null) return localizations(context).priceInputErrorMissing;

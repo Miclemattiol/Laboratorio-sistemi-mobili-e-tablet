@@ -8,6 +8,7 @@
         "housewallet",
         "lpsmt",
         "mipmap",
+        "rxdart",
         "unfocus"
     ],
     "files.exclude": {

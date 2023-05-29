@@ -13,7 +13,6 @@ import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
 import 'package:rxdart/rxdart.dart';
 
-//TODO aggiungere anche gli scambi di denaro accettati
 class PaymentsPage extends StatelessWidget {
   const PaymentsPage({super.key});
 

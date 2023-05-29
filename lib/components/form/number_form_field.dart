@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class NumberFormField<T extends num> extends StatelessWidget {
   final TextEditingController? controller;
@@ -60,12 +61,22 @@ class NumberFormField<T extends num> extends StatelessWidget {
     }
   }
 
+  String? _initialValueString(BuildContext context) {
+    if (initialValue == null) return null;
+
+    if (T == int) {
+      return initialValue.toString();
+    } else {
+      return NumberFormat("0.00", Localizations.localeOf(context).languageCode).format(initialValue);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
       autofocus: autofocus,
-      initialValue: initialValue?.toString(),
+      initialValue: _initialValueString(context),
       autovalidateMode: autovalidateMode,
       decoration: decoration,
       validator: (value) => validator?.call(_tryParse(value)),

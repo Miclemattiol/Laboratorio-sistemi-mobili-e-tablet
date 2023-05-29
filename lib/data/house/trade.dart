@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
-import 'package:house_wallet/data/payment_trade.dart';
+import 'package:house_wallet/data/payment_or_trade.dart';
 import 'package:house_wallet/data/user.dart';
 
 class Trade {
@@ -43,7 +43,7 @@ class Trade {
   }
 }
 
-class TradeRef extends PaymentTrade {
+class TradeRef extends PaymentOrTrade {
   final num amount;
   final User from;
   final User to;
