@@ -52,7 +52,7 @@ class Task {
   final RepeatOptions? repeating;
   final int? interval;
   final String? description;
-  final List<String> assignedTo;
+  final Set<String> assignedTo;
 
   const Task({
     required this.title,
@@ -73,7 +73,7 @@ class Task {
       repeating: data["repeating"] != null ? RepeatOptions.values[data["repeating"]] : null,
       interval: data["interval"],
       description: data["description"],
-      assignedTo: List.from(data["assignedTo"]),
+      assignedTo: Set.from(data["assignedTo"]),
     );
   }
 
