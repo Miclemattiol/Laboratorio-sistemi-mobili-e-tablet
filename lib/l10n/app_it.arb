@@ -54,6 +54,14 @@
     "noPeopleSharesInputErrorMissing": "La transazione deve includere almeno una persona",
     "paymentPaidFrom": "Pagato da {from}",
     "paymentDate": "Data pagamento",
+    "paymentCategory": "Categoria",
+    "paymentFilterTitle": "Titolo",
+    "paymentFilterDescription": "Descrizione",
+    "paymentFilterMinPrice": "Prezzo minimo",
+    "paymentFilterMaxPrice": "Prezzo massimo",
+    "paymentFilterMaxPriceError": "Il prezzo massimo deve essere maggiore o uguale al prezzo minimo",
+    "paymentFilterFromDate": "Pagato dal",
+    "paymentFilterToDate": "Pagato fino al",
     "@paymentPaidFrom": {
         "placeholders": {
             "from": {
