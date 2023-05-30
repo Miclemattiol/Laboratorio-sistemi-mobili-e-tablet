@@ -113,7 +113,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
               if (from == null) {
                 return localizations(context).taskDateInputErrorMissing;
               } else if (_toValue?.isBefore(from) ?? false) {
-                return localizations(context).taskStartDateInputErrorBeforeEndDate;
+                return localizations(context).taskStartDateInputErrorAfterEndDate;
               }
               return null;
             },

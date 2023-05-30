@@ -7,9 +7,9 @@ import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
+import 'package:house_wallet/data/payment_or_trade.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
-import 'package:house_wallet/data/payments/payment_filter.dart';
 import 'package:house_wallet/data/shopping/trade.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/categories_page.dart';
@@ -30,7 +30,7 @@ class PaymentsPage extends StatefulWidget {
 }
 
 class _PaymentsPageState extends State<PaymentsPage> {
-  final _paymentFilter = PaymentFilter();
+  PaymentFilter _paymentFilter = PaymentFilter();
 
   void _addPayment(BuildContext context) {
     final loggedUser = LoggedUser.of(context, listen: false);
@@ -43,18 +43,39 @@ class _PaymentsPageState extends State<PaymentsPage> {
     );
   }
 
-  void _filter(BuildContext context) {
+  void _filter(BuildContext context) async {
     final house = HouseDataRef.of(context, listen: false);
 
-    showModalBottomSheet(
+    final filter = await showModalBottomSheet<PaymentFilter>(
       context: context,
       isScrollControlled: true,
       enableDrag: false,
       builder: (context) => FilterBottomSheet(
         house: house,
-        filter: _paymentFilter,
+        currentFilter: _paymentFilter,
       ),
     );
+    if (filter == null) return;
+
+    setState(() => _paymentFilter = filter);
+  }
+
+  List<FirestoreDocument<PaymentOrTrade>>? _filteredData(List<FirestoreDocument<PaymentOrTrade>>? data) {
+    if (data == null) return null;
+
+    return data.where((element) {
+      //TODO use filters here: use only rules like this: if(!followsFilters) return false, if everything fails return true at the end of the function!
+      if (element.data is PaymentRef) {
+        final payment = element.data as PaymentRef;
+        if (_paymentFilter.titleShouldMatch != null && !payment.title.contains(_paymentFilter.titleShouldMatch!)) return false;
+        if (_paymentFilter.priceRange?.test(payment.price) == false) return false;
+      } else {
+        final trade = element.data as TradeRef;
+        if (_paymentFilter.priceRange?.test(trade.amount) == false) return false;
+      }
+
+      return true;
+    }).toList();
   }
 
   @override
@@ -89,7 +110,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
               ..sort((payment, trade) => trade.data.date.compareTo(payment.data.date)),
           ),
           builder: (context, snapshot) {
-            final payments = snapshot.data;
+            final payments = _filteredData(snapshot.data);
 
             if (payments == null) {
               if (snapshot.connectionState == ConnectionState.waiting) {

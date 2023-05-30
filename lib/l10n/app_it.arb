@@ -58,6 +58,7 @@
     "paymentFilterTitle": "Titolo",
     "paymentFilterDescription": "Descrizione",
     "paymentFilterMinPrice": "Prezzo minimo",
+    "paymentFilterMinPriceError": "Il prezzo minimo deve essere minore o uguale al prezzo massimo",
     "paymentFilterMaxPrice": "Prezzo massimo",
     "paymentFilterMaxPriceError": "Il prezzo massimo deve essere maggiore o uguale al prezzo minimo",
     "paymentFilterFromDate": "Pagato dal",
@@ -128,7 +129,7 @@
         }
     },
     "taskStartDateInput": "Data di inizio",
-    "taskStartDateInputErrorBeforeEndDate": "La data di inizio deve essere precedente alla data di fine",
+    "taskStartDateInputErrorAfterEndDate": "La data di inizio deve essere precedente alla data di fine",
     "taskEndDateInput": "Data di fine",
     "taskEndDateInputErrorBeforeStartDate": "La data di fine deve essere successiva alla data di inizio",
     "taskDateInputErrorMissing": "Data non valida",

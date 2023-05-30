@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 
 class DatePickerFormField extends StatelessWidget {
   final DateTime? initialValue;
+  final DateTime? firstDate;
   final AutovalidateMode? autovalidateMode;
   final InputDecoration? decoration;
   final String? Function(DateTime? value)? validator;
@@ -19,6 +20,7 @@ class DatePickerFormField extends StatelessWidget {
 
   const DatePickerFormField({
     this.initialValue,
+    this.firstDate,
     this.autovalidateMode,
     this.decoration,
     this.validator,
@@ -31,6 +33,7 @@ class DatePickerFormField extends StatelessWidget {
 
   const DatePickerFormField.dateOnly({
     this.initialValue,
+    this.firstDate,
     this.autovalidateMode,
     this.decoration,
     this.validator,
@@ -51,19 +54,20 @@ class DatePickerFormField extends StatelessWidget {
     this.enabled = true,
     super.key,
   })  : pickDate = false,
-        pickTime = true;
+        pickTime = true,
+        firstDate = null;
 
   void _pickDateTime(BuildContext context, FormFieldState<DateTime?> state) async {
-    DateTime initialDate = state.value ?? DateTime.now();
-    DateTime smallerDate = initialDate.compareTo(DateTime.now()) < 0 ? initialDate : DateTime.now();
+    final initialDate = state.value ?? DateTime.now();
+    final firstDate = this.firstDate ?? DateTime.now();
 
     DateTime? date = !pickDate
         ? DateTime(0)
         : await showDatePicker(
             context: context,
             initialDate: initialDate,
-            firstDate: smallerDate,
-            lastDate: DateTime(smallerDate.year + 100),
+            firstDate: firstDate,
+            lastDate: DateTime(firstDate.year + 100),
             locale: const Locale("it", "IT"),
           );
     if (date == null) return;

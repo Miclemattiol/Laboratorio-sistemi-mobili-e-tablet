@@ -74,31 +74,30 @@ class _RepeatIntervalFormFieldState extends State<RepeatIntervalFormField> {
                 collapsed: !isRepeat,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<RepeatOptions>(
-                      value: stateValue.repeat,
-                      isExpanded: true,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                      onChanged: widget.enabled
-                          ? (value) => setState(() {
-                                final repeatValue = value ?? RepeatOptions.daily;
-                                state.didChange(RepeatData(repeatValue, repeatValue == RepeatOptions.custom ? _intervalValue : null));
-                                _repeatValue = repeatValue;
-                              })
-                          : null,
-                      items: RepeatOptions.values.map((option) {
-                        return DropdownMenuItem<RepeatOptions>(
-                          value: option,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(option.label(context)),
-                              Icon(option.icon, color: widget.enabled ? null : Theme.of(context).disabledColor),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    ),
+                  child: DropdownButton<RepeatOptions>(
+                    value: stateValue.repeat,
+                    isExpanded: true,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    underline: const SizedBox.shrink(),
+                    onChanged: widget.enabled
+                        ? (value) => setState(() {
+                              final repeatValue = value ?? RepeatOptions.daily;
+                              state.didChange(RepeatData(repeatValue, repeatValue == RepeatOptions.custom ? _intervalValue : null));
+                              _repeatValue = repeatValue;
+                            })
+                        : null,
+                    items: RepeatOptions.values.map((option) {
+                      return DropdownMenuItem<RepeatOptions>(
+                        value: option,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(option.label(context)),
+                            Icon(option.icon, color: widget.enabled ? null : Theme.of(context).disabledColor),
+                          ],
+                        ),
+                      );
+                    }).toList(),
                   ),
                 ),
               ),
