@@ -65,11 +65,11 @@ class RecipeFormField extends StatelessWidget {
                   return RecipeItemListTile(
                     key: Key("$index${recipe.hashCode}"),
                     recipe,
-                    onPressed: () => _editItem(context, state, index, recipe),
-                    onDelete: () => _deleteItem(state, index),
+                    onPressed: enabled ? () => _editItem(context, state, index, recipe) : null,
+                    onDelete: enabled ? () => _deleteItem(state, index) : null,
                   );
                 }),
-                RecipeItemListTile.createNew(onPressed: () => _addNewItem(context, state)),
+                RecipeItemListTile.createNew(onPressed: enabled ? () => _addNewItem(context, state) : null),
               ],
             ),
           ),

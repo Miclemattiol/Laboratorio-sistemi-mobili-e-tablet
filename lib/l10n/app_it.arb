@@ -55,6 +55,7 @@
     "paymentPaidFrom": "Pagato da {from}",
     "paymentDate": "Data pagamento",
     "paymentCategory": "Categoria",
+    "nameInputErrorMissing": "Inserisci il nome",
     "paymentFilterTitle": "Titolo",
     "paymentFilterDescription": "Descrizione",
     "paymentFilterMinPrice": "Prezzo minimo",
@@ -80,6 +81,7 @@
     },
     "descriptionInput": "Descrizione",
     "categoriesPage": "Categorie",
+    "categoriesPageError": "Impossibile caricare le categorie",
     "shoppingPage": "Spesa",
     "shoppingPageError": "Impossibile caricare la lista della spesa",
     "quickRecipeTooltip": "Aggiungi elementi ad una nuova ricetta",
@@ -98,12 +100,13 @@
     "priceQuantityChipTooltip": "Prezzo e quantità",
     "titleInputErrorMissing": "Inserisci il titolo",
     "buyItemsPage": "Conferma acquisto",
+    "payAsInput": "Paga come",
     "totalPrice": "Totale",
     "recipesPage": "Ricette",
+    "recipesPageError": "Impossibile caricare le ricette",
     "addToShoppingListTooltip": "Aggiungi prodotti alla lista della spesa",
     "addToShoppingListError": "Impossibile aggiungere i prodotti alla lista della spesa",
     "addToShoppingListSuccess": "Prodotti aggiunti alla lista della spesa",
-    "recipesPageError": "Impossibile caricare le ricette",
     "recipeItemsInput": "Prodotti",
     "recipeItemsInputMissing": "Inserisci almeno un prodotto",
     "tasksPage": "Incarichi",
@@ -236,6 +239,15 @@
         }
     },
     "leaveConfirmDialogContentLastUser": "Sei sicuro di voler uscire dalla casa?\nEssendo l'ultimo utente la casa verrà eliminata permanentemente!",
+    "iconPickerSearch": "Cerca un icona",
+    "filterError": "Nessun risultato per \"{query}\"",
+    "@filterError": {
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
     "buttonYes": "Sì",
     "buttonNo": "No",
     "buttonOk": "OK",
@@ -244,6 +256,7 @@
     "copied": "Copiato!",
     "error": "Errore",
     "title": "Titolo",
+    "name": "Nome",
     "supermarket": "Supermercato",
     "people": "Persone",
     "peopleShares": "Divisione dei prezzi",

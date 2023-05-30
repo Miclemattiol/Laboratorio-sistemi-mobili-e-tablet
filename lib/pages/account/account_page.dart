@@ -14,6 +14,7 @@ import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/account/notifications_page.dart';
 import 'package:house_wallet/pages/main_page.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 import 'package:provider/provider.dart';
 
 class AccountPage extends StatefulWidget {
@@ -221,7 +222,7 @@ class _AccountPageState extends State<AccountPage> {
                   onChanged: (_) {
                     if (!_edited) setState(() => _edited = true);
                   },
-                  onSaved: (iban) => _ibanValue = (iban ?? "").trim().isEmpty ? null : iban?.trim(),
+                  onSaved: (iban) => _ibanValue = iban.toNullable(),
                 ),
                 TextFormField(
                   initialValue: user.payPal,
@@ -230,7 +231,7 @@ class _AccountPageState extends State<AccountPage> {
                   onChanged: (_) {
                     if (!_edited) setState(() => _edited = true);
                   },
-                  onSaved: (payPal) => _payPalValue = (payPal ?? "").trim().isEmpty ? null : payPal?.trim(),
+                  onSaved: (payPal) => _payPalValue = payPal.toNullable(),
                 ),
               ],
             ),

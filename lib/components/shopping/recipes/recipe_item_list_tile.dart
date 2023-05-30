@@ -5,13 +5,13 @@ import 'package:house_wallet/main.dart';
 
 class RecipeItemListTile extends StatelessWidget {
   final RecipeItem? item;
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final void Function()? onDelete;
 
   const RecipeItemListTile(
     RecipeItem this.item, {
     required this.onPressed,
-    required void Function() this.onDelete,
+    required this.onDelete,
     super.key,
   });
 

@@ -12,7 +12,7 @@ import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/payments/categories_page.dart';
+import 'package:house_wallet/pages/payments/categories/categories_page.dart';
 import 'package:house_wallet/pages/payments/filter_bottom_sheet.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
 import 'package:house_wallet/themes.dart';
@@ -60,17 +60,16 @@ class _PaymentsPageState extends State<PaymentsPage> {
     setState(() => _paymentFilter = filter);
   }
 
-  List<FirestoreDocument<PaymentOrTrade>>? _filteredData(List<FirestoreDocument<PaymentOrTrade>>? data) {
-    if (data == null) return null;
-
+  List<FirestoreDocument<PaymentOrTrade>> _filteredData(List<FirestoreDocument<PaymentOrTrade>> data) {
     return data.where((element) {
       //TODO use filters here: use only rules like this: if(!followsFilters) return false, if everything fails return true at the end of the function!
       if (element.data is PaymentRef) {
         final payment = element.data as PaymentRef;
-        if (_paymentFilter.titleShouldMatch != null && !payment.title.contains(_paymentFilter.titleShouldMatch!)) return false;
+        if (_paymentFilter.titleShouldMatch != null && !payment.title.contains(_paymentFilter.titleShouldMatch!)) return false; //TODO make case insensitive
         if (_paymentFilter.priceRange?.test(payment.price) == false) return false;
       } else {
         final trade = element.data as TradeRef;
+        if (_paymentFilter.titleShouldMatch != null) return false;
         if (_paymentFilter.priceRange?.test(trade.amount) == false) return false;
       }
 
@@ -92,7 +91,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
           ),
           IconButton(
             tooltip: localizations(context).categoriesPage,
-            onPressed: () => Navigator.of(context).push(SlidingPageRoute(const CategoriesPage(), fullscreenDialog: true)),
+            onPressed: () => Navigator.of(context).push(SlidingPageRoute(CategoriesPage(house: HouseDataRef.of(context, listen: false)), fullscreenDialog: true)),
             icon: const Icon(Icons.segment),
           ),
         ],
@@ -110,7 +109,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
               ..sort((payment, trade) => trade.data.date.compareTo(payment.data.date)),
           ),
           builder: (context, snapshot) {
-            final payments = _filteredData(snapshot.data);
+            final payments = snapshot.data;
 
             if (payments == null) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -138,6 +137,12 @@ class _PaymentsPageState extends State<PaymentsPage> {
             //TODO empty list
             if (payments.isEmpty) {
               return const Center(child: Text("🗿", style: TextStyle(fontSize: 64)));
+            }
+
+            final filteredPayments = _filteredData(payments);
+            //TODO empty list with filters
+            if (filteredPayments.isEmpty) {
+              return const Center(child: Text("🗿 (filtri)", style: TextStyle(fontSize: 64)));
             }
 
             return ListView.separated(

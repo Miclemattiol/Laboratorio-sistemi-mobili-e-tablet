@@ -13,6 +13,7 @@ import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/tasks/tasks_page.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 
 class TaskDetailsBottomSheet extends StatefulWidget {
   final LoggedUser loggedUser;
@@ -160,7 +161,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
             initialValue: widget.task?.data.description,
             decoration: inputDecoration(localizations(context).descriptionInput),
             keyboardType: TextInputType.multiline,
-            onSaved: (description) => _descriptionValue = (description ?? "").trim().isEmpty ? null : description?.trim(),
+            onSaved: (description) => _descriptionValue = description.toNullable(),
           ),
         ],
         actions: [

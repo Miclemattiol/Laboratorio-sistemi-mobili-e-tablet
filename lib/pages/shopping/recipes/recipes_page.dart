@@ -32,9 +32,7 @@ class RecipesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarFix(
-        title: Text(localizations(context).recipesPage),
-      ),
+      appBar: AppBarFix(title: Text(localizations(context).recipesPage)),
       body: StreamBuilder(
         stream: firestoreRef(house.id).snapshots().map(defaultFirestoreConverter),
         builder: (context, snapshot) {

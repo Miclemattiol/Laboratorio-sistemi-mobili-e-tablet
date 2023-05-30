@@ -87,12 +87,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               TextFormField(
                 initialValue: widget.currentFilter.titleShouldMatch,
                 decoration: inputDecoration(localizations(context).paymentFilterTitle),
-                onSaved: (title) => _titleValue = title,
+                onSaved: (title) => _titleValue = title.toNullable(),
               ),
               TextFormField(
                 initialValue: widget.currentFilter.descriptionShouldMatch,
                 decoration: inputDecoration(localizations(context).paymentFilterDescription),
-                onSaved: (description) => _descriptionValue = description,
+                onSaved: (description) => _descriptionValue = description.toNullable(),
               ),
               DropdownButton(
                 //TODO implement categories (create new component CategoriesFormField)

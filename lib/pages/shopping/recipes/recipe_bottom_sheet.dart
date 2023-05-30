@@ -8,8 +8,9 @@ import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/shopping/recipe.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/shopping/recipes_page.dart';
+import 'package:house_wallet/pages/shopping/recipes/recipes_page.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 
 class RecipeBottomSheet extends StatefulWidget {
   final HouseDataRef house;
@@ -90,7 +91,7 @@ class _RecipeBottomSheetState extends State<RecipeBottomSheet> {
             enabled: !_loading,
             initialValue: widget.recipe?.data.title,
             decoration: inputDecoration(localizations(context).title, true),
-            onSaved: (title) => _titleValue = (title ?? "").trim().isEmpty ? null : title?.trim(),
+            onSaved: (title) => _titleValue = title.toNullable(),
             validator: (value) => value?.trim().isEmpty == true ? localizations(context).titleInputErrorMissing : null,
           ),
           RecipeFormField(

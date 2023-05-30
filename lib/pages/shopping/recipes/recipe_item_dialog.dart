@@ -5,6 +5,7 @@ import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/shopping/recipe.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 
 class RecipeItemDialog extends StatefulWidget {
   final RecipeItem? initialValue;
@@ -52,7 +53,7 @@ class _RecipeItemDialogState extends State<RecipeItemDialog> {
             autofocus: widget.initialValue?.title == null,
             initialValue: widget.initialValue?.title,
             decoration: inputDecoration(localizations(context).title, true),
-            onSaved: (title) => _titleValue = (title ?? "").trim().isEmpty ? null : title?.trim(),
+            onSaved: (title) => _titleValue = title.toNullable(),
             validator: (value) => value?.trim().isEmpty == true ? localizations(context).titleInputErrorMissing : null,
           ),
           NumberFormField(
@@ -69,7 +70,7 @@ class _RecipeItemDialogState extends State<RecipeItemDialog> {
           TextFormField(
             initialValue: widget.initialValue?.supermarket,
             decoration: inputDecoration(localizations(context).supermarket),
-            onSaved: (supermarket) => _supermarketValue = (supermarket ?? "").trim().isEmpty ? null : supermarket?.trim(),
+            onSaved: (supermarket) => _supermarketValue = supermarket.toNullable(),
           ),
         ],
         actions: [

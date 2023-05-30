@@ -11,6 +11,7 @@ import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 
 class ShoppingItemDetailsBottomSheet extends StatefulWidget {
   final FirestoreDocument<ShoppingItemRef> shoppingItem;
@@ -105,7 +106,7 @@ class _ShoppingItemDetailsBottomSheetState extends State<ShoppingItemDetailsBott
                   enabled: !_loading,
                   initialValue: widget.shoppingItem.data.supermarket,
                   decoration: inputDecoration(localizations(context).supermarket),
-                  onSaved: (supermarket) => _supermarketValue = (supermarket ?? "").trim().isEmpty ? null : supermarket?.trim(),
+                  onSaved: (supermarket) => _supermarketValue = supermarket.toNullable(),
                 ),
               ),
               ConstrainedBox(

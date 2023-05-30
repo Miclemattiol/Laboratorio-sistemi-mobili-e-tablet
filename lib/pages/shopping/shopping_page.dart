@@ -6,12 +6,13 @@ import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
+import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/shopping/recipe.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/shopping/buy_items_page.dart';
 import 'package:house_wallet/pages/shopping/recipes/recipe_bottom_sheet.dart';
-import 'package:house_wallet/pages/shopping/recipes_page.dart';
+import 'package:house_wallet/pages/shopping/recipes/recipes_page.dart';
 import 'package:house_wallet/pages/shopping/shopping_bottom_sheet.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:shimmer/shimmer.dart';
@@ -72,7 +73,21 @@ class _ShoppingPageState extends State<ShoppingPage> {
         actions: [
           IconButton(
             tooltip: localizations(context).buyItemsTooltip,
-            onPressed: _checkedIds.isEmpty ? null : () => Navigator.of(context).push(SlidingPageRoute(BuyItemsPage(_checkedItems()), fullscreenDialog: true)),
+            onPressed: _checkedIds.isEmpty
+                ? null
+                : () {
+                    Navigator.of(context).push(
+                      SlidingPageRoute(
+                        BuyItemsPage(
+                          _checkedItems(),
+                          loggedUser: LoggedUser.of(context, listen: false),
+                          house: HouseDataRef.of(context, listen: false),
+                          onComplete: () => setState(() => _checkedIds.clear()),
+                        ),
+                        fullscreenDialog: true,
+                      ),
+                    );
+                  },
             icon: const Icon(Icons.shopping_cart),
           ),
           PopupMenuButton<_PopupMenu>(

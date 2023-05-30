@@ -128,13 +128,17 @@ class CustomDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            PadColumn(
-              spacing: spacing,
-              padding: padding,
-              mainAxisSize: mainAxisSize,
-              mainAxisAlignment: mainAxisAlignment,
-              crossAxisAlignment: crossAxisAlignment,
-              children: body,
+            Flexible(
+              child: SingleChildScrollView(
+                child: PadColumn(
+                  spacing: spacing,
+                  padding: padding,
+                  mainAxisSize: mainAxisSize,
+                  mainAxisAlignment: mainAxisAlignment,
+                  crossAxisAlignment: crossAxisAlignment,
+                  children: body,
+                ),
+              ),
             ),
             if (actions != null) PadRow(spacing: 1, children: actions!.map((action) => Expanded(child: action)).toList())
           ],

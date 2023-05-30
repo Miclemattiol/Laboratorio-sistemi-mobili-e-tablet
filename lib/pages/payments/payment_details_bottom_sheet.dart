@@ -18,6 +18,7 @@ import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 import 'package:uuid/uuid.dart';
 
 class PaymentDetailsBottomSheet extends StatefulWidget {
@@ -143,7 +144,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
                   enabled: !_loading,
                   initialValue: widget.payment?.data.title,
                   decoration: inputDecoration(localizations(context).title, true),
-                  onSaved: (title) => _titleValue = (title ?? "").trim().isEmpty ? null : title?.trim(),
+                  onSaved: (title) => _titleValue = title.toNullable(),
                   validator: (value) => value?.trim().isEmpty == true ? localizations(context).titleInputErrorMissing : null,
                 ),
               ),
@@ -192,7 +193,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
             initialValue: widget.payment?.data.description,
             decoration: inputDecoration(localizations(context).descriptionInput),
             keyboardType: TextInputType.multiline,
-            onSaved: (description) => _descriptionValue = (description ?? "").trim().isEmpty ? null : description?.trim(),
+            onSaved: (description) => _descriptionValue = description.toNullable(),
           ),
         ],
         actions: [

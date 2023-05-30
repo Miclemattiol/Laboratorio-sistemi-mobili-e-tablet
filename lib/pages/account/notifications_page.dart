@@ -10,11 +10,10 @@ class NotificationsPage extends StatefulWidget {
 }
 
 class _NotificationsPageState extends State<NotificationsPage> {
-  final Map<String, bool> _values = {
-    "Placeholder 1": true,
-    "Placeholder 2": true,
-    "Placeholder 3": true,
-    "Placeholder 4": true
+  late final Map<String, bool> _values = {
+    localizations(context).paymentsPage: true,
+    localizations(context).tasksPage: true,
+    localizations(context).tradesSection: true,
   };
 
   @override

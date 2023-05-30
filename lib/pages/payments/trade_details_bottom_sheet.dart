@@ -11,6 +11,7 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 
 class TradeDetailsBottomSheet extends StatefulWidget {
   final LoggedUser loggedUser;
@@ -95,7 +96,7 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
             initialValue: widget.trade.data.description,
             decoration: inputDecoration(localizations(context).descriptionInput),
             keyboardType: TextInputType.multiline,
-            onSaved: (description) => _descriptionValue = (description ?? "").trim().isEmpty ? null : description?.trim(),
+            onSaved: (description) => _descriptionValue = description.toNullable(),
           ),
         ],
         actions: [

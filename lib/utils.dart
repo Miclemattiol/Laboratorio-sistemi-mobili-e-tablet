@@ -27,3 +27,9 @@ extension BoolExtension on bool {
     return this ? 1 : 0;
   }
 }
+
+extension StringExtension on String? {
+  String? toNullable() {
+    return (this ?? "").trim() == "" ? null : this!.trim();
+  }
+}
