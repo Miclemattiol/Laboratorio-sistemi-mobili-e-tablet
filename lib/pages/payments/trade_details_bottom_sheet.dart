@@ -8,7 +8,7 @@ import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
-import 'package:house_wallet/data/shopping/trade.dart';
+import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/themes.dart';
 
@@ -70,9 +70,9 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
         dismissible: !_loading,
         spacing: 16,
         body: [
-          NumberFormField<num>(
+          NumberFormField(
             enabled: !_loading,
-            initialValue: widget.trade.data.amount.toDouble(),
+            initialValue: widget.trade.data.amount,
             decoration: inputDecoration(localizations(context).quantity),
             decimal: true,
             onSaved: (amount) => _amountValue = amount,

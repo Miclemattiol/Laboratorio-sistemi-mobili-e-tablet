@@ -26,7 +26,7 @@ class TaskDetailsBottomSheet extends StatefulWidget {
   }) : task = null;
 
   const TaskDetailsBottomSheet.edit(
-    this.task, {
+    FirestoreDocument<TaskRef> this.task, {
     required this.loggedUser,
     required this.house,
     super.key,

@@ -32,7 +32,7 @@ class PaymentDetailsBottomSheet extends StatefulWidget {
   }) : payment = null;
 
   const PaymentDetailsBottomSheet.edit(
-    this.payment, {
+    FirestoreDocument<PaymentRef> this.payment, {
     required this.loggedUser,
     required this.house,
     super.key,

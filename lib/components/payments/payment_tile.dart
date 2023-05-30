@@ -6,7 +6,7 @@ import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payment_or_trade.dart';
 import 'package:house_wallet/data/payments/payment.dart';
-import 'package:house_wallet/data/shopping/trade.dart';
+import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
 import 'package:house_wallet/pages/payments/trade_details_bottom_sheet.dart';
@@ -14,7 +14,7 @@ import 'package:house_wallet/pages/payments/trade_details_bottom_sheet.dart';
 class PaymentTile extends StatelessWidget {
   final FirestoreDocument<PaymentOrTrade> doc;
 
-  const PaymentTile(this.doc, {Key? key}) : super(key: key);
+  PaymentTile(this.doc) : super(key: Key(doc.id));
 
   static Widget shimmer({required double titleWidth, required double subtitleWidth}) {
     return PadRow(

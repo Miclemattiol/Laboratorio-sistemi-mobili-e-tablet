@@ -40,7 +40,7 @@ class _PriceQuantityDialogState extends State<PriceQuantityDialog> {
           spacing: 16,
           children: [
             Expanded(
-              child: NumberFormField<num>(
+              child: NumberFormField(
                 initialValue: widget.initialValue?.price,
                 decimal: true,
                 decoration: inputDecoration(localizations(context).price),

@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/shopping/shopping_item_tile.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
-import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
+import 'package:house_wallet/data/shopping/recipe.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/shopping/buy_items_page.dart';
+import 'package:house_wallet/pages/shopping/recipes/recipe_bottom_sheet.dart';
 import 'package:house_wallet/pages/shopping/recipes_page.dart';
 import 'package:house_wallet/pages/shopping/shopping_bottom_sheet.dart';
 import 'package:house_wallet/themes.dart';
@@ -64,12 +65,29 @@ class _ShoppingPageState extends State<ShoppingPage> {
           ),
           PopupMenuButton<_PopupMenu>(
             onSelected: (value) {
+              final house = HouseDataRef.of(context, listen: false);
+
               switch (value) {
                 case _PopupMenu.recipes:
-                  Navigator.of(context).push(SlidingPageRoute(const RecipesPage(), fullscreenDialog: true));
+                  Navigator.of(context).push(SlidingPageRoute(RecipesPage(house: house), fullscreenDialog: true));
                   break;
                 case _PopupMenu.quickAddRecipe:
-                  CustomDialog.alert(context: context, title: "TODO", content: "TODO show dialog of recipe"); //TODO open add recipe dialog with pre-compiled data from _checkedItems
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    enableDrag: false,
+                    builder: (context) => RecipeBottomSheet.quickAddRecipe(
+                      _checkedItems.map((item) {
+                        return RecipeItem(
+                          title: item.data.title,
+                          price: item.data.price,
+                          quantity: item.data.quantity,
+                          supermarket: item.data.supermarket,
+                        );
+                      }).toList(),
+                      house: house,
+                    ),
+                  );
                   break;
               }
             },

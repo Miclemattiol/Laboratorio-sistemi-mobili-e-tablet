@@ -10,7 +10,7 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payment_or_trade.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
-import 'package:house_wallet/data/shopping/trade.dart';
+import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/categories_page.dart';
 import 'package:house_wallet/pages/payments/filter_bottom_sheet.dart';

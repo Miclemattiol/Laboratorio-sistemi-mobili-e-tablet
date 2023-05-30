@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/data/firestore.dart';
-import 'package:house_wallet/data/shopping/trade.dart';
+import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
 
 class TradeListTile extends StatelessWidget {

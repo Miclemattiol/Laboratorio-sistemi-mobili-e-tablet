@@ -86,7 +86,7 @@ class _ShoppingItemDetailsBottomSheetState extends State<ShoppingItemDetailsBott
               ),
               ConstrainedBox(
                 constraints: multiInputRowConstraints(context),
-                child: NumberFormField<num>(
+                child: NumberFormField(
                   enabled: !_loading,
                   initialValue: widget.shoppingItem.data.price,
                   decoration: inputDecoration(localizations(context).price),
