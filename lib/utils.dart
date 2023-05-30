@@ -6,28 +6,15 @@ T tryOrDefault<T>(T Function() tryFunc, T defaultValue) {
   }
 }
 
-class NumRange<T extends num> {
+class Range<T extends Comparable> {
   final T? start;
   final T? end;
 
-  const NumRange(this.start, this.end);
+  const Range(this.start, this.end);
 
   bool test(T other) {
-    if (start != null && other < start!) return false;
-    if (end != null && other > end!) return false;
-    return true;
-  }
-}
-
-class DateRange {
-  final DateTime? start;
-  final DateTime? end;
-
-  const DateRange(this.start, this.end);
-
-  bool test(DateTime other) {
-    if (start != null && other.isBefore(start!)) return false;
-    if (end != null && other.isAfter(end!)) return false;
+    if (start?.compareTo(other) == 1) return false;
+    if (end?.compareTo(other) == -1) return false;
     return true;
   }
 }

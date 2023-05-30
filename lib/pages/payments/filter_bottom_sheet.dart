@@ -16,8 +16,8 @@ class PaymentFilter {
   Set<String>? categoryId;
   Set<String>? fromUser;
   Set<String>? toUser;
-  NumRange? priceRange;
-  DateRange? dateRange;
+  Range<num>? priceRange;
+  Range<DateTime>? dateRange;
   String? shouldMatch;
   bool? andOr; //TODO not used?
 
@@ -70,8 +70,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
       categoryId: _categoryValue,
       fromUser: _fromUserValue,
       toUser: _toUserValue,
-      priceRange: NumRange(_minPriceValue, _maxPriceValue),
-      dateRange: DateRange(_fromDateValue, _toDateValue),
+      priceRange: Range(_minPriceValue, _maxPriceValue),
+      dateRange: Range(_fromDateValue, _toDateValue),
     ));
   }
 
