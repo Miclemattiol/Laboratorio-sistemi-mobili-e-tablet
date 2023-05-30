@@ -10,7 +10,10 @@ class Range<T extends Comparable> {
   final T? start;
   final T? end;
 
-  const Range(this.start, this.end);
+  Range(
+    this.start,
+    this.end,
+  ) : assert(start == null || end == null || start.compareTo(end) != 1);
 
   bool test(T other) {
     if (start?.compareTo(other) == 1) return false;
