@@ -102,6 +102,7 @@ class AppBarFix extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       leading: leading ?? _getLeading(context),
+      automaticallyImplyLeading: automaticallyImplyLeading,
       title: title,
       actions: actions,
       flexibleSpace: flexibleSpace,

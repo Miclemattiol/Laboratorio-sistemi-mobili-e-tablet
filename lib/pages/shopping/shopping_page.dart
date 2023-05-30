@@ -31,7 +31,8 @@ class ShoppingPage extends StatefulWidget {
 }
 
 class _ShoppingPageState extends State<ShoppingPage> {
-  final _checkedItems = <FirestoreDocument<ShoppingItemRef>>[];
+  Map<String, FirestoreDocument<ShoppingItemRef>> _items = {};
+  final _checkedIds = <String>{};
 
   Widget _shoppingList(Widget child) {
     return SingleChildScrollView(
@@ -49,6 +50,17 @@ class _ShoppingPageState extends State<ShoppingPage> {
     );
   }
 
+  List<FirestoreDocument<ShoppingItemRef>> _checkedItems() {
+    return _checkedIds.expand<FirestoreDocument<ShoppingItemRef>>((id) {
+      if (_items.containsKey(id)) {
+        return [
+          _items[id]!
+        ];
+      }
+      return [];
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,7 +72,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
         actions: [
           IconButton(
             tooltip: localizations(context).buyItemsTooltip,
-            onPressed: _checkedItems.isEmpty ? null : () => Navigator.of(context).push(SlidingPageRoute(BuyItemsPage(_checkedItems), fullscreenDialog: true)),
+            onPressed: _checkedIds.isEmpty ? null : () => Navigator.of(context).push(SlidingPageRoute(BuyItemsPage(_checkedItems()), fullscreenDialog: true)),
             icon: const Icon(Icons.shopping_cart),
           ),
           PopupMenuButton<_PopupMenu>(
@@ -77,7 +89,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                     isScrollControlled: true,
                     enableDrag: false,
                     builder: (context) => RecipeBottomSheet.quickAddRecipe(
-                      _checkedItems.map((item) {
+                      _checkedItems().map((item) {
                         return RecipeItem(
                           title: item.data.title,
                           price: item.data.price,
@@ -105,7 +117,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
               ),
               PopupMenuItem(
                 value: _PopupMenu.quickAddRecipe,
-                enabled: _checkedItems.isNotEmpty,
+                enabled: _checkedIds.isNotEmpty,
                 child: PadRow(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   spacing: 16,
@@ -149,6 +161,8 @@ class _ShoppingPageState extends State<ShoppingPage> {
                   }
                 }
 
+                _items = Map.fromEntries(shoppingItems.map((item) => MapEntry(item.id, item)));
+
                 //TODO empty list
                 if (shoppingItems.isEmpty) {
                   return const Center(child: Text("🗿", style: TextStyle(fontSize: 64)));
@@ -159,12 +173,12 @@ class _ShoppingPageState extends State<ShoppingPage> {
                     children: shoppingItems.map((shoppingItem) {
                       return ShoppingItemTile(
                         shoppingItem,
-                        checked: _checkedItems.map((item) => item.id).contains(shoppingItem.id),
+                        checked: _checkedIds.contains(shoppingItem.id),
                         setChecked: (value) => setState(() {
                           if (value) {
-                            _checkedItems.add(shoppingItem);
+                            _checkedIds.add(shoppingItem.id);
                           } else {
-                            _checkedItems.removeWhere((item) => item.id == shoppingItem.id);
+                            _checkedIds.remove(shoppingItem.id);
                           }
                         }),
                       );
