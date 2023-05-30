@@ -67,13 +67,13 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
         ));
       } else {
         await widget.task!.reference.update({
-          "title": _titleValue!,
-          "description": _descriptionValue,
-          "from": _fromValue!,
-          "to": _toValue!,
-          "repeating": _repeatValue!.repeat?.index,
-          "interval": _repeatValue!.interval,
-          "assignedTo": _assignedToValue,
+          Task.titleKey: _titleValue!,
+          Task.descriptionKey: _descriptionValue,
+          Task.fromKey: _fromValue!,
+          Task.toKey: _toValue!,
+          Task.repeatingKey: _repeatValue!.repeat?.index,
+          Task.intervalKey: _repeatValue!.interval,
+          Task.assignedToKey: _assignedToValue,
         });
       }
 

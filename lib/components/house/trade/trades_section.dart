@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/components/house/section.dart';
 import 'package:house_wallet/components/house/trade/trade_list_tile.dart';
 import 'package:house_wallet/data/firestore.dart';
-import 'package:house_wallet/data/house/trade.dart';
+import 'package:house_wallet/data/shopping/trade.dart';
 import 'package:house_wallet/main.dart';
 
 class TradesSection extends StatelessWidget {

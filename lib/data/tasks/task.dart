@@ -54,6 +54,14 @@ class Task {
   final String? description;
   final Set<String> assignedTo;
 
+  static const titleKey = "title";
+  static const fromKey = "from";
+  static const toKey = "to";
+  static const repeatingKey = "repeating";
+  static const intervalKey = "interval";
+  static const descriptionKey = "description";
+  static const assignedToKey = "assignedTo";
+
   const Task({
     required this.title,
     required this.from,
@@ -67,25 +75,25 @@ class Task {
   factory Task.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc, [SnapshotOptions? _]) {
     final data = doc.data()!;
     return Task(
-      title: data["title"],
-      from: (data["from"] as Timestamp).toDate(),
-      to: (data["to"] as Timestamp).toDate(),
-      repeating: data["repeating"] != null ? RepeatOptions.values[data["repeating"]] : null,
-      interval: data["interval"],
-      description: data["description"],
-      assignedTo: Set.from(data["assignedTo"]),
+      title: data[titleKey],
+      from: (data[fromKey] as Timestamp).toDate(),
+      to: (data[toKey] as Timestamp).toDate(),
+      repeating: data[repeatingKey] != null ? RepeatOptions.values[data[repeatingKey]] : null,
+      interval: data[intervalKey],
+      description: data[descriptionKey],
+      assignedTo: Set.from(data[assignedToKey]),
     );
   }
 
   static Map<String, dynamic> toFirestore(Task trade, [SetOptions? _]) {
     return {
-      "title": trade.title,
-      "from": Timestamp.fromDate(trade.from),
-      "to": Timestamp.fromDate(trade.to),
-      "repeating": trade.repeating?.index,
-      "interval": trade.interval,
-      "description": trade.description,
-      "assignedTo": trade.assignedTo,
+      titleKey: trade.title,
+      fromKey: Timestamp.fromDate(trade.from),
+      toKey: Timestamp.fromDate(trade.to),
+      repeatingKey: trade.repeating?.index,
+      intervalKey: trade.interval,
+      descriptionKey: trade.description,
+      assignedToKey: trade.assignedTo,
     };
   }
 }

@@ -3,9 +3,9 @@ import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/house/trade/trades_section.dart';
 import 'package:house_wallet/components/house/user/users_section.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
-import 'package:house_wallet/data/house/trade.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
+import 'package:house_wallet/data/shopping/trade.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/main_page.dart';
 

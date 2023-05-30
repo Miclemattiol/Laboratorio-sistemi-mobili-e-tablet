@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_auth/firebase_auth.dart' hide User;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
@@ -8,6 +8,7 @@ import 'package:house_wallet/components/ui/dropdown_list_tile.dart';
 import 'package:house_wallet/components/ui/image_avatar.dart';
 import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:house_wallet/data/logged_user.dart';
+import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/image_picker_bottom_sheet.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/account/notifications_page.dart';
@@ -49,7 +50,7 @@ class _AccountPageState extends State<AccountPage> {
       setState(() => _uploadProgress = null);
 
       await MainPage.userFirestoreRef(loggedUser.uid).update({
-        "imageUrl": imageUrl
+        User.imageUrlKey: imageUrl
       });
 
       if (currentImage != null) {
@@ -79,7 +80,7 @@ class _AccountPageState extends State<AccountPage> {
 
     try {
       await MainPage.userFirestoreRef(loggedUser.uid).update({
-        "username": username,
+        User.usernameKey: username,
       });
 
       scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.saveChangesDialogContent)));
@@ -96,8 +97,8 @@ class _AccountPageState extends State<AccountPage> {
 
     try {
       await MainPage.userFirestoreRef(loggedUser.uid).update({
-        "iban": _ibanValue,
-        "payPal": _payPalValue
+        User.ibanKey: _ibanValue,
+        User.payPalKey: _payPalValue
       });
 
       _edited = false;

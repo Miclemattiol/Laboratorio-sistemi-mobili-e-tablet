@@ -8,10 +8,12 @@ import 'package:house_wallet/main.dart';
 class CopyFormField extends StatefulWidget {
   final InputDecoration? decoration;
   final String textToCopy;
+  final Duration fadeDuration;
 
   const CopyFormField(
     this.textToCopy, {
     this.decoration,
+    this.fadeDuration = const Duration(milliseconds: 500),
     super.key,
   });
 
@@ -53,12 +55,12 @@ class _CopyFormFieldState extends State<CopyFormField> {
                 children: [
                   AnimatedOpacity(
                     opacity: _copied ? 0 : 1,
-                    duration: _copied ? Duration.zero : const Duration(milliseconds: 500),
+                    duration: _copied ? Duration.zero : widget.fadeDuration,
                     child: Text(widget.textToCopy, overflow: TextOverflow.ellipsis),
                   ),
                   AnimatedOpacity(
                     opacity: _copied ? 1 : 0,
-                    duration: _copied ? Duration.zero : const Duration(milliseconds: 500),
+                    duration: _copied ? Duration.zero : widget.fadeDuration,
                     child: Text(localizations(context).copied),
                   ),
                 ],

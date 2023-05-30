@@ -87,13 +87,13 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
         ));
       } else {
         await widget.payment!.reference.update({
-          "title": _titleValue!,
-          /* "category": _categoryValue!, */ //TODO category
-          "description": _descriptionValue,
-          "price": _priceValue!,
-          "imageUrl": _imageValue == null ? widget.payment!.data.imageUrl : await _uploadImage(_imageValue!),
-          "date": _dateValue!,
-          "to": _toValue,
+          Payment.titleKey: _titleValue!,
+          /* Payment.categoryKey: _categoryValue!, */ //TODO category
+          Payment.descriptionKey: _descriptionValue,
+          Payment.priceKey: _priceValue!,
+          Payment.imageUrlKey: _imageValue == null ? widget.payment!.data.imageUrl : await _uploadImage(_imageValue!),
+          Payment.dateKey: _dateValue!,
+          Payment.toKey: _toValue,
         });
 
         if (_imageValue != null && widget.payment!.data.imageUrl != null) {

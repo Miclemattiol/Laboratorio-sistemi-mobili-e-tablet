@@ -45,11 +45,11 @@ class _ShoppingItemDetailsBottomSheetState extends State<ShoppingItemDetailsBott
     setState(() => _loading = true);
     try {
       await widget.shoppingItem.reference.update({
-        "price": _priceValue,
-        "quantity": _quantityValue,
-        "supermarket": _supermarketValue,
-        "title": _titleValue!,
-        "to": _toValue!,
+        ShoppingItem.priceKey: _priceValue,
+        ShoppingItem.quantityKey: _quantityValue,
+        ShoppingItem.supermarketKey: _supermarketValue,
+        ShoppingItem.titleKey: _titleValue!,
+        ShoppingItem.toKey: _toValue!,
       });
       navigator.pop();
     } on FirebaseException catch (error) {

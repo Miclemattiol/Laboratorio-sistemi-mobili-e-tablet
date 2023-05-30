@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:house_wallet/themes.dart';
 
 class CollapsibleContainer extends StatelessWidget {
   final bool collapsed;
@@ -10,7 +11,7 @@ class CollapsibleContainer extends StatelessWidget {
   const CollapsibleContainer({
     required this.collapsed,
     required this.child,
-    this.duration = const Duration(milliseconds: 200),
+    this.duration = animationDuration,
     this.curve = Curves.easeInOut,
     this.axis = Axis.vertical,
     super.key,

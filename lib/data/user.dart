@@ -7,6 +7,11 @@ class User {
   final String? iban;
   final String? payPal;
 
+  static const usernameKey = "username";
+  static const imageUrlKey = "imageUrl";
+  static const ibanKey = "iban";
+  static const payPalKey = "payPal";
+
   const User({
     required this.uid,
     required this.username,
@@ -26,19 +31,19 @@ class User {
     final data = doc.data()!;
     return User(
       uid: doc.id,
-      username: data["username"],
-      imageUrl: data["imageUrl"],
-      iban: data["iban"],
-      payPal: data["payPal"],
+      username: data[usernameKey],
+      imageUrl: data[imageUrlKey],
+      iban: data[ibanKey],
+      payPal: data[payPalKey],
     );
   }
 
   static Map<String, dynamic> toFirestore(User user, [SetOptions? _]) {
     return {
-      "username": user.username,
-      "imageUrl": user.imageUrl,
-      "iban": user.iban,
-      "payPal": user.payPal,
+      usernameKey: user.username,
+      imageUrlKey: user.imageUrl,
+      ibanKey: user.iban,
+      payPalKey: user.payPal,
     };
   }
 }

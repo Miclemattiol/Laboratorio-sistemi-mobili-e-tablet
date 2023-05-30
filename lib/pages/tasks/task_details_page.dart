@@ -89,7 +89,7 @@ class TaskDetailsPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                  PartecipantsList(partecipants: task.data.assignedTo.toSet()),
+                  ParticipantsList(task.data.assignedTo.toSet()),
                 ],
               ),
             ))

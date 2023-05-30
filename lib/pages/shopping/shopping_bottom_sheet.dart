@@ -11,6 +11,7 @@ import 'package:house_wallet/pages/shopping/people_share_dialog.dart';
 import 'package:house_wallet/pages/shopping/price_quantity_dialog.dart';
 import 'package:house_wallet/pages/shopping/shopping_page.dart';
 import 'package:house_wallet/pages/shopping/supermarket_dialog.dart';
+import 'package:house_wallet/themes.dart';
 
 class ShoppingBottomSheet extends StatefulWidget {
   const ShoppingBottomSheet({super.key});
@@ -103,7 +104,7 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
               onPressed: () => setState(() => _detailsCollapsed = !_detailsCollapsed),
               icon: AnimatedRotation(
                 turns: _detailsCollapsed ? .5 : 0,
-                duration: const Duration(milliseconds: 200),
+                duration: animationDuration,
                 child: const Icon(Icons.keyboard_arrow_down),
               ),
               tooltip: _detailsCollapsed ? localizations(context).showDetailsTooltip : localizations(context).hideDetailsTooltip,

@@ -12,6 +12,13 @@ class Trade {
   final DateTime date;
   final String? description;
 
+  static const acceptedKey = "accepted";
+  static const amountKey = "amount";
+  static const fromKey = "from";
+  static const toKey = "to";
+  static const dateKey = "date";
+  static const descriptionKey = "description";
+
   const Trade({
     required this.amount,
     required this.from,
@@ -23,22 +30,22 @@ class Trade {
   factory Trade.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc, [SnapshotOptions? _]) {
     final data = doc.data()!;
     return Trade(
-      amount: data["amount"],
-      from: data["from"],
-      to: data["to"],
-      date: (data["date"] as Timestamp).toDate(),
-      description: data["description"],
+      amount: data[amountKey],
+      from: data[fromKey],
+      to: data[toKey],
+      date: (data[dateKey] as Timestamp).toDate(),
+      description: data[descriptionKey],
     );
   }
 
   static Map<String, dynamic> toFirestore(Trade trade, [SetOptions? _]) {
     return {
-      "accepted": false,
-      "amount": trade.amount,
-      "from": trade.from,
-      "to": trade.to,
-      "date": Timestamp.fromDate(trade.date),
-      "description": trade.description,
+      acceptedKey: false,
+      amountKey: trade.amount,
+      fromKey: trade.from,
+      toKey: trade.to,
+      dateKey: Timestamp.fromDate(trade.date),
+      descriptionKey: trade.description,
     };
   }
 }

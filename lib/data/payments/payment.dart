@@ -17,6 +17,15 @@ class Payment {
   final String title;
   final Map<String, int> to;
 
+  static const categoryKey = "category";
+  static const dateKey = "date";
+  static const descriptionKey = "description";
+  static const fromKey = "from";
+  static const imageUrlKey = "imageUrl";
+  static const priceKey = "price";
+  static const titleKey = "title";
+  static const toKey = "to";
+
   const Payment({
     required this.category,
     required this.date,
@@ -31,27 +40,27 @@ class Payment {
   factory Payment.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc, [SnapshotOptions? _]) {
     final data = doc.data()!;
     return Payment(
-      category: data["category"],
-      date: (data["date"] as Timestamp).toDate(),
-      description: data["description"],
-      from: data["from"],
-      imageUrl: data["imageUrl"],
-      price: data["price"],
-      title: data["title"],
-      to: Map.from(data["to"]),
+      category: data[categoryKey],
+      date: (data[dateKey] as Timestamp).toDate(),
+      description: data[descriptionKey],
+      from: data[fromKey],
+      imageUrl: data[imageUrlKey],
+      price: data[priceKey],
+      title: data[titleKey],
+      to: Map.from(data[toKey]),
     );
   }
 
   static Map<String, dynamic> toFirestore(Payment trade, [SetOptions? _]) {
     return {
-      "category": trade.category,
-      "date": Timestamp.fromDate(trade.date),
-      "description": trade.description,
-      "from": trade.from,
-      "imageUrl": trade.imageUrl,
-      "price": trade.price,
-      "title": trade.title,
-      "to": trade.to,
+      categoryKey: trade.category,
+      dateKey: Timestamp.fromDate(trade.date),
+      descriptionKey: trade.description,
+      fromKey: trade.from,
+      imageUrlKey: trade.imageUrl,
+      priceKey: trade.price,
+      titleKey: trade.title,
+      toKey: trade.to,
     };
   }
 }

@@ -34,6 +34,8 @@ InputDecoration inputDecoration([String? labelText, bool smallErrorText = false]
 
 BoxConstraints multiInputRowConstraints(BuildContext context) => BoxConstraints(maxWidth: MediaQuery.of(context).size.width / 4);
 
+const animationDuration = Duration(milliseconds: 200);
+
 //TODO themes
 ThemeData get lightTheme {
   final colorScheme = ColorScheme.fromSeed(seedColor: const Color(0xFFA6D0DD), brightness: Brightness.light);

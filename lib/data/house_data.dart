@@ -9,6 +9,9 @@ class HouseData {
   final String owner;
   final List<String> users;
 
+  static const ownerKey = "owner";
+  static const usersKey = "users";
+
   const HouseData({
     required this.reference,
     required this.owner,
@@ -19,15 +22,15 @@ class HouseData {
     final data = doc.data()!;
     return HouseData(
       reference: doc.reference,
-      owner: data["owner"],
-      users: List.from(data["users"]),
+      owner: data[ownerKey],
+      users: List.from(data[usersKey]),
     );
   }
 
   static Map<String, dynamic> toFirestore(HouseData house, [SetOptions? _]) {
     return {
-      "owner": house.owner,
-      "users": house.users,
+      ownerKey: house.owner,
+      usersKey: house.users,
     };
   }
 }

@@ -8,6 +8,7 @@ class ImageAvatar extends StatelessWidget {
   final Widget fallback;
   final double size;
   final bool enabled;
+  final double progressSize;
   final double? progress;
   final void Function()? onTap;
 
@@ -17,6 +18,7 @@ class ImageAvatar extends StatelessWidget {
     this.size = 64,
     this.onTap,
     this.enabled = true,
+    this.progressSize = 32,
     this.progress,
     super.key,
   }) : assert(image is File || image is String?);
@@ -45,7 +47,7 @@ class ImageAvatar extends StatelessWidget {
                 imageUrl: (image as String?) ?? "",
                 placeholder: (context, url) => Container(
                   decoration: _border(context),
-                  padding: EdgeInsets.all((size - 32) / 2),
+                  padding: EdgeInsets.all((size - progressSize) / 2),
                   child: const CircularProgressIndicator(),
                 ),
                 errorWidget: (context, url, error) => Container(
@@ -65,7 +67,7 @@ class ImageAvatar extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: _border(context).copyWith(color: Colors.black26),
       child: Padding(
-        padding: EdgeInsets.all((size - 32) / 2),
+        padding: EdgeInsets.all((size - progressSize) / 2),
         child: CircularProgressIndicator(value: progress),
       ),
     );

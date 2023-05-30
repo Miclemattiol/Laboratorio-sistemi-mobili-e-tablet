@@ -6,9 +6,9 @@ import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/firestore.dart';
-import 'package:house_wallet/data/house/trade.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
+import 'package:house_wallet/data/shopping/trade.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/themes.dart';
 
@@ -45,9 +45,9 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
     setState(() => _loading = true);
     try {
       await widget.trade.reference.update({
-        "description": _descriptionValue,
-        "amount": _amountValue!,
-        "date": _dateValue!,
+        Trade.descriptionKey: _descriptionValue,
+        Trade.amountKey: _amountValue!,
+        Trade.dateKey: _dateValue!,
       });
 
       navigator.pop();

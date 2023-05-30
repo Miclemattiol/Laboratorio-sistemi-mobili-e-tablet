@@ -5,6 +5,9 @@ class Category {
   final IconData icon;
   final String name;
 
+  static const iconKey = "icon";
+  static const nameKey = "name";
+
   const Category({
     required this.icon,
     required this.name,
@@ -13,15 +16,15 @@ class Category {
   factory Category.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc, [SnapshotOptions? _]) {
     final data = doc.data()!;
     return Category(
-      icon: IconData(data["icon"], fontFamily: "MaterialIcons"),
-      name: data["name"],
+      icon: IconData(data[iconKey], fontFamily: "MaterialIcons"),
+      name: data[nameKey],
     );
   }
 
   static Map<String, dynamic> toFirestore(Category category, [SetOptions? _]) {
     return {
-      "icon": category.icon.codePoint,
-      "name": category.name,
+      iconKey: category.icon.codePoint,
+      nameKey: category.name,
     };
   }
 }

@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/data/user.dart';
 
-class PartecipantsList extends StatelessWidget {
-  final Set<User> partecipants;
-  const PartecipantsList({
-    required this.partecipants,
+class ParticipantsList extends StatelessWidget {
+  final Set<User> participants;
+
+  const ParticipantsList(
+    this.participants, {
     super.key,
   });
 
@@ -16,7 +17,7 @@ class PartecipantsList extends StatelessWidget {
         'Partecipanti:', //TODO localization
         style: Theme.of(context).textTheme.titleMedium,
       ),
-      ...partecipants.map((e) => Text(e.username)).toList()
+      ...participants.map((e) => Text(e.username)).toList()
     ]);
   }
 }

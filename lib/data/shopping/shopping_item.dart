@@ -11,6 +11,12 @@ class ShoppingItem {
   final String title;
   final Map<String, int> to;
 
+  static const priceKey = "price";
+  static const quantityKey = "quantity";
+  static const supermarketKey = "supermarket";
+  static const titleKey = "title";
+  static const toKey = "to";
+
   const ShoppingItem({
     required this.price,
     required this.quantity,
@@ -22,21 +28,21 @@ class ShoppingItem {
   factory ShoppingItem.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc, [SnapshotOptions? _]) {
     final data = doc.data()!;
     return ShoppingItem(
-      price: data["price"],
-      quantity: data["quantity"],
-      supermarket: data["supermarket"],
-      title: data["title"],
-      to: Map.from(data["to"]),
+      price: data[priceKey],
+      quantity: data[quantityKey],
+      supermarket: data[supermarketKey],
+      title: data[titleKey],
+      to: Map.from(data[toKey]),
     );
   }
 
   static Map<String, dynamic> toFirestore(ShoppingItem shoppingItem, [SetOptions? _]) {
     return {
-      "price": shoppingItem.price,
-      "quantity": shoppingItem.quantity,
-      "supermarket": shoppingItem.supermarket,
-      "title": shoppingItem.title,
-      "to": shoppingItem.to,
+      priceKey: shoppingItem.price,
+      quantityKey: shoppingItem.quantity,
+      supermarketKey: shoppingItem.supermarket,
+      titleKey: shoppingItem.title,
+      toKey: shoppingItem.to,
     };
   }
 }

@@ -47,7 +47,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
         await house.reference.delete();
       } else {
         await house.reference.update({
-          "users": FieldValue.arrayRemove([
+          HouseData.usersKey: FieldValue.arrayRemove([
             loggedUser.uid
           ])
         });
@@ -75,7 +75,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
 
     try {
       await house.reference.update({
-        "users": FieldValue.arrayRemove([
+        HouseData.usersKey: FieldValue.arrayRemove([
           user.uid
         ])
       });
@@ -102,7 +102,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
 
     try {
       await house.reference.update({
-        "owner": user.uid
+        HouseData.ownerKey: user.uid
       });
       navigator.pop();
     } on FirebaseException catch (error) {
