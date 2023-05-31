@@ -16,6 +16,7 @@ import 'package:house_wallet/pages/payments/categories/categories_page.dart';
 import 'package:house_wallet/pages/payments/filter_bottom_sheet.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -63,14 +64,31 @@ class _PaymentsPageState extends State<PaymentsPage> {
   List<FirestoreDocument<PaymentOrTrade>> _filteredData(List<FirestoreDocument<PaymentOrTrade>> data) {
     return data.where((element) {
       //TODO use filters here: use only rules like this: if(!followsFilters) return false, if everything fails return true at the end of the function!
+      // if (element.data is PaymentRef) {
+      //   final payment = element.data as PaymentRef;
+      //   if (_paymentFilter.titleShouldMatch != null && !payment.title.containsCaseUnsensitive(_paymentFilter.titleShouldMatch!)) return false; //TODO make case insensitive
+      //   if (_paymentFilter.priceRange?.test(payment.price) == false) return false;
+      //   if (_paymentFilter.categoryId != null && (_paymentFilter.categoryId?.contains(payment.category?.name) ?? false) == false) return false; //TODO get payment category ID
+      //   if (_paymentFilter.fromUser != null && (_paymentFilter.fromUser?.contains(payment.from.uid) ?? false) == false) return false; //TODO get payment paidBy
+      // } else {
+      //   final trade = element.data as TradeRef;
+      //   if (_paymentFilter.titleShouldMatch != null) return false;
+      //   if (_paymentFilter.priceRange?.test(trade.amount) == false) return false;
+      // }
+      if (_paymentFilter.titleShouldMatch != null && element.data is TradeRef) return false;
+      if (_paymentFilter.categoryId != null && element.data is TradeRef) return false;
+      if (_paymentFilter.dateRange?.test(element.data.date) == false) return false;
+
       if (element.data is PaymentRef) {
         final payment = element.data as PaymentRef;
-        if (_paymentFilter.titleShouldMatch != null && !payment.title.contains(_paymentFilter.titleShouldMatch!)) return false; //TODO make case insensitive
+        if (_paymentFilter.titleShouldMatch != null && !payment.title.containsCaseUnsensitive(_paymentFilter.titleShouldMatch!)) return false;
         if (_paymentFilter.priceRange?.test(payment.price) == false) return false;
+        // TODO category
+        if (_paymentFilter.descriptionShouldMatch != null && !payment.description.containsCaseUnsensitive(_paymentFilter.descriptionShouldMatch!)) return false;
       } else {
         final trade = element.data as TradeRef;
-        if (_paymentFilter.titleShouldMatch != null) return false;
         if (_paymentFilter.priceRange?.test(trade.amount) == false) return false;
+        if (_paymentFilter.descriptionShouldMatch != null && !trade.description.containsCaseUnsensitive(_paymentFilter.descriptionShouldMatch!)) return false;
       }
 
       return true;
@@ -146,8 +164,8 @@ class _PaymentsPageState extends State<PaymentsPage> {
             }
 
             return ListView.separated(
-              itemCount: payments.length,
-              itemBuilder: (context, index) => PaymentTile(payments[index]),
+              itemCount: filteredPayments.length,
+              itemBuilder: (context, index) => PaymentTile(filteredPayments[index]),
               separatorBuilder: (context, index) => const Divider(height: 0),
             );
           },

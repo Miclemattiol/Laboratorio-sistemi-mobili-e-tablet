@@ -32,4 +32,11 @@ extension StringExtension on String? {
   String? toNullable() {
     return (this ?? "").trim() == "" ? null : this!.trim();
   }
+
+  bool containsCaseUnsensitive(Pattern other, [int startIndex = 0]) {
+    if (other is String) {
+      other = other.toLowerCase();
+    }
+    return this?.toLowerCase().contains(other, startIndex) ?? false;
+  }
 }
