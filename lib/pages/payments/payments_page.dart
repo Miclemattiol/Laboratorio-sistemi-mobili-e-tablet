@@ -107,6 +107,14 @@ class _PaymentsPageState extends State<PaymentsPage> {
             onPressed: () => _filter(context),
             icon: const Icon(Icons.filter_alt),
           ),
+          if (!_paymentFilter.empty)
+            IconButton(
+              tooltip: localizations(context).clearFilterTooltip,
+              icon: const Icon(Icons.filter_alt_off),
+              onPressed: () {
+                setState(() => _paymentFilter = PaymentFilter());
+              },
+            ),
           IconButton(
             tooltip: localizations(context).categoriesPage,
             onPressed: () => Navigator.of(context).push(SlidingPageRoute(CategoriesPage(house: HouseDataRef.of(context, listen: false)), fullscreenDialog: true)),

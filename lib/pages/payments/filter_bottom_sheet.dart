@@ -31,6 +31,10 @@ class PaymentFilter {
     this.dateRange,
     this.shouldMatch,
   });
+
+  bool get empty {
+    return titleShouldMatch.toNullable() == null && descriptionShouldMatch.toNullable() == null && categoryId == null && fromUser == null && toUser == null && priceRange == null && dateRange == null && shouldMatch == null;
+  }
 }
 
 class FilterBottomSheet extends StatefulWidget {

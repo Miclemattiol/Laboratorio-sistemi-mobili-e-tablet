@@ -178,6 +178,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
           DatePickerFormField(
             enabled: !_loading,
             initialValue: widget.payment?.data.date ?? DateTime.now(),
+            firstDate: DateTime(DateTime.now().year - 10),
             decoration: inputDecoration(localizations(context).paymentDate),
             onSaved: (date) => _dateValue = date,
             validator: (value) {

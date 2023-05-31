@@ -48,6 +48,7 @@
     "paymentsPage": "Transazioni",
     "paymentsPageError": "Impossibile caricare le transazioni",
     "filterTooltip": "Filtra transazioni",
+    "clearFilterTooltip": "Rimuovi filtro",
     "priceInvalid": "Prezzo non valido",
     "paymentDateInputErrorMissing": "Inserisci la data del pagamento",
     "paymentDateInputErrorFuture": "La data del pagamento deve essere precedente a quella odierna",
