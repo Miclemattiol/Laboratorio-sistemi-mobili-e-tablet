@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
             child: PadColumn(
               padding: const EdgeInsets.all(16),
               spacing: 16,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Image.asset("assets/logo.png", width: 200),
                 TextFormField(
@@ -75,6 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                   enabled: !_loading,
                   validator: (password) => (password == null || password.trim().isEmpty) ? localizations(context).passwordInputErrorMissing : null,
                   onSaved: (password) => _passwordValue = password,
+                  onEditingComplete: _loading ? null : _login,
                 ),
                 ElevatedButton(
                   onPressed: _loading ? null : _login,

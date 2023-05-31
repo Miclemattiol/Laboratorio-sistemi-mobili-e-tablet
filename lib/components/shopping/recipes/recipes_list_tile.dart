@@ -42,8 +42,6 @@ class RecipeListTile extends StatelessWidget {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final appLocalizations = localizations(context);
 
-    //TODO dialog for price division
-
     try {
       final batch = FirebaseFirestore.instance.batch();
 

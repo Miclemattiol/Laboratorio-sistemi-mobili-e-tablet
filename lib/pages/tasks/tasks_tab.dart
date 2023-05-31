@@ -12,10 +12,12 @@ import 'package:shimmer/shimmer.dart';
 class TasksTab extends StatelessWidget {
   final AsyncSnapshot<Iterable<FirestoreDocument<TaskRef>>> snapshot;
   final bool myTasks;
+  final bool Function(UserScrollNotification notification)? onNotification;
 
   const TasksTab({
     required this.snapshot,
     required this.myTasks,
+    required this.onNotification,
     super.key,
   });
 
@@ -45,16 +47,26 @@ class TasksTab extends StatelessWidget {
       }
     }
 
-    //TODO empty list
     if (tasks.isEmpty) {
-      return const Center(child: Text("🗿", style: TextStyle(fontSize: 64)));
+      return centerSectionText(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(localizations(context).tasksPageEmpty, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium),
+            Text(myTasks ? localizations(context).myTasksPageEmptyDescription : localizations(context).tasksPageEmptyDescription, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.normal)),
+          ],
+        ),
+      );
     }
 
-    return ListView(
-      children: [
-        if (myTasks) const Calendar(),
-        ...tasks.map(TaskListTile.new)
-      ],
+    return NotificationListener<UserScrollNotification>(
+      onNotification: onNotification,
+      child: ListView(
+        children: [
+          if (myTasks) const Calendar(),
+          ...tasks.map(TaskListTile.new)
+        ],
+      ),
     );
   }
 }

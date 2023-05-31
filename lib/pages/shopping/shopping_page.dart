@@ -178,9 +178,16 @@ class _ShoppingPageState extends State<ShoppingPage> {
 
                 _items = Map.fromEntries(shoppingItems.map((item) => MapEntry(item.id, item)));
 
-                //TODO empty list
                 if (shoppingItems.isEmpty) {
-                  return const Center(child: Text("🗿", style: TextStyle(fontSize: 64)));
+                  return centerSectionText(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(localizations(context).shoppingPageEmpty, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium),
+                        Text(localizations(context).shoppingPageEmptyDescription, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.normal)),
+                      ],
+                    ),
+                  );
                 }
 
                 return _shoppingList(

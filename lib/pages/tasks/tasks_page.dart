@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
@@ -19,20 +20,32 @@ class TabData {
   const TabData({required this.label, required this.widget});
 }
 
-class TasksPage extends StatelessWidget {
+class TasksPage extends StatefulWidget {
   const TasksPage({super.key});
 
   static CollectionReference<Task> tasksFirestoreRef(String houseId) => FirebaseFirestore.instance.collection("/groups/$houseId/tasks").withConverter(fromFirestore: Task.fromFirestore, toFirestore: Task.toFirestore);
+
+  @override
+  State<TasksPage> createState() => _TasksPageState();
+}
+
+class _TasksPageState extends State<TasksPage> {
+  bool _showFab = true;
+
+  bool onNotification(UserScrollNotification notification) {
+    setState(() => _showFab = notification.direction == ScrollDirection.idle);
+    return true;
+  }
 
   List<TabData> _tabs(BuildContext context, AsyncSnapshot<Iterable<FirestoreDocument<TaskRef>>> snapshot) {
     return [
       TabData(
         label: localizations(context).myTasksTab,
-        widget: TasksTab(snapshot: snapshot, myTasks: true),
+        widget: TasksTab(snapshot: snapshot, myTasks: true, onNotification: onNotification),
       ),
       TabData(
         label: localizations(context).allTasksTab,
-        widget: TasksTab(snapshot: snapshot, myTasks: false),
+        widget: TasksTab(snapshot: snapshot, myTasks: false, onNotification: onNotification),
       ),
     ];
   }
@@ -52,7 +65,7 @@ class TasksPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final houseId = HouseDataRef.of(context).id;
     return StreamBuilder(
-      stream: tasksFirestoreRef(houseId).snapshots().map(TaskRef.converter(context)),
+      stream: TasksPage.tasksFirestoreRef(houseId).snapshots().map(TaskRef.converter(context)),
       builder: (context, snapshot) {
         final tabs = _tabs(context, snapshot);
         return DefaultTabController(
@@ -63,11 +76,13 @@ class TasksPage extends StatelessWidget {
               bottom: TabBar(tabs: tabs.map((tab) => Tab(text: tab.label)).toList()),
             ),
             body: TabBarView(children: tabs.map((tab) => tab.widget).toList()),
-            floatingActionButton: FloatingActionButton(
-              heroTag: null,
-              onPressed: () => _addTask(context),
-              child: const Icon(Icons.add),
-            ),
+            floatingActionButton: _showFab
+                ? FloatingActionButton(
+                    heroTag: null,
+                    onPressed: () => _addTask(context),
+                    child: const Icon(Icons.add),
+                  )
+                : null,
           ),
         );
       },

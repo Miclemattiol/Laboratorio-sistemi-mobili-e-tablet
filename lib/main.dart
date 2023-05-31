@@ -10,6 +10,7 @@ import 'package:house_wallet/data/shared_preferences.dart';
 import 'package:house_wallet/firebase_options.dart';
 import 'package:house_wallet/pages/login_page.dart';
 import 'package:house_wallet/pages/main_page.dart';
+import 'package:house_wallet/pages/no_group_page.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
@@ -71,25 +72,10 @@ class App extends StatelessWidget {
       }
     }
 
-    if (user.houses.isEmpty) {
-      return Scaffold(
-        body: PadColumn(
-          spacing: 8,
-          padding: const EdgeInsets.all(16),
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Center(child: Text("User is not a member of any group!", style: Theme.of(context).textTheme.headlineSmall, textAlign: TextAlign.center)), //TODO allow users to create groups
-            ElevatedButton(onPressed: FirebaseAuth.instance.signOut, child: Text(localizations(context).logoutButton)),
-          ],
-        ),
-      );
-    } else {
-      return Provider.value(
-        value: user,
-        child: const MainPage(),
-      );
-    }
+    return Provider.value(
+      value: user,
+      child: user.houses.isEmpty ? const NoGroupPage() : const MainPage(),
+    );
   }
 
   @override

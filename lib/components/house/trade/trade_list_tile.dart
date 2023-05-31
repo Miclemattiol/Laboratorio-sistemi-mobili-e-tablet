@@ -6,7 +6,7 @@ import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
 
 class TradeListTile extends StatelessWidget {
-  final FirestoreDocument<TradeRef> trade; //TODO show description in some way
+  final FirestoreDocument<TradeRef> trade;
 
   TradeListTile(this.trade) : super(key: Key(trade.id));
 
@@ -14,7 +14,7 @@ class TradeListTile extends StatelessWidget {
     if (!await CustomDialog.confirm(
       context: context,
       title: localizations(context).tradeConfirmDialogTitle,
-      content: localizations(context).tradeConfirmDialogContent,
+      content: "${trade.data.description ?? "(Nessuna descrizione fornita)"}\n\n${localizations(context).tradeConfirmDialogContent}",
     )) return;
 
     trade.reference.update({
@@ -26,7 +26,7 @@ class TradeListTile extends StatelessWidget {
     if (!await CustomDialog.confirm(
       context: context,
       title: localizations(context).tradeDenyDialogTitle,
-      content: localizations(context).tradeDenyDialogContent,
+      content: "${trade.data.description ?? "(Nessuna descrizione fornita)"}\n\n${localizations(context).tradeDenyDialogContent}",
     )) return;
 
     trade.reference.delete();

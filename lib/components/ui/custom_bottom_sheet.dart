@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 
-//TODO scrollable if too large
 class CustomBottomSheet extends StatelessWidget {
   final List<Widget> body;
   final bool dismissible;

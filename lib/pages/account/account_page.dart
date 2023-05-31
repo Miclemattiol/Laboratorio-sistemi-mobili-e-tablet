@@ -99,7 +99,7 @@ class _AccountPageState extends State<AccountPage> {
     try {
       await MainPage.userFirestoreRef(loggedUser.uid).update({
         User.ibanKey: _ibanValue,
-        User.payPalKey: _payPalValue
+        User.payPalKey: _payPalValue,
       });
 
       _edited = false;
@@ -231,7 +231,7 @@ class _AccountPageState extends State<AccountPage> {
                   onChanged: (_) {
                     if (!_edited) setState(() => _edited = true);
                   },
-                  onSaved: (payPal) => _payPalValue = payPal.toNullable(),
+                  onSaved: (payPal) => _payPalValue = payPal.toNullable()?.split("/").last,
                 ),
               ],
             ),

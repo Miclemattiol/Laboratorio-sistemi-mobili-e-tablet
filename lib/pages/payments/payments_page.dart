@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:house_wallet/components/house/trade/trades_section.dart';
 import 'package:house_wallet/components/payments/payment_tile.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
@@ -29,6 +30,7 @@ class PaymentsPage extends StatefulWidget {
 }
 
 class _PaymentsPageState extends State<PaymentsPage> {
+  bool _showFab = true;
   List<FirestoreDocument<Category>> _categories = [];
   PaymentFilter _paymentFilter = const PaymentFilter.empty();
 
@@ -123,31 +125,53 @@ class _PaymentsPageState extends State<PaymentsPage> {
                 }
               }
 
-              //TODO empty list
               if (payments.isEmpty) {
-                return const Center(child: Text("🗿", style: TextStyle(fontSize: 64)));
+                return centerSectionText(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(localizations(context).paymentsPageEmpty, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium),
+                      Text(localizations(context).paymentsPageEmptyDescription, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.normal)),
+                    ],
+                  ),
+                );
               }
 
               final filteredPayments = _paymentFilter.filterData(payments);
-              //TODO empty list with filters
               if (filteredPayments.isEmpty) {
-                return const Center(child: Text("🗿 (filtri)", style: TextStyle(fontSize: 64)));
+                return centerSectionText(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(localizations(context).paymentsPageEmpty, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineMedium),
+                      Text(localizations(context).paymentsPageEmptyFilterDescription, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.normal)),
+                    ],
+                  ),
+                );
               }
 
-              return ListView.separated(
-                itemCount: filteredPayments.length,
-                itemBuilder: (context, index) => PaymentTile(filteredPayments[index], categories: _categories),
-                separatorBuilder: (context, index) => const Divider(height: 0),
+              return NotificationListener<UserScrollNotification>(
+                onNotification: (notification) {
+                  setState(() => _showFab = notification.direction == ScrollDirection.idle);
+                  return true;
+                },
+                child: ListView.separated(
+                  itemCount: filteredPayments.length,
+                  itemBuilder: (context, index) => PaymentTile(filteredPayments[index], categories: _categories),
+                  separatorBuilder: (context, index) => const Divider(height: 0),
+                ),
               );
             },
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: null,
-        onPressed: () => _addPayment(context),
-        child: const Icon(Icons.add),
-      ),
+      floatingActionButton: _showFab
+          ? FloatingActionButton(
+              heroTag: null,
+              onPressed: () => _addPayment(context),
+              child: const Icon(Icons.add),
+            )
+          : null,
     );
   }
 }

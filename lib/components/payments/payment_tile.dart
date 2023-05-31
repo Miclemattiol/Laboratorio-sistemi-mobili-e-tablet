@@ -96,8 +96,6 @@ class PaymentTile extends StatelessWidget {
       final trade = payment as TradeRef;
       if (trade.from.uid == myUid) {
         return localizations(context).tradeTo(trade.to.username);
-      } else if (trade.to.uid == myUid) {
-        return localizations(context).tradeFrom(trade.from.username); //TODO same as the else branch?
       } else {
         return localizations(context).tradeFrom(trade.from.username);
       }
