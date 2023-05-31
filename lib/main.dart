@@ -1,16 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/shared_preferences.dart';
 import 'package:house_wallet/firebase_options.dart';
+import 'package:house_wallet/pages/error_page.dart';
 import 'package:house_wallet/pages/login_page.dart';
 import 'package:house_wallet/pages/main_page.dart';
-import 'package:house_wallet/pages/no_group_page.dart';
+import 'package:house_wallet/pages/no_house_page.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:intl/intl.dart';
 import 'package:keyboard_dismisser/keyboard_dismisser.dart';
@@ -44,22 +46,13 @@ void main() async {
 class App extends StatelessWidget {
   const App({super.key});
 
+  static final groupsFirestoreReference = FirebaseFirestore.instance.collection("/groups").withConverter(fromFirestore: HouseData.fromFirestore, toFirestore: HouseData.toFirestore);
+
   Widget home(BuildContext context, AsyncSnapshot<LoggedUser?> snapshot) {
     final user = snapshot.data;
 
     if (snapshot.hasError) {
-      return Scaffold(
-        body: PadColumn(
-          spacing: 8,
-          padding: const EdgeInsets.all(16),
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            centerErrorText(context: context, message: localizations(context).accountPageError, error: snapshot.error),
-            ElevatedButton(onPressed: FirebaseAuth.instance.signOut, child: Text(localizations(context).logoutButton))
-          ],
-        ),
-      );
+      return ErrorPage(message: localizations(context).accountPageError, error: snapshot.error);
     }
 
     if (user == null) {
@@ -74,7 +67,7 @@ class App extends StatelessWidget {
 
     return Provider.value(
       value: user,
-      child: user.houses.isEmpty ? const NoGroupPage() : const MainPage(),
+      child: user.houses.isEmpty ? const NoHousePage() : const MainPage(),
     );
   }
 

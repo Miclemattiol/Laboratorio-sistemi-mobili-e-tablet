@@ -53,8 +53,8 @@ ThemeData get lightTheme {
       actionsIconTheme: IconThemeData(color: Colors.black),
     ),
     textTheme: const TextTheme(
-      headlineMedium: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
-      headlineSmall: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+      headlineMedium: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+      headlineSmall: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
@@ -84,8 +84,8 @@ ThemeData get darkTheme {
     listTileTheme: const ListTileThemeData(iconColor: Colors.white),
     iconTheme: const IconThemeData(color: Colors.white),
     textTheme: const TextTheme(
-      headlineMedium: TextStyle(fontWeight: FontWeight.bold, fontSize: 28),
-      headlineSmall: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+      headlineMedium: TextStyle(fontWeight: FontWeight.bold, fontSize: 26),
+      headlineSmall: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(

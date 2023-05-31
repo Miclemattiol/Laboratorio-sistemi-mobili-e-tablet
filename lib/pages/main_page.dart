@@ -1,15 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/account/account_page.dart';
+import 'package:house_wallet/pages/error_page.dart';
 import 'package:house_wallet/pages/house/house_page.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/pages/shopping/shopping_page.dart';
 import 'package:house_wallet/pages/tasks/tasks_page.dart';
-import 'package:house_wallet/themes.dart';
 import 'package:provider/provider.dart';
 
 class PageData {
@@ -31,11 +32,11 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final loggedUser = LoggedUser.of(context);
     return StreamBuilder(
-      stream: MainPage.houseFirestoreRef(loggedUser.houses.first).snapshots().map((doc) => doc.data()),
+      stream: MainPage.houseFirestoreRef(loggedUser.houses.first).snapshots().map((doc) => FirestoreDocument(doc, doc.data()!)),
       builder: (context, snapshot) {
         final house = snapshot.data;
         return StreamBuilder(
-          stream: usersFirestoreRef.where(FieldPath.documentId, whereIn: house?.users).snapshots().map(HouseDataRef.converter(house)),
+          stream: usersFirestoreRef.where(FieldPath.documentId, whereIn: house?.data.users).snapshots().map(HouseDataRef.converter(house)),
           builder: (context, snapshot) {
             final house = snapshot.data;
 
@@ -43,7 +44,7 @@ class MainPage extends StatelessWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Scaffold(body: Center(child: CircularProgressIndicator()));
               } else {
-                return Scaffold(body: centerErrorText(context: context, message: localizations(context).houseDataError, error: snapshot.error));
+                return ErrorPage(message: localizations(context).houseDataError, error: snapshot.error);
               }
             }
 

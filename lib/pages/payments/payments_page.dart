@@ -92,7 +92,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
           return StreamBuilder(
             stream: Rx.combineLatest2(
               PaymentsPage.paymentsFirestoreRef(houseId).snapshots().map(PaymentRef.converter(context, snapshot.data)),
-              TradesSection.firestoreRef(HouseDataRef.of(context).id).where("accepted", isEqualTo: true).snapshots().map(TradeRef.converter(context)),
+              TradesSection.firestoreRef(HouseDataRef.of(context).id).where(Trade.acceptedKey, isEqualTo: true).snapshots().map(TradeRef.converter(context)),
               (payments, trades) => [
                 ...payments,
                 ...trades

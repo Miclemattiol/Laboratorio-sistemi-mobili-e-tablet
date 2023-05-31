@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/components/house/section.dart';
 import 'package:house_wallet/components/house/user/user_list_tile.dart';
 import 'package:house_wallet/data/house_data.dart';
+import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/main.dart';
 
 class UsersSection extends StatelessWidget {
@@ -14,7 +15,7 @@ class UsersSection extends StatelessWidget {
       title: localizations(context).usersSection,
       children: [
         ...users.map(UserListTile.new),
-        const UserListTile.invite(),
+        if (LoggedUser.of(context).uid == HouseDataRef.of(context).owner.uid) const UserListTile.invite(),
       ],
     );
   }

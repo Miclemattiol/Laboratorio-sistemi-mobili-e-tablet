@@ -46,7 +46,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
 
     setState(() => _loading = true);
     try {
-      if ((await CategoriesPage.firestoreRef(widget.house.id).where("icon", isEqualTo: _iconValue!.codePoint).where("name", isEqualTo: _nameValue).count().get()).count != 0) {
+      if ((await CategoriesPage.firestoreRef(widget.house.id).where(Category.iconKey, isEqualTo: _iconValue!.codePoint).where(Category.nameKey, isEqualTo: _nameValue).count().get()).count != 0) {
         throw FirebaseException(plugin: "", message: "duplicate");
       }
 

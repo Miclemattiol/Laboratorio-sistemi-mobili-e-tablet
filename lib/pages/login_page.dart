@@ -54,28 +54,33 @@ class _LoginPageState extends State<LoginPage> {
           child: SingleChildScrollView(
             child: PadColumn(
               padding: const EdgeInsets.all(16),
-              spacing: 16,
+              spacing: 24,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Image.asset("assets/logo.png", width: 200),
-                TextFormField(
-                  decoration: inputDecoration(localizations(context).emailInput),
-                  enabled: !_loading,
-                  validator: (email) {
-                    if (email == null || email.trim().isEmpty) return localizations(context).emailInputErrorMissing;
-                    if (!EmailValidator.validate(email.trim())) return localizations(context).emailInputErrorInvalid;
-                    return null;
-                  },
-                  keyboardType: TextInputType.emailAddress,
-                  onSaved: (email) => _emailValue = email,
-                ),
-                TextFormField(
-                  decoration: inputDecoration(localizations(context).passwordInput),
-                  obscureText: true,
-                  enabled: !_loading,
-                  validator: (password) => (password == null || password.trim().isEmpty) ? localizations(context).passwordInputErrorMissing : null,
-                  onSaved: (password) => _passwordValue = password,
-                  onEditingComplete: _loading ? null : _login,
+                Center(child: Image.asset("assets/logo.png", width: 200)),
+                PadColumn(
+                  spacing: 8,
+                  children: [
+                    TextFormField(
+                      decoration: inputDecoration(localizations(context).emailInput),
+                      enabled: !_loading,
+                      validator: (email) {
+                        if (email == null || email.trim().isEmpty) return localizations(context).emailInputErrorMissing;
+                        if (!EmailValidator.validate(email.trim())) return localizations(context).emailInputErrorInvalid;
+                        return null;
+                      },
+                      keyboardType: TextInputType.emailAddress,
+                      onSaved: (email) => _emailValue = email,
+                    ),
+                    TextFormField(
+                      decoration: inputDecoration(localizations(context).passwordInput),
+                      obscureText: true,
+                      enabled: !_loading,
+                      validator: (password) => (password == null || password.trim().isEmpty) ? localizations(context).passwordInputErrorMissing : null,
+                      onSaved: (password) => _passwordValue = password,
+                      onEditingComplete: _loading ? null : _login,
+                    ),
+                  ],
                 ),
                 ElevatedButton(
                   onPressed: _loading ? null : _login,

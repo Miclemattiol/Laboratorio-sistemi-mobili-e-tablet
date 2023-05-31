@@ -5,25 +5,26 @@ import 'package:house_wallet/data/user.dart';
 import 'package:provider/provider.dart';
 
 class HouseData {
-  final DocumentReference reference;
   final String owner;
   final List<String> users;
+  final List<String> codes;
 
   static const ownerKey = "owner";
   static const usersKey = "users";
+  static const codesKey = "codes";
 
   const HouseData({
-    required this.reference,
     required this.owner,
     required this.users,
+    required this.codes,
   });
 
   factory HouseData.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc, [SnapshotOptions? _]) {
     final data = doc.data()!;
     return HouseData(
-      reference: doc.reference,
       owner: data[ownerKey],
       users: List.from(data[usersKey]),
+      codes: List.from(data[codesKey]),
     );
   }
 
@@ -31,6 +32,7 @@ class HouseData {
     return {
       ownerKey: house.owner,
       usersKey: house.users,
+      codesKey: house.codes,
     };
   }
 }
@@ -52,14 +54,14 @@ class HouseDataRef {
 
   User getUser(String uid) => users[uid] ?? const User.invalid();
 
-  static HouseDataRef? Function(QuerySnapshot<User> data) converter(HouseData? house) {
+  static HouseDataRef? Function(QuerySnapshot<User> data) converter(FirestoreDocument<HouseData>? house) {
     return (data) {
       if (house == null) return null;
       final users = Map.fromEntries(defaultFirestoreConverter(data).map((user) => MapEntry(user.id, user.data)));
       return HouseDataRef(
         reference: house.reference,
-        owner: users[house.owner] ?? const User.invalid(),
-        users: Map.fromEntries(house.users.map((uid) => MapEntry(uid, users[uid] ?? const User.invalid()))),
+        owner: users[house.data.owner] ?? const User.invalid(),
+        users: Map.fromEntries(house.data.users.map((uid) => MapEntry(uid, users[uid] ?? const User.invalid()))),
       );
     };
   }

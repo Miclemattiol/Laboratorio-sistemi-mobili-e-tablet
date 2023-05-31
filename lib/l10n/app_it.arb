@@ -21,12 +21,13 @@
         }
     },
     "loginButton": "Accedi",
-    "noGroupPageTitle": "Non fai parte di nessun gruppo!",
+    "noGroupPageTitle": "Non fai parte di nessuna casa!",
     "noGroupPageContent": "Se hai un codice inseriscilo qui! 👇",
     "noGroupPageContentOr": "oppure",
     "noGroupPageNewHouseButton": "Crea una nuova casa!",
     "noGroupPageCodeInput": "Codice casa",
     "noGroupPageCodeInputErrorMissing": "Inserisci un codice",
+    "noGroupPageCodeInputErrorInvalid": "Il codice che hai inserito non è valido, controlla se lo hai inserito correttamente o chiedi al proprietario della casa di inviartene un altro!",
     "accountPage": "Profilo",
     "accountPageError": "Impossibile caricare i dati dell'utente",
     "usernameInput": "Nome utente",
@@ -261,6 +262,14 @@
         }
     },
     "leaveConfirmDialogContentLastUser": "Sei sicuro di voler uscire dalla casa?\nEssendo l'ultimo utente la casa verrà eliminata permanentemente!",
+    "shareContent": "Unisciti alla mia casa di HouseWallet utilizzando questo codice: {code}",
+    "@shareContent": {
+        "placeholders": {
+            "code": {
+                "type": "String"
+            }
+        }
+    },
     "iconPickerSearch": "Cerca un icona",
     "filterError": "Nessun risultato per \"{query}\"",
     "@filterError": {

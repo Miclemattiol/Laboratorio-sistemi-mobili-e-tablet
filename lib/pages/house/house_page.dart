@@ -15,7 +15,7 @@ class HousePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: TradesSection.firestoreRef(HouseDataRef.of(context).id).where("accepted", isEqualTo: false).where("to", isEqualTo: LoggedUser.of(context).uid).snapshots().map(TradeRef.converter(context)),
+      stream: TradesSection.firestoreRef(HouseDataRef.of(context).id).where(Trade.acceptedKey, isEqualTo: false).where(Trade.toKey, isEqualTo: LoggedUser.of(context).uid).snapshots().map(TradeRef.converter(context)),
       builder: (context, snapshot) {
         WidgetsBinding.instance.addPostFrameCallback((_) => BadgesNotifier.of(context, listen: false).setBadge(HousePage, snapshot.data?.length));
         return Scaffold(
