@@ -7,7 +7,6 @@ import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/payments/category.dart';
-import 'package:house_wallet/data/shopping/recipe.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/categories/categories_page.dart';
 import 'package:house_wallet/themes.dart';
@@ -47,19 +46,25 @@ class _CategoryDialogState extends State<CategoryDialog> {
 
     setState(() => _loading = true);
     try {
+      if ((await CategoriesPage.firestoreRef(widget.house.id).where("icon", isEqualTo: _iconValue!.codePoint).where("name", isEqualTo: _nameValue).count().get()).count != 0) {
+        throw FirebaseException(plugin: "", message: "duplicate");
+      }
+
       if (widget.category == null) {
-        await CategoriesPage.firestoreRef(widget.house.id).add(Category(
+        final ref = await CategoriesPage.firestoreRef(widget.house.id).add(Category(
           icon: _iconValue!,
           name: _nameValue!,
         ));
+
+        navigator.pop<String>(ref.id);
       } else {
         await widget.category!.reference.update({
           Category.iconKey: _iconValue!.codePoint,
           Category.nameKey: _nameValue!,
         });
-      }
 
-      navigator.pop();
+        navigator.pop();
+      }
     } on FirebaseException catch (error) {
       if (!context.mounted) return;
       CustomDialog.alert(
@@ -106,7 +111,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
           ),
         ],
         actions: [
-          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop<RecipeItem?>(), child: Text(localizations(context).buttonCancel)),
+          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel)),
           ModalButton(enabled: !_loading, onPressed: _saveItem, child: Text(localizations(context).buttonOk)),
         ],
       ),

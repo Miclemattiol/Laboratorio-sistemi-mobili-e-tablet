@@ -15,6 +15,12 @@ class Range<T extends Comparable> {
     this.end,
   ) : assert(start == null || end == null || start.compareTo(end) != 1);
 
+  const Range.empty()
+      : start = null,
+        end = null;
+
+  bool get isEmpty => start == null && end == null;
+
   bool test(T other) {
     if (start?.compareTo(other) == 1) return false;
     if (end?.compareTo(other) == -1) return false;

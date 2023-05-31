@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/components/form/category_form_field.dart';
 import 'package:house_wallet/components/form/date_picker_form_field.dart';
 import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/form/people_share_form_field.dart';
@@ -14,8 +15,10 @@ import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
+import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/payments/categories/category_dialog.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:house_wallet/utils.dart';
@@ -24,11 +27,13 @@ import 'package:uuid/uuid.dart';
 class PaymentDetailsBottomSheet extends StatefulWidget {
   final LoggedUser loggedUser;
   final HouseDataRef house;
+  final List<FirestoreDocument<Category>> categories;
   final FirestoreDocument<PaymentRef>? payment;
 
   const PaymentDetailsBottomSheet({
     required this.loggedUser,
     required this.house,
+    required this.categories,
     super.key,
   }) : payment = null;
 
@@ -36,6 +41,7 @@ class PaymentDetailsBottomSheet extends StatefulWidget {
     FirestoreDocument<PaymentRef> this.payment, {
     required this.loggedUser,
     required this.house,
+    required this.categories,
     super.key,
   });
 
@@ -49,7 +55,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
   double? _uploadProgress;
 
   String? _titleValue;
-  /* String? _categoryValue; */ //TODO category
+  String? _categoryValue;
   String? _descriptionValue;
   num? _priceValue;
   File? _imageValue;
@@ -75,6 +81,14 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
 
     setState(() => _loading = true);
     try {
+      if (_categoryValue == CategoryFormField.newCategoryKey) {
+        _categoryValue = await showDialog<String?>(context: context, builder: (context) => CategoryDialog(house: widget.house));
+        if (_categoryValue == null) {
+          setState(() => _loading = false);
+          return;
+        }
+      }
+
       if (widget.payment == null) {
         await PaymentsPage.paymentsFirestoreRef(widget.house.id).add(Payment(
           title: _titleValue!,
@@ -89,7 +103,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
       } else {
         await widget.payment!.reference.update({
           Payment.titleKey: _titleValue!,
-          /* Payment.categoryKey: _categoryValue!, */ //TODO category
+          Payment.categoryKey: _categoryValue,
           Payment.descriptionKey: _descriptionValue,
           Payment.priceKey: _priceValue!,
           Payment.imageUrlKey: _imageValue == null ? widget.payment!.data.imageUrl : await _uploadImage(_imageValue!),
@@ -171,9 +185,12 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
               return null;
             },
           ),
-          TextFormField(
+          CategoryFormField(
+            categories: widget.categories,
             enabled: !_loading,
-            decoration: inputDecoration("Category (TODO)"), //TODO category
+            initialValue: widget.payment?.data.category,
+            decoration: inputDecoration(localizations(context).paymentCategory),
+            onSaved: (category) => _categoryValue = category,
           ),
           DatePickerFormField(
             enabled: !_loading,

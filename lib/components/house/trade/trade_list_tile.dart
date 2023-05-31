@@ -36,7 +36,7 @@ class TradeListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: const SizedBox(height: double.infinity, child: Icon(FontAwesomeIcons.sackDollar)),
-      title: Text(localizations(context).tradeAmount(currencyFormat(context).format(trade.data.amount))),
+      title: Text(localizations(context).tradeAmount(currencyFormat(context).format(trade.data.price))),
       subtitle: Text(localizations(context).tradeFrom(trade.data.from.username)),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

@@ -73,7 +73,7 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
         body: [
           NumberFormField(
             enabled: !_loading,
-            initialValue: widget.trade.data.amount,
+            initialValue: widget.trade.data.price,
             decoration: inputDecoration(localizations(context).quantity),
             decimal: true,
             onSaved: (amount) => _amountValue = amount,

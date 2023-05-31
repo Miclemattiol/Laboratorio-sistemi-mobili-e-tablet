@@ -48,23 +48,12 @@
     "paymentsPage": "Transazioni",
     "paymentsPageError": "Impossibile caricare le transazioni",
     "filterTooltip": "Filtra transazioni",
-    "clearFilterTooltip": "Rimuovi filtro",
+    "clearFilterTooltip": "Rimuovi filtri",
     "priceInvalid": "Prezzo non valido",
     "paymentDateInputErrorMissing": "Inserisci la data del pagamento",
     "paymentDateInputErrorFuture": "La data del pagamento deve essere precedente a quella odierna",
     "noPeopleSharesInputErrorMissing": "La transazione deve includere almeno una persona",
     "paymentPaidFrom": "Pagato da {from}",
-    "paymentDate": "Data pagamento",
-    "paymentCategory": "Categoria",
-    "nameInputErrorMissing": "Inserisci il nome",
-    "paymentFilterTitle": "Titolo",
-    "paymentFilterDescription": "Descrizione",
-    "paymentFilterMinPrice": "Prezzo minimo",
-    "paymentFilterMinPriceError": "Il prezzo minimo deve essere minore o uguale al prezzo massimo",
-    "paymentFilterMaxPrice": "Prezzo massimo",
-    "paymentFilterMaxPriceError": "Il prezzo massimo deve essere maggiore o uguale al prezzo minimo",
-    "paymentFilterFromDate": "Pagato dal",
-    "paymentFilterToDate": "Pagato fino al",
     "@paymentPaidFrom": {
         "placeholders": {
             "from": {
@@ -72,6 +61,20 @@
             }
         }
     },
+    "paymentPaidFor": "Pagato per",
+    "paymentDate": "Data pagamento",
+    "paymentCategory": "Categoria",
+    "paymentCategoryEmpty": "Nessuna categoria",
+    "paymentCategoryNew": "Nuova categoria",
+    "nameInputErrorMissing": "Inserisci il nome",
+    "paymentFilterTitle": "Titolo",
+    "paymentFilterDescription": "Descrizione",
+    "paymentFilterMinPrice": "Prezzo minimo",
+    "paymentFilterMinPriceError": "Il prezzo minimo deve essere minore o uguale al prezzo massimo",
+    "paymentFilterMaxPrice": "Prezzo massimo",
+    "paymentFilterMaxPriceError": "Il prezzo massimo deve essere maggiore o uguale al prezzo minimo",
+    "paymentFilterFromDate": "Data iniziale",
+    "paymentFilterToDate": "Data finale",
     "paymentPaidImpact": "Impatto: {impact}",
     "@paymentPaidImpact": {
         "placeholders": {

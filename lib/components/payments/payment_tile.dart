@@ -5,6 +5,7 @@ import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payment_or_trade.dart';
+import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
@@ -12,9 +13,13 @@ import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
 import 'package:house_wallet/pages/payments/trade_details_bottom_sheet.dart';
 
 class PaymentTile extends StatelessWidget {
+  final List<FirestoreDocument<Category>> categories;
   final FirestoreDocument<PaymentOrTrade> doc;
 
-  PaymentTile(this.doc) : super(key: Key(doc.id));
+  PaymentTile(
+    this.doc, {
+    required this.categories,
+  }) : super(key: Key(doc.id));
 
   static Widget shimmer({required double titleWidth, required double subtitleWidth}) {
     return PadRow(
@@ -117,14 +122,14 @@ class PaymentTile extends StatelessWidget {
       );
     } else {
       final trade = payment as TradeRef;
-      return Text(currencyFormat(context).format(trade.amount));
+      return Text(currencyFormat(context).format(trade.price));
     }
   }
 
   IconData _leading(BuildContext context) {
     final payment = doc.data;
     if (payment is PaymentRef) {
-      return payment.category?.icon ?? Icons.shopping_cart;
+      return payment.category?.data.icon ?? Icons.shopping_cart;
     } else {
       final trade = payment as TradeRef;
       if (trade.from.uid == LoggedUser.of(context).uid) {
@@ -148,7 +153,7 @@ class PaymentTile extends StatelessWidget {
       enableDrag: false,
       builder: (context) {
         if (payment is PaymentRef) {
-          return PaymentDetailsBottomSheet.edit(doc as FirestoreDocument<PaymentRef>, loggedUser: loggedUser, house: house);
+          return PaymentDetailsBottomSheet.edit(doc as FirestoreDocument<PaymentRef>, loggedUser: loggedUser, house: house, categories: categories);
         } else {
           return TradeDetailsBottomSheet.edit(doc as FirestoreDocument<TradeRef>, loggedUser: loggedUser, house: house);
         }

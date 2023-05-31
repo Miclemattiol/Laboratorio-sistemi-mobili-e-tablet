@@ -51,17 +51,14 @@ class Trade {
 }
 
 class TradeRef extends PaymentOrTrade {
-  final num amount;
-  final User from;
   final User to;
-  final String? description;
 
   const TradeRef({
-    required this.amount,
-    required this.from,
+    required super.price,
+    required super.from,
     required this.to,
     required super.date,
-    required this.description,
+    required super.description,
   });
 
   static FirestoreConverter<Trade, TradeRef> converter(BuildContext context) {
@@ -69,7 +66,7 @@ class TradeRef extends PaymentOrTrade {
     return firestoreConverter((doc) {
       final trade = doc.data();
       return TradeRef(
-        amount: trade.amount,
+        price: trade.amount,
         from: houseRef.getUser(trade.from),
         to: houseRef.getUser(trade.to),
         date: trade.date,

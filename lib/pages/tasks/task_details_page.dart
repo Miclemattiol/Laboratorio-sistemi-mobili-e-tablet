@@ -70,7 +70,6 @@ class TaskDetailsPage extends StatelessWidget {
         const Calendar(),
         Padding(
             padding: const EdgeInsets.all(16),
-            // child: Text(task.data.description ?? ""),
             child: SingleChildScrollView(
               child: PadColumn(
                 spacing: 16,
@@ -80,7 +79,7 @@ class TaskDetailsPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "Descrizione: ",
+                          localizations(context).descriptionInput,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         Text(
