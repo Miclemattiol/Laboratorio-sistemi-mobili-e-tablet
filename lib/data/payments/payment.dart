@@ -64,6 +64,7 @@ class Payment {
   }
 
   impact(String uid) {
+    //to test
     final totalShares = to.values.fold<num>(0, (prev, element) => prev + element);
     final pricePerShare = price / totalShares;
     final myShare = to[uid];
@@ -118,6 +119,7 @@ class PaymentRef extends PaymentOrTrade {
   }
 
   impact(String uid) {
+    //To test
     final totalShares = to.values.fold<num>(0, (prev, element) => prev + element.share);
     final pricePerShare = price / totalShares;
     final myShare = to[uid]?.share;
