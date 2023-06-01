@@ -18,7 +18,7 @@ class LoggedUser {
 
   User getUserData(BuildContext context, {bool listen = true}) => HouseDataRef.of(context, listen: listen).getUser(uid);
 
-  static Query<HouseData> _groupsFirestoreRef(String uid) => App.groupsFirestoreReference.where(HouseData.usersKey, arrayContains: uid);
+  static Query<HouseData> _groupsFirestoreRef(String uid) => App.groupsFirestoreReference.orderBy("${HouseData.usersKey}.$uid");
 
   static Widget stream({required Widget Function(BuildContext context, AsyncSnapshot<LoggedUser?> snapshot) builder}) {
     return StreamBuilder(

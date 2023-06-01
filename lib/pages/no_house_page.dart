@@ -42,9 +42,7 @@ class _NoHousePageState extends State<NoHousePage> {
         HouseData.codesKey: FieldValue.arrayRemove([
           _codeValue
         ]),
-        HouseData.usersKey: FieldValue.arrayUnion([
-          myUid
-        ]),
+        "${HouseData.usersKey}.$myUid": 0,
       });
     } on FirebaseException catch (error) {
       if (!mounted) return;
@@ -63,9 +61,9 @@ class _NoHousePageState extends State<NoHousePage> {
 
       await App.groupsFirestoreReference.add(HouseData(
         owner: myUid,
-        users: [
-          myUid
-        ],
+        users: {
+          myUid: 0
+        },
         codes: [],
       ));
     } on FirebaseException catch (error) {

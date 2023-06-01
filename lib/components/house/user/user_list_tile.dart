@@ -112,8 +112,12 @@ class _UserListTileState extends State<UserListTile> {
       );
     }
 
+    final house = HouseDataRef.of(context);
+    final myShare = house.getShare(widget.user!.uid);
+    final maxBalance = house.shares.values.reduce((prev, value) => prev > value.abs() ? prev : value.abs());
+
     return Container(
-      decoration: _balanceBackground(.75), //TODO resize based on balance
+      decoration: _balanceBackground(myShare / maxBalance),
       child: ListTile(
         tileColor: Colors.transparent,
         leading: CircleAvatar(
@@ -121,7 +125,7 @@ class _UserListTileState extends State<UserListTile> {
           onForegroundImageError: (exception, stackTrace) {},
           child: const Icon(Icons.person, size: 20),
         ),
-        trailing: Text(currencyFormat(context).format(10)), //TODO balance
+        trailing: Text("${myShare > 0 ? "+" : ""}${currencyFormat(context).format(myShare)}"),
         title: Text(_username(context)),
         onTap: () => _openUserDetails(context),
       ),

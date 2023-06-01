@@ -40,7 +40,7 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
 
-  double? _priceValue;
+  num? _priceValue;
   String? _descriptionValue;
 
   final TextEditingController _descriptionController = TextEditingController();
@@ -88,9 +88,12 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
         dismissible: false,
         spacing: 12,
         body: [
-          NumberFormField<double>(
+          NumberFormField<num>(
             enabled: !_loading,
-            initialValue: 10, //TODO balance
+            initialValue: () {
+              final share = widget.house.getShare(widget.user.uid);
+              return share <= 0 ? null : share;
+            }(),
             decoration: inputDecoration(localizations(context).price),
             decimal: true,
             validator: (price) => (price == null || price == 0) ? localizations(context).priceInputErrorMissing : null,

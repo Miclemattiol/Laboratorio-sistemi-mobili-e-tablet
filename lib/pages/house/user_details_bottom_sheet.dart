@@ -48,9 +48,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
         await house.reference.delete();
       } else {
         await house.reference.update({
-          HouseData.usersKey: FieldValue.arrayRemove([
-            loggedUser.uid
-          ])
+          "${HouseData.usersKey}.${loggedUser.uid}": FieldValue.delete()
         });
       }
       navigator.pop();
@@ -76,9 +74,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
 
     try {
       await house.reference.update({
-        HouseData.usersKey: FieldValue.arrayRemove([
-          user.uid
-        ])
+        "${HouseData.usersKey}.${user.uid}": FieldValue.delete()
       });
       navigator.pop();
     } on FirebaseException catch (error) {
@@ -131,7 +127,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text(localizations(context).userBalance(currencyFormat(context).format(10))), //TODO balance
+          child: Text(localizations(context).userBalance(currencyFormat(context).format(house.getShare(user.uid)))),
         ),
         if (loggedUser.uid == user.uid) ...[
           ElevatedButton(

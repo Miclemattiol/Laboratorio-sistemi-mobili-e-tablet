@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 
 class HouseData {
   final String owner;
-  final List<String> users;
+  final Map<String, num> users;
   final List<String> codes;
 
   static const ownerKey = "owner";
@@ -23,7 +23,7 @@ class HouseData {
     final data = doc.data()!;
     return HouseData(
       owner: data[ownerKey],
-      users: List.from(data[usersKey]),
+      users: Map.from(data[usersKey]),
       codes: List.from(data[codesKey]),
     );
   }
@@ -43,16 +43,19 @@ class HouseDataRef {
   final DocumentReference reference;
   final User owner;
   final Map<String, User> users;
+  final Map<String, num> shares;
 
   const HouseDataRef({
     required this.reference,
     required this.owner,
     required this.users,
+    required this.shares,
   });
 
   String get id => reference.id;
 
   User getUser(String uid) => users[uid] ?? const User.invalid();
+  num getShare(String uid) => shares[uid] ?? 0;
 
   static HouseDataRef? Function(QuerySnapshot<User> data) converter(FirestoreDocument<HouseData>? house) {
     return (data) {
@@ -61,7 +64,8 @@ class HouseDataRef {
       return HouseDataRef(
         reference: house.reference,
         owner: users[house.data.owner] ?? const User.invalid(),
-        users: Map.fromEntries(house.data.users.map((uid) => MapEntry(uid, users[uid] ?? const User.invalid()))),
+        users: Map.fromEntries(house.data.users.keys.map((uid) => MapEntry(uid, users[uid] ?? const User.invalid()))),
+        shares: house.data.users,
       );
     };
   }

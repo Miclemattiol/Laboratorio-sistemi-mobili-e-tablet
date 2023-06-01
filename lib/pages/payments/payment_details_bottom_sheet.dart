@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
@@ -17,7 +16,6 @@ import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
-import 'package:house_wallet/data/payment_or_trade.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/data/payments/trade.dart';
@@ -26,7 +24,6 @@ import 'package:house_wallet/pages/payments/categories/category_dialog.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:house_wallet/utils.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
 class PaymentDetailsBottomSheet extends StatefulWidget {
@@ -90,12 +87,12 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
           return (users.contains(paymentTrade.from) || users.contains(paymentTrade.to)); //Se almeno uno degli utenti ha partecipato allo scambio
         } else {
           //It should never happen
-          return false;
+          return false; //TODO rimuovi l'else e cambia l'else-if in un else
         }
       },
     );
 
-    users.forEach((user) {
+    for (final user in users) {
       final balance = transactions.fold<num>(0, (previousValue, paymentTrade) {
         if (paymentTrade is Payment) {
           return previousValue + paymentTrade.impact(user);
@@ -109,11 +106,11 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
           }
         } else {
           //It should never happen
-          return previousValue;
+          return previousValue; //TODO rimuovi l'else e cambia l'else-if in un else
         }
       });
       //TODO push to firebase
-    });
+    }
 
     // Rx.combineLatest2(
     //           PaymentsPage.paymentsFirestoreRef(widget.house.id).get().map(PaymentRef.converter(context, snapshot.data)),
@@ -143,7 +140,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
       if (widget.payment == null) {
         await PaymentsPage.paymentsFirestoreRef(widget.house.id).add(Payment(
           title: _titleValue!,
-          category: "evPQw3qSnmIHEeZKeOGW",
+          category: _categoryValue,
           description: _descriptionValue,
           price: _priceValue!,
           imageUrl: _imageValue == null ? null : await _uploadImage(_imageValue!),

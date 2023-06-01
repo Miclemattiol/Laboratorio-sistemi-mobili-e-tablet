@@ -36,7 +36,7 @@ class MainPage extends StatelessWidget {
       builder: (context, snapshot) {
         final house = snapshot.data;
         return StreamBuilder(
-          stream: usersFirestoreRef.where(FieldPath.documentId, whereIn: house?.data.users).snapshots().map(HouseDataRef.converter(house)),
+          stream: usersFirestoreRef.where(FieldPath.documentId, whereIn: house?.data.users.keys).snapshots().map(HouseDataRef.converter(house)),
           builder: (context, snapshot) {
             final house = snapshot.data;
 
