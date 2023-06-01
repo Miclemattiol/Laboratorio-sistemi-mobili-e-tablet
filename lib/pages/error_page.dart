@@ -34,10 +34,13 @@ class ErrorPage extends StatelessWidget {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: FloatingActionButton(
-        onPressed: FirebaseAuth.instance.signOut,
-        tooltip: localizations(context).logoutButton,
-        child: const Icon(Icons.logout),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(top: 18),
+        child: FloatingActionButton(
+          onPressed: FirebaseAuth.instance.signOut,
+          tooltip: localizations(context).logoutButton,
+          child: const Icon(Icons.logout),
+        ),
       ),
     );
   }

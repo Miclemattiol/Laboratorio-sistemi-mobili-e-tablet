@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/sliding_page_route.dart';
+import 'package:house_wallet/main.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ImagePickerBottomSheet extends StatelessWidget {
@@ -46,7 +47,7 @@ class ImagePickerBottomSheet extends StatelessWidget {
             child: ConstrainedBox(
               constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height / 2),
               child: GestureDetector(
-                onTap: () => Navigator.of(context).push(SlidingPageRoute(_ImagePage(image), fullscreenDialog: true)),
+                onTap: () => ImagePage.openImage(context, image),
                 child: image is File
                     ? Image.file(image, fit: BoxFit.fitWidth)
                     : CachedNetworkImage(
@@ -73,10 +74,12 @@ class ImagePickerBottomSheet extends StatelessWidget {
   }
 }
 
-class _ImagePage extends StatelessWidget {
+class ImagePage extends StatelessWidget {
   final dynamic image;
 
-  const _ImagePage(this.image) : assert(image is File || image is String);
+  const ImagePage._(this.image) : assert(image is File || image is String);
+
+  static void openImage(BuildContext context, dynamic image) => Navigator.of(context).push(SlidingPageRoute(ImagePage._(image), fullscreenDialog: true));
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +93,7 @@ class _ImagePage extends StatelessWidget {
               : CachedNetworkImage(
                   imageUrl: image as String,
                   placeholder: (context, url) => const Center(child: CircularProgressIndicator()),
-                  errorWidget: (context, url, error) => const SizedBox.shrink(),
+                  errorWidget: (context, url, error) => Text(localizations(context).imageError),
                 ),
         ),
       ),

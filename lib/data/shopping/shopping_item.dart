@@ -16,6 +16,7 @@ class ShoppingItem {
   static const supermarketKey = "supermarket";
   static const titleKey = "title";
   static const toKey = "to";
+  static const timestampKey = "timestamp";
 
   const ShoppingItem({
     required this.price,
@@ -43,6 +44,7 @@ class ShoppingItem {
       supermarketKey: shoppingItem.supermarket,
       titleKey: shoppingItem.title,
       toKey: shoppingItem.to,
+      timestampKey: FieldValue.serverTimestamp(),
     };
   }
 }

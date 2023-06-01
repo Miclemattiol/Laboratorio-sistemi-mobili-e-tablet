@@ -21,11 +21,12 @@ class ShoppingBottomSheet extends StatefulWidget {
 }
 
 class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
+  late final _users = HouseDataRef.of(context).users;
   final TextEditingController _titleController = TextEditingController();
   bool _detailsCollapsed = true;
 
   String? _titleValue;
-  Map<String, int> _toValue = {};
+  late Map<String, int> _toValue = _users.map((key, value) => MapEntry(key, 1));
   String? _supermarketValue;
   PriceQuantity? _priceQuantityValue;
 
@@ -41,12 +42,10 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
         to: _toValue,
       ));
 
-      FocusManager.instance.primaryFocus?.unfocus();
       _titleController.clear();
       setState(() {
-        _detailsCollapsed = true;
         _titleValue = null;
-        _toValue = {};
+        _toValue = _users.map((key, value) => MapEntry(key, 1));
         _supermarketValue = null;
         _priceQuantityValue = null;
       });
@@ -122,7 +121,11 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
                 DetailsItemChip(
                   icon: Icons.groups,
                   tooltip: localizations(context).peopleShares,
-                  label: _toValue.isEmpty ? null : localizations(context).peopleChipLabel(_toValue.length),
+                  label: _toValue.isEmpty
+                      ? null
+                      : _toValue.length == _users.length
+                          ? localizations(context).peopleChipLabelEveryone
+                          : localizations(context).peopleChipLabel(_toValue.length),
                   onTap: () async {
                     final house = HouseDataRef.of(context, listen: false);
                     final to = await showDialog<Map<String, int>>(context: context, builder: (_) => PeopleSharesDialog(house: house, initialValues: _toValue));

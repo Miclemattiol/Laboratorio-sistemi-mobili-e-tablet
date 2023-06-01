@@ -109,10 +109,13 @@ class _NoHousePageState extends State<NoHousePage> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: FloatingActionButton(
-        onPressed: _loading ? null : FirebaseAuth.instance.signOut,
-        tooltip: localizations(context).logoutButton,
-        child: const Icon(Icons.logout),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(top: 18),
+        child: FloatingActionButton(
+          onPressed: _loading ? null : FirebaseAuth.instance.signOut,
+          tooltip: localizations(context).logoutButton,
+          child: const Icon(Icons.logout),
+        ),
       ),
     );
   }

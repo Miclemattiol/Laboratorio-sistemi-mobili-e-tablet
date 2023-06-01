@@ -148,9 +148,10 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
             },
           ),
           PeopleFormField(
+            enabled: !_loading,
             house: widget.house,
             decoration: inputDecoration(localizations(context).taskAssignedToInput),
-            initialValue: widget.task?.data.assignedTo.map((user) => user.uid).toSet(),
+            initialValue: widget.task?.data.assignedTo.map((user) => user.uid).toSet() ?? widget.house.users.keys.toSet(),
             onSaved: (assignedTo) => _assignedToValue = assignedTo,
             validator: (assignedTo) => (assignedTo.isEmpty) ? localizations(context).taskAssignedToInputMissing : null,
           ),

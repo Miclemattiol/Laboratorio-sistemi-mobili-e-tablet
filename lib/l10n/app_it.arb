@@ -107,6 +107,7 @@
     "addNewInput": "Aggiungi nuovo...",
     "showDetailsTooltip": "Mostra dettagli aggiuntivi",
     "hideDetailsTooltip": "Nascondi dettagli aggiuntivi",
+    "peopleChipLabelEveryone": "Tutti",
     "peopleChipLabel": "{count, plural, =1{1 persona} other{{count} persone}}",
     "@peopleChipLabel": {
         "placeholders": {
@@ -279,6 +280,7 @@
             }
         }
     },
+    "imageError": "Errore nel caricamento dell'immagine",
     "buttonYes": "Sì",
     "buttonNo": "No",
     "buttonOk": "OK",

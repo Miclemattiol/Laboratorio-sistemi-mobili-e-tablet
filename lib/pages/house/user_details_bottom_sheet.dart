@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/components/image_picker_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/image_avatar.dart';
@@ -124,7 +125,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
           spacing: 16,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            ImageAvatar(user.imageUrl, fallback: const Icon(Icons.person)),
+            ImageAvatar(user.imageUrl, fallback: const Icon(Icons.person), onTap: user.imageUrl != null ? () => ImagePage.openImage(context, user.imageUrl) : null),
             Text(user.username),
           ],
         ),

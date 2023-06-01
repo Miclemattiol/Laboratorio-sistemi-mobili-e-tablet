@@ -32,7 +32,7 @@ class ShoppingPage extends StatefulWidget {
 }
 
 class _ShoppingPageState extends State<ShoppingPage> {
-  Map<String, FirestoreDocument<ShoppingItemRef>> _items = {};
+  Map<String, FirestoreDocument<ShoppingItemRef>> _shoppingItems = {};
   final _checkedIds = <String>{};
 
   Widget _shoppingList(Widget child) {
@@ -53,9 +53,9 @@ class _ShoppingPageState extends State<ShoppingPage> {
 
   List<FirestoreDocument<ShoppingItemRef>> _checkedItems() {
     return _checkedIds.expand<FirestoreDocument<ShoppingItemRef>>((id) {
-      if (_items.containsKey(id)) {
+      if (_shoppingItems.containsKey(id)) {
         return [
-          _items[id]!
+          _shoppingItems[id]!
         ];
       }
       return [];
@@ -150,7 +150,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
         children: [
           Expanded(
             child: StreamBuilder(
-              stream: ShoppingPage.firestoreRef(HouseDataRef.of(context).id).snapshots().map(ShoppingItemRef.converter(context)),
+              stream: ShoppingPage.firestoreRef(HouseDataRef.of(context).id).orderBy(ShoppingItem.timestampKey, descending: true).snapshots().map(ShoppingItemRef.converter(context)),
               builder: (context, snapshot) {
                 final shoppingItems = snapshot.data;
 
@@ -176,7 +176,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                   }
                 }
 
-                _items = Map.fromEntries(shoppingItems.map((item) => MapEntry(item.id, item)));
+                _shoppingItems = Map.fromEntries(shoppingItems.map((item) => MapEntry(item.id, item)));
 
                 if (shoppingItems.isEmpty) {
                   return centerSectionText(

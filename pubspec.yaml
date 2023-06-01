@@ -42,14 +42,13 @@ dev_dependencies:
   flutter_lints: ^2.0.1
   change_app_package_name: ^1.1.0
   flutter_launcher_icons: ^0.13.1
-  flutter_native_splash: ^2.2.19
+  flutter_native_splash: ^2.3.0
 
 flutter:
   uses-material-design: true
   generate: true
   assets: [ assets/ ]
 
-# TODO icon
 # dart run flutter_launcher_icons
 flutter_launcher_icons:
   android: true
@@ -57,10 +56,12 @@ flutter_launcher_icons:
   image_path: assets/icon/icon.png
   image_path_ios: assets/icon/icon_ios.png
   adaptive_icon_foreground: assets/icon/adaptive_foreground.png
-  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_background: assets/icon/adaptive_background.png
 
-# TODO splash screen
 # dart run flutter_native_splash:create
 flutter_native_splash:
-  color: "#FFFFFF"
   image: assets/splash_screen.png
+  background_image: assets/icon/adaptive_background.png
+  android_12:
+    color: "#FFFFFF"
+    color_dark: "#1C1C1C"

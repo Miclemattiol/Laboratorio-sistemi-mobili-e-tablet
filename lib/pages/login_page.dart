@@ -2,6 +2,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/components/login/app_icon.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/themes.dart';
 
@@ -45,6 +46,7 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  //TODO add test app functionality with demo values?
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
               spacing: 24,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Center(child: Image.asset("assets/logo.png", width: 200)),
+                const AppIcon(),
                 PadColumn(
                   spacing: 8,
                   children: [

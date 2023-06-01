@@ -177,7 +177,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
           PeopleSharesFormField(
             enabled: !_loading,
             house: widget.house,
-            initialValue: widget.payment?.data.to.map((key, value) => MapEntry(key, value.share)),
+            initialValue: widget.payment?.data.to.map((key, value) => MapEntry(key, value.share)) ?? widget.house.users.map((key, value) => MapEntry(key, 1)),
             decoration: inputDecoration(localizations(context).peopleShares),
             onSaved: (to) => _toValue = to,
             validator: (value) {
