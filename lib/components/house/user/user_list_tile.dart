@@ -76,6 +76,32 @@ class _UserListTileState extends State<UserListTile> {
     return username;
   }
 
+  BoxDecoration _balanceBackground(double value) {
+    const opacity = .5;
+    final redValue = value >= 0 ? 0 : -value;
+    final greenValue = value <= 0 ? 0 : value;
+    return BoxDecoration(
+      gradient: LinearGradient(
+        colors: [
+          Colors.transparent,
+          Colors.red.withOpacity(opacity),
+          Colors.red.withOpacity(opacity),
+          Colors.green.withOpacity(opacity),
+          Colors.green.withOpacity(opacity),
+          Colors.transparent,
+        ],
+        stops: [
+          .5 - .5 * redValue,
+          .5 - .5 * redValue,
+          .5,
+          .5,
+          .5 + .5 * greenValue,
+          .5 + .5 * greenValue
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (widget.user == null) {
@@ -86,15 +112,19 @@ class _UserListTileState extends State<UserListTile> {
       );
     }
 
-    //TODO show balance, background color balance
-    return ListTile(
-      leading: CircleAvatar(
-        foregroundImage: NetworkImage(widget.user!.imageUrl ?? ""),
-        onForegroundImageError: (exception, stackTrace) {},
-        child: const Icon(Icons.person, size: 20),
+    return Container(
+      decoration: _balanceBackground(.75), //TODO resize based on balance
+      child: ListTile(
+        tileColor: Colors.transparent,
+        leading: CircleAvatar(
+          foregroundImage: NetworkImage(widget.user!.imageUrl ?? ""),
+          onForegroundImageError: (exception, stackTrace) {},
+          child: const Icon(Icons.person, size: 20),
+        ),
+        trailing: Text(currencyFormat(context).format(10)), //TODO balance
+        title: Text(_username(context)),
+        onTap: () => _openUserDetails(context),
       ),
-      title: Text(_username(context)),
-      onTap: () => _openUserDetails(context),
     );
   }
 }
