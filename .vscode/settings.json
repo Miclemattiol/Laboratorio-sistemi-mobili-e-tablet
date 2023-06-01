@@ -9,6 +9,7 @@
         "lpsmt",
         "mipmap",
         "rxdart",
+        "SHORTWEEKDAYS",
         "unfocus"
     ],
     "cSpell.ignorePaths": [

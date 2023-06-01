@@ -34,10 +34,8 @@ extension BoolExtension on bool {
   }
 }
 
-extension StringExtension on String? {
-  String? toNullable() {
-    return (this ?? "").trim() == "" ? null : this!.trim();
-  }
+extension NullStringExtension on String? {
+  String? toNullable() => (this ?? "").trim() == "" ? null : this!.trim();
 
   bool containsCaseUnsensitive(Pattern other, [int startIndex = 0]) {
     if (other is String) {
@@ -45,4 +43,12 @@ extension StringExtension on String? {
     }
     return this?.toLowerCase().contains(other, startIndex) ?? false;
   }
+}
+
+extension StringExtension on String {
+  String capitalize() => "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
+}
+
+extension DateTimeExtension on DateTime {
+  bool isSameDayAs(DateTime other) => year == other.year && month == other.month && day == other.day;
 }

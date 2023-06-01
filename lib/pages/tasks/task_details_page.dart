@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/components/tasks/calendar.dart';
 import 'package:house_wallet/components/tasks/participants_list.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
-import 'package:house_wallet/data/tasks/calendar.dart';
 import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/tasks/task_details_bottom_sheet.dart';
@@ -37,7 +37,6 @@ class TaskDetailsPage extends StatelessWidget {
   }
 
   void _edit(BuildContext context) {
-    //TODO change?
     Navigator.of(context).pop();
     showModalBottomSheet(
       context: context,
@@ -67,9 +66,10 @@ class TaskDetailsPage extends StatelessWidget {
           )
         ],
       ),
-      body: ListView(children: [
-        const Calendar(),
-        Padding(
+      body: ListView(
+        children: [
+          Calendar.singleTask(task.data.range),
+          Padding(
             padding: const EdgeInsets.all(16),
             child: SingleChildScrollView(
               child: PadColumn(
@@ -92,8 +92,10 @@ class TaskDetailsPage extends StatelessWidget {
                   ParticipantsList(task.data.assignedTo.toSet()),
                 ],
               ),
-            ))
-      ]),
+            ),
+          )
+        ],
+      ),
     );
   }
 }

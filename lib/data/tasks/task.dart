@@ -117,6 +117,8 @@ class TaskRef {
     required this.assignedTo,
   });
 
+  DateTimeRange get range => DateTimeRange(start: DateTime(from.year, from.month, from.day), end: DateTime(to.year, to.month, to.day));
+
   static FirestoreConverter<Task, TaskRef> converter(BuildContext context) {
     final houseRef = HouseDataRef.of(context);
     return firestoreConverter((doc) {

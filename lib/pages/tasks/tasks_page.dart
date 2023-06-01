@@ -33,7 +33,9 @@ class _TasksPageState extends State<TasksPage> {
   bool _showFab = true;
 
   bool onNotification(UserScrollNotification notification) {
-    setState(() => _showFab = notification.direction == ScrollDirection.idle);
+    if (notification.depth == 0) {
+      setState(() => _showFab = notification.direction == ScrollDirection.idle);
+    }
     return true;
   }
 

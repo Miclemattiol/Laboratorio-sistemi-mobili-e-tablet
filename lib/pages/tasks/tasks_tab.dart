@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:house_wallet/components/tasks/calendar.dart';
 import 'package:house_wallet/components/tasks/task_list_tile.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/logged_user.dart';
-import 'package:house_wallet/data/tasks/calendar.dart';
 import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/themes.dart';
@@ -63,7 +63,7 @@ class TasksTab extends StatelessWidget {
       onNotification: onNotification,
       child: ListView(
         children: [
-          if (myTasks) const Calendar(),
+          if (myTasks) Calendar(tasks.map((task) => task.data.range).toList()),
           ...tasks.map(TaskListTile.new)
         ],
       ),
