@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
@@ -7,6 +8,7 @@ import 'package:house_wallet/components/form/category_form_field.dart';
 import 'package:house_wallet/components/form/date_picker_form_field.dart';
 import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/form/people_share_form_field.dart';
+import 'package:house_wallet/components/house/trade/trades_section.dart';
 import 'package:house_wallet/components/image_picker_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
@@ -15,13 +17,16 @@ import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
+import 'package:house_wallet/data/payment_or_trade.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
+import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/categories/category_dialog.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:house_wallet/utils.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:uuid/uuid.dart';
 
 class PaymentDetailsBottomSheet extends StatefulWidget {
@@ -71,6 +76,52 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
     final imageRef = (await upload).ref;
     setState(() => _uploadProgress = null);
     return imageRef.getDownloadURL();
+  }
+
+  void recalculateBalance(Set<String> users) async {
+    final transactions = [
+      ...(await PaymentsPage.paymentsFirestoreRef(widget.house.id).get()).docs.map((doc) => doc.data()),
+      ...(await TradesSection.firestoreRef(widget.house.id).get()).docs.map((doc) => doc.data()),
+    ].where(
+      (paymentTrade) {
+        if (paymentTrade is Payment) {
+          return paymentTrade.to.keys.toSet().intersection(users).isNotEmpty; //Se contiene almeno un utente che ha partecipato alla transazione
+        } else if (paymentTrade is Trade) {
+          return (users.contains(paymentTrade.from) || users.contains(paymentTrade.to)); //Se almeno uno degli utenti ha partecipato allo scambio
+        } else {
+          //It should never happen
+          return false;
+        }
+      },
+    );
+
+    users.forEach((user) {
+      final balance = transactions.fold<num>(0, (previousValue, paymentTrade) {
+        if (paymentTrade is Payment) {
+          return previousValue + paymentTrade.impact(user);
+        } else if (paymentTrade is Trade) {
+          if (paymentTrade.from == user) {
+            return previousValue - paymentTrade.amount;
+          } else if (paymentTrade.to == user) {
+            return previousValue + paymentTrade.amount;
+          } else {
+            return previousValue;
+          }
+        } else {
+          //It should never happen
+          return previousValue;
+        }
+      });
+      //TODO push to firebase
+    });
+
+    // Rx.combineLatest2(
+    //           PaymentsPage.paymentsFirestoreRef(widget.house.id).get().map(PaymentRef.converter(context, snapshot.data)),
+    //           TradesSection.firestoreRef(HouseDataRef.of(context).id).where(Trade.acceptedKey, isEqualTo: true).snapshots().map(TradeRef.converter(context)),
+    //           (payments, trades) => [
+    //             ...payments,
+    //             ...trades
+    //           ].toList()
   }
 
   void _savePayment() async {
