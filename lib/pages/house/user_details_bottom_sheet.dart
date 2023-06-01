@@ -127,7 +127,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text(localizations(context).userBalance(currencyFormat(context).format(house.getShare(user.uid)))),
+          child: Text(localizations(context).userBalance(currencyFormat(context).format(house.getBalance(user.uid)))),
         ),
         if (loggedUser.uid == user.uid) ...[
           ElevatedButton(

@@ -91,8 +91,8 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
           NumberFormField<num>(
             enabled: !_loading,
             initialValue: () {
-              final share = widget.house.getShare(widget.user.uid);
-              return share <= 0 ? null : share;
+              final balance = widget.house.getBalance(widget.user.uid);
+              return balance <= 0 ? null : balance;
             }(),
             decoration: inputDecoration(localizations(context).price),
             decimal: true,

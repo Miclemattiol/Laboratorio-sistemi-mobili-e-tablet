@@ -113,11 +113,11 @@ class _UserListTileState extends State<UserListTile> {
     }
 
     final house = HouseDataRef.of(context);
-    final myShare = house.getShare(widget.user!.uid);
-    final maxBalance = house.shares.values.reduce((prev, value) => prev > value.abs() ? prev : value.abs());
+    final myBalance = house.getBalance(widget.user!.uid);
+    final maxBalance = house.balances.values.reduce((prev, value) => prev > value.abs() ? prev : value.abs());
 
     return Container(
-      decoration: _balanceBackground(myShare / maxBalance),
+      decoration: _balanceBackground(myBalance / maxBalance),
       child: ListTile(
         tileColor: Colors.transparent,
         leading: CircleAvatar(
@@ -125,7 +125,7 @@ class _UserListTileState extends State<UserListTile> {
           onForegroundImageError: (exception, stackTrace) {},
           child: const Icon(Icons.person, size: 20),
         ),
-        trailing: Text("${myShare > 0 ? "+" : ""}${currencyFormat(context).format(myShare)}"),
+        trailing: Text("${myBalance > 0 ? "+" : ""}${currencyFormat(context).format(myBalance)}"),
         title: Text(_username(context)),
         onTap: () => _openUserDetails(context),
       ),

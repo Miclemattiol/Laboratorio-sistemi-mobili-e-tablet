@@ -43,19 +43,19 @@ class HouseDataRef {
   final DocumentReference reference;
   final User owner;
   final Map<String, User> users;
-  final Map<String, num> shares;
+  final Map<String, num> balances;
 
   const HouseDataRef({
     required this.reference,
     required this.owner,
     required this.users,
-    required this.shares,
+    required this.balances,
   });
 
   String get id => reference.id;
 
   User getUser(String uid) => users[uid] ?? const User.invalid();
-  num getShare(String uid) => shares[uid] ?? 0;
+  num getBalance(String uid) => balances[uid] ?? 0;
 
   static HouseDataRef? Function(QuerySnapshot<User> data) converter(FirestoreDocument<HouseData>? house) {
     return (data) {
@@ -65,7 +65,7 @@ class HouseDataRef {
         reference: house.reference,
         owner: users[house.data.owner] ?? const User.invalid(),
         users: Map.fromEntries(house.data.users.keys.map((uid) => MapEntry(uid, users[uid] ?? const User.invalid()))),
-        shares: house.data.users,
+        balances: house.data.users,
       );
     };
   }
