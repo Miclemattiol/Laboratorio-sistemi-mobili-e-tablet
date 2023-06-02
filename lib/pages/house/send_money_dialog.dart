@@ -65,7 +65,7 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
       CustomDialog.alert(
         context: context,
         title: localizations(context).error,
-        content: "${localizations(context).userDialogContentError} (${error.message})",
+        content: localizations(context).actionError(error.message.toString()),
       );
       setState(() => _loading = false);
     }
@@ -96,7 +96,7 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
             }(),
             decoration: inputDecoration(localizations(context).price),
             decimal: true,
-            validator: (price) => (price == null || price == 0) ? localizations(context).priceInputErrorMissing : null,
+            validator: (price) => (price == null || price == 0) ? localizations(context).priceMissing : null,
             onSaved: (price) => _priceValue = price,
           ),
           TextFormField(
@@ -104,11 +104,11 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
             minLines: 1,
             maxLines: 5,
             controller: _descriptionController,
-            decoration: inputDecoration(localizations(context).descriptionInput),
+            decoration: inputDecoration(localizations(context).description),
             keyboardType: TextInputType.multiline,
             onSaved: (description) => _descriptionValue = description.toNullable(),
           ),
-          if (widget.user.iban != null) CopyFormField(widget.user.iban!, decoration: inputDecoration(localizations(context).ibanInput)),
+          if (widget.user.iban != null) CopyFormField(widget.user.iban!, decoration: inputDecoration(localizations(context).iban)),
           if (widget.user.payPal != null)
             ElevatedButton(
               onPressed: _payWithPayPal,
@@ -121,15 +121,15 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
                 spacing: 8,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text("Paga con"),
+                  Text(localizations(context).payWith),
                   Image.memory(_payPalLogo, height: 18),
                 ],
               ),
             ),
         ],
         actions: [
-          ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel)),
-          ModalButton(onPressed: () => _addTrade(context), child: Text(localizations(context).buttonPay)),
+          ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).cancel)),
+          ModalButton(onPressed: () => _addTrade(context), child: Text(localizations(context).pay)),
         ],
       ),
     );

@@ -51,8 +51,8 @@ class _CategoriesDialogState extends State<CategoriesDialog> {
         );
       }).toList(),
       actions: [
-        ModalButton(onPressed: () => Navigator.of(context).pop<Set<String>>(), child: Text(localizations(context).buttonCancel)),
-        ModalButton(onPressed: () => Navigator.of(context).pop<Set<String>>(_values), child: Text(localizations(context).buttonOk)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<Set<String>>(), child: Text(localizations(context).cancel)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<Set<String>>(_values), child: Text(localizations(context).ok)),
       ],
     );
   }

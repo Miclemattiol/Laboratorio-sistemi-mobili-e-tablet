@@ -54,7 +54,7 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
       CustomDialog.alert(
         context: context,
         title: localizations(context).error,
-        content: "${localizations(context).saveChangesDialogContentError} (${error.message})",
+        content: localizations(context).saveChangesError(error.message.toString()),
       );
     }
   }
@@ -143,7 +143,7 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
                 ),
                 DetailsItemChip(
                   icon: Icons.attach_money,
-                  tooltip: localizations(context).priceQuantityChipTooltip,
+                  tooltip: localizations(context).priceAndQuantity,
                   label: _priceQuantityLabel(),
                   onTap: () async {
                     final priceQuantity = await showDialog<PriceQuantity>(context: context, builder: (context) => PriceQuantityDialog(initialValue: _priceQuantityValue));

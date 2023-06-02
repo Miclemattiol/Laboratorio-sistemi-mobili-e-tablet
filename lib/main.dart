@@ -90,8 +90,8 @@ class App extends StatelessWidget {
               GlobalWidgetsLocalizations.delegate,
             ],
             supportedLocales: const [
+              Locale("en"),
               Locale("it"),
-              // Locale("en"), //TODO translations
             ],
             navigatorObservers: [ClearFocusOnPush()],
           );

@@ -33,7 +33,7 @@ class _NoHousePageState extends State<NoHousePage> {
       final groups = (await App.groupsFirestoreReference.where(HouseData.codesKey, arrayContains: _codeValue!).limit(1).get()).docs;
 
       if (groups.isEmpty) {
-        scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.noGroupPageCodeInputErrorInvalid), duration: const Duration(seconds: 6)));
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.groupCodeInvalid), duration: const Duration(seconds: 6)));
         setState(() => _loading = false);
         return;
       }
@@ -44,7 +44,7 @@ class _NoHousePageState extends State<NoHousePage> {
       });
     } on FirebaseException catch (error) {
       if (!mounted) return;
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${appLocalizations.userDialogContentError}\n(${error.message})")));
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
       setState(() => _loading = false);
     }
   }
@@ -64,7 +64,7 @@ class _NoHousePageState extends State<NoHousePage> {
       ));
     } on FirebaseException catch (error) {
       if (!mounted) return;
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${appLocalizations.userDialogContentError}\n(${error.message})")));
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
       setState(() => _loading = false);
     }
   }
@@ -81,21 +81,21 @@ class _NoHousePageState extends State<NoHousePage> {
               spacing: 16,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Text(localizations(context).noGroupPageTitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall),
-                Text(localizations(context).noGroupPageContent, textAlign: TextAlign.center),
+                Text(localizations(context).noHousePageTitle, textAlign: TextAlign.center, style: Theme.of(context).textTheme.headlineSmall),
+                Text(localizations(context).noHousePageContent, textAlign: TextAlign.center),
                 TextFormField(
-                  decoration: inputDecoration(localizations(context).noGroupPageCodeInput).copyWith(
+                  decoration: inputDecoration(localizations(context).groupCode).copyWith(
                     suffixIcon: GestureDetector(onTap: _loading ? null : _joinGroup, child: const Icon(Icons.send)),
                   ),
                   enabled: !_loading,
-                  validator: (code) => (code ?? "").trim().isEmpty ? localizations(context).noGroupPageCodeInputErrorMissing : null,
+                  validator: (code) => (code ?? "").trim().isEmpty ? localizations(context).groupCodeMissing : null,
                   onSaved: (code) => _codeValue = code,
                   onEditingComplete: _loading ? null : _joinGroup,
                 ),
-                Text(localizations(context).noGroupPageContentOr, textAlign: TextAlign.center),
+                Text(localizations(context).noHousePageContentOr, textAlign: TextAlign.center),
                 ElevatedButton(
                   onPressed: _loading ? null : _createGroup,
-                  child: Text(localizations(context).noGroupPageNewHouseButton),
+                  child: Text(localizations(context).createNewHouse),
                 ),
               ],
             ),
@@ -107,7 +107,7 @@ class _NoHousePageState extends State<NoHousePage> {
         padding: const EdgeInsets.only(top: 18),
         child: FloatingActionButton(
           onPressed: _loading ? null : FirebaseAuth.instance.signOut,
-          tooltip: localizations(context).logoutButton,
+          tooltip: localizations(context).logout,
           child: const Icon(Icons.logout),
         ),
       ),

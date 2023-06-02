@@ -38,7 +38,7 @@ class ErrorPage extends StatelessWidget {
         padding: const EdgeInsets.only(top: 18),
         child: FloatingActionButton(
           onPressed: FirebaseAuth.instance.signOut,
-          tooltip: localizations(context).logoutButton,
+          tooltip: localizations(context).logout,
           child: const Icon(Icons.logout),
         ),
       ),

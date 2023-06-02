@@ -62,7 +62,7 @@ class CategoryFormField extends StatelessWidget {
                 spacing: 4,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text(localizations(context).paymentCategoryEmpty, style: const TextStyle(fontStyle: FontStyle.italic)),
+                  Text(localizations(context).noCategory, style: const TextStyle(fontStyle: FontStyle.italic)),
                 ],
               ),
             ),
@@ -73,7 +73,7 @@ class CategoryFormField extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const Icon(Icons.add),
-                  Text(localizations(context).paymentCategoryNew, style: const TextStyle(fontStyle: FontStyle.italic)),
+                  Text(localizations(context).newCategory, style: const TextStyle(fontStyle: FontStyle.italic)),
                 ],
               ),
             ),

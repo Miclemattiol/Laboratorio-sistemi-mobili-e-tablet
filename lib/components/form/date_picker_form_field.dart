@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 class DatePickerFormField extends StatelessWidget {
   final DateTime? initialValue;
   final DateTime? firstDate;
+  final DateTime? lastDate;
   final AutovalidateMode? autovalidateMode;
   final InputDecoration? decoration;
   final String? Function(DateTime? value)? validator;
@@ -18,9 +19,10 @@ class DatePickerFormField extends StatelessWidget {
   static final dateFormat = DateFormat("dd/MM/yyyy");
   static final timeFormat = DateFormat("HH:mm");
 
-  const DatePickerFormField({
+  DatePickerFormField({
     this.initialValue,
     this.firstDate,
+    this.lastDate,
     this.autovalidateMode,
     this.decoration,
     this.validator,
@@ -29,11 +31,13 @@ class DatePickerFormField extends StatelessWidget {
     this.enabled = true,
     super.key,
   })  : pickDate = true,
-        pickTime = true;
+        pickTime = true,
+        assert(firstDate == null || lastDate == null || !firstDate.isAfter(lastDate));
 
   const DatePickerFormField.dateOnly({
     this.initialValue,
     this.firstDate,
+    this.lastDate,
     this.autovalidateMode,
     this.decoration,
     this.validator,
@@ -55,11 +59,12 @@ class DatePickerFormField extends StatelessWidget {
     super.key,
   })  : pickDate = false,
         pickTime = true,
-        firstDate = null;
+        firstDate = null,
+        lastDate = null;
 
   void _pickDateTime(BuildContext context, FormFieldState<DateTime?> state) async {
     final initialDate = state.value ?? DateTime.now();
-    final firstDate = this.firstDate ?? DateTime.now();
+    final firstDate = this.firstDate ?? (lastDate != null ? DateTime(lastDate!.year - 100, lastDate!.month, lastDate!.day) : DateTime.now());
 
     DateTime? date = !pickDate
         ? DateTime(0)
@@ -67,7 +72,7 @@ class DatePickerFormField extends StatelessWidget {
             context: context,
             initialDate: initialDate,
             firstDate: firstDate,
-            lastDate: DateTime(firstDate.year + 100),
+            lastDate: lastDate ?? DateTime(firstDate.year + 100),
             locale: const Locale("it", "IT"),
           );
     if (date == null) return;

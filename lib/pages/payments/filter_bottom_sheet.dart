@@ -127,12 +127,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
             children: [
               TextFormField(
                 initialValue: widget.currentFilter.title,
-                decoration: inputDecoration(localizations(context).paymentFilterTitle),
+                decoration: inputDecoration(localizations(context).title),
                 onSaved: (title) => _titleValue = (title ?? "").trim(),
               ),
               TextFormField(
                 initialValue: widget.currentFilter.description,
-                decoration: inputDecoration(localizations(context).paymentFilterDescription),
+                decoration: inputDecoration(localizations(context).description),
                 onSaved: (description) => _descriptionValue = (description ?? "").trim(),
               ),
               CategoriesFormField(
@@ -144,13 +144,13 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               PeopleFormField(
                 initialValue: widget.currentFilter.fromUsers,
                 house: widget.house,
-                decoration: inputDecoration(localizations(context).paymentPaidFrom("")),
+                decoration: inputDecoration(localizations(context).paidBy),
                 onSaved: (fromUser) => _fromUserValue = fromUser,
               ),
               PeopleFormField(
                 initialValue: widget.currentFilter.toUsers,
                 house: widget.house,
-                decoration: inputDecoration(localizations(context).paymentPaidFor),
+                decoration: inputDecoration(localizations(context).paidFor),
                 onSaved: (toUser) => _toUserValue = toUser,
               ),
               PadRow(
@@ -159,18 +159,18 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
                   Expanded(
                     child: NumberFormField(
                       initialValue: widget.currentFilter.priceRange.start,
-                      decoration: inputDecoration(localizations(context).paymentFilterMinPrice),
+                      decoration: inputDecoration(localizations(context).rangeMinPrice),
                       decimal: true,
-                      validator: (minPrice) => (minPrice != null && _maxPriceValue != null && _maxPriceValue! < minPrice) ? localizations(context).paymentFilterMinPriceError : null,
+                      validator: (minPrice) => (minPrice != null && _maxPriceValue != null && _maxPriceValue! < minPrice) ? localizations(context).rangeMinPriceError : null,
                       onSaved: (minPrice) => _minPriceValue = minPrice,
                     ),
                   ),
                   Expanded(
                     child: NumberFormField(
                       initialValue: widget.currentFilter.priceRange.end,
-                      decoration: inputDecoration(localizations(context).paymentFilterMaxPrice).copyWith(errorMaxLines: 3),
+                      decoration: inputDecoration(localizations(context).rangeMaxPrice).copyWith(errorMaxLines: 3),
                       decimal: true,
-                      validator: (maxPrice) => (maxPrice != null && _minPriceValue != null && _minPriceValue! > maxPrice) ? localizations(context).paymentFilterMaxPriceError : null,
+                      validator: (maxPrice) => (maxPrice != null && _minPriceValue != null && _minPriceValue! > maxPrice) ? localizations(context).rangeMaxPriceError : null,
                       onSaved: (maxPrice) => _maxPriceValue = maxPrice,
                     ),
                   ),
@@ -178,16 +178,16 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               ),
               DatePickerFormField.dateOnly(
                 initialValue: widget.currentFilter.dateRange.start,
-                decoration: inputDecoration(localizations(context).paymentFilterFromDate),
+                decoration: inputDecoration(localizations(context).rangeStartDate),
                 firstDate: DateTime(DateTime.now().year - 10),
-                validator: (fromDate) => (fromDate != null && (_toDateValue?.isBefore(fromDate) ?? false)) ? localizations(context).taskStartDateInputErrorAfterEndDate : null,
+                validator: (fromDate) => (fromDate != null && (_toDateValue?.isBefore(fromDate) ?? false)) ? localizations(context).rangeStartDateInvalid : null,
                 onSaved: (fromDate) => _fromDateValue = fromDate,
               ),
               DatePickerFormField.dateOnly(
                 initialValue: widget.currentFilter.dateRange.end,
                 firstDate: DateTime(DateTime.now().year - 10),
-                decoration: inputDecoration(localizations(context).paymentFilterToDate),
-                validator: (toDate) => (toDate != null && (_fromDateValue?.isAfter(toDate) ?? false)) ? localizations(context).taskEndDateInputErrorBeforeStartDate : null,
+                decoration: inputDecoration(localizations(context).rangeEndDate),
+                validator: (toDate) => (toDate != null && (_fromDateValue?.isAfter(toDate) ?? false)) ? localizations(context).rangeEndDateInvalid : null,
                 onSaved: (toDate) => _toDateValue = toDate,
               ),
             ],
@@ -195,8 +195,8 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
         ),
       ],
       actions: [
-        ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel)),
-        ModalButton(onPressed: () => _saveFilter(), child: Text(localizations(context).buttonOk)),
+        ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).cancel)),
+        ModalButton(onPressed: () => _saveFilter(), child: Text(localizations(context).ok)),
       ],
     );
   }

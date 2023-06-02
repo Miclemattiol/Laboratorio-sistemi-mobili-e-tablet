@@ -70,7 +70,7 @@ class _IconPickerState extends State<IconPicker> {
         )
       ],
       actions: [
-        ModalButton(onPressed: () => Navigator.of(context).pop<IconData?>(), child: Text(localizations(context).buttonCancel)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<IconData?>(), child: Text(localizations(context).cancel)),
       ],
     );
   }

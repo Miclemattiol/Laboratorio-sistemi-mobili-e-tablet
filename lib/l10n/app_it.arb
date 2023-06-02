@@ -1,12 +1,5 @@
 {
     "@@locale": "it",
-    "houseDataError": "Impossibile caricare i dati della casa",
-    "loginPage": "Login",
-    "emailInput": "Email",
-    "emailInputErrorMissing": "Inserisci un indirizzo email",
-    "emailInputErrorInvalid": "Inserisci un indirizzo email valido",
-    "passwordInput": "Password",
-    "passwordInputErrorMissing": "Inserisci la password",
     "loginErrorUserDisabled": "Impossibile effettuare il login:\nUtente disabilitato",
     "loginErrorUserNotFound": "Impossibile effettuare il login:\nUtente inesistente",
     "loginErrorWrongPassword": "Impossibile effettuare il login:\nPassword errata",
@@ -20,38 +13,19 @@
             }
         }
     },
-    "loginButton": "Accedi",
-    "noGroupPageTitle": "Non fai parte di nessuna casa!",
-    "noGroupPageContent": "Se hai un codice inseriscilo qui! 👇",
-    "noGroupPageContentOr": "oppure",
-    "noGroupPageNewHouseButton": "Crea una nuova casa!",
-    "noGroupPageCodeInput": "Codice casa",
-    "noGroupPageCodeInputErrorMissing": "Inserisci un codice",
-    "noGroupPageCodeInputErrorInvalid": "Il codice che hai inserito non è valido, controlla se lo hai inserito correttamente o chiedi al proprietario della casa di inviartene un altro!",
+    "noHousePageTitle": "Non fai parte di nessuna casa!",
+    "noHousePageContent": "Se hai un codice inseriscilo qui! 👇",
+    "noHousePageContentOr": "oppure",
+    "houseDataError": "Impossibile caricare i dati della casa",
     "accountPage": "Profilo",
     "accountPageError": "Impossibile caricare i dati dell'utente",
-    "usernameInput": "Nome utente",
-    "usernameInputErrorMissing": "Inserisci un nome utente",
-    "changeUsernameDialogTitle": "Modifica nome utente",
-    "ibanInput": "IBAN",
-    "paypalInput": "PayPal.me",
-    "discardChangesTooltip": "Annulla modifiche",
-    "saveChangesTooltip": "Salva modifiche",
-    "saveChangesDialogContent": "Modifiche salvate con successo",
-    "saveChangesDialogContentError": "Impossibile salvare le modifiche",
-    "changePasswordDialogTitle": "Cambia password",
-    "changePasswordDialogContent": "Ti verrà inviata un email con un link per cambiare la tua password. Vuoi procedere?",
-    "changePasswordDialogContentSendSuccess": "Email inviata, controlla la tua posta in arrivo e lo spam",
-    "changePasswordDialogContentSendError": "Impossibile inviare l'email per il reset della password",
-    "logoutDialogTitle": "Logout",
-    "logoutDialogContent": "Sei sicuro di voler effettuare il logout?",
+    "changeUsernameTitle": "Modifica nome utente",
+    "changePasswordTitle": "Cambia password",
+    "changePasswordContent": "Ti verrà inviata un email con un link per cambiare la tua password. Vuoi procedere?",
+    "changePasswordSuccess": "Email inviata, controlla la tua posta in arrivo e lo spam",
+    "changePasswordError": "Impossibile inviare l'email per il reset della password",
+    "logoutConfirm": "Sei sicuro di voler effettuare il logout?",
     "notificationsPage": "Notifiche",
-    "themeInput": "Tema",
-    "themeDevice": "Dispositivo",
-    "themeLight": "Chiaro",
-    "themeDark": "Scuro",
-    "changePasswordPage": "Cambia password",
-    "logoutButton": "Logout",
     "paymentsPage": "Transazioni",
     "paymentsPageNew": "Crea nuova transazione",
     "paymentsPageError": "Impossibile caricare le transazioni",
@@ -60,41 +34,14 @@
     "paymentsPageEmptyFilterDescription": "Prova a cambiare i filtri",
     "filterTooltip": "Filtra transazioni",
     "clearFilterTooltip": "Rimuovi filtri",
-    "priceInvalid": "Prezzo non valido",
-    "paymentDateInputErrorMissing": "Inserisci la data del pagamento",
-    "paymentDateInputErrorFuture": "La data del pagamento deve essere precedente a quella odierna",
-    "noPeopleSharesInputErrorMissing": "La transazione deve includere almeno una persona",
-    "paymentPaidFrom": "Pagato da {from}",
-    "@paymentPaidFrom": {
-        "placeholders": {
-            "from": {
-                "type": "String"
-            }
-        }
-    },
-    "paymentPaidFor": "Pagato per",
-    "paymentDate": "Data pagamento",
-    "paymentCategory": "Categoria",
-    "paymentCategoryEmpty": "Nessuna categoria",
-    "paymentCategoryNew": "Nuova categoria",
-    "nameInputErrorMissing": "Inserisci il nome",
-    "paymentFilterTitle": "Titolo",
-    "paymentFilterDescription": "Descrizione",
-    "paymentFilterMinPrice": "Prezzo minimo",
-    "paymentFilterMinPriceError": "Il prezzo minimo deve essere minore o uguale al prezzo massimo",
-    "paymentFilterMaxPrice": "Prezzo massimo",
-    "paymentFilterMaxPriceError": "Il prezzo massimo deve essere maggiore o uguale al prezzo minimo",
-    "paymentFilterFromDate": "Data iniziale",
-    "paymentFilterToDate": "Data finale",
-    "paymentPaidImpact": "Impatto: {impact}",
-    "@paymentPaidImpact": {
+    "paymentImpact": "Impatto: {impact}",
+    "@paymentImpact": {
         "placeholders": {
             "impact": {
                 "type": "String"
             }
         }
     },
-    "descriptionInput": "Descrizione",
     "categoriesPage": "Categorie",
     "categoriesPageNew": "Crea nuova categoria",
     "categoriesPageError": "Impossibile caricare le categorie",
@@ -118,22 +65,16 @@
             }
         }
     },
-    "priceQuantityChipTooltip": "Prezzo e quantità",
-    "titleInputErrorMissing": "Inserisci il titolo",
     "buyItemsPage": "Conferma acquisto",
-    "payAsInput": "Paga come",
-    "totalPrice": "Totale",
     "recipesPage": "Ricette",
-    "recipesPageNew": "Aggiungi nuova ricetta",
-    "recipesPageNewItem": "Aggiungi prodotto",
+    "recipesPageNew": "Crea nuova ricetta",
     "recipesPageError": "Impossibile caricare le ricette",
     "recipesPageEmpty": "Nessuna ricetta",
     "recipesPageEmptyDescription": "Aggiungine una premendo il bottone qui sotto!",
+    "recipesPageNewItem": "Aggiungi prodotto",
     "addToShoppingListTooltip": "Aggiungi prodotti alla lista della spesa",
     "addToShoppingListError": "Impossibile aggiungere i prodotti alla lista della spesa",
     "addToShoppingListSuccess": "Prodotti aggiunti alla lista della spesa",
-    "recipeItemsInput": "Prodotti",
-    "recipeItemsInputMissing": "Inserisci almeno un prodotto",
     "tasksPage": "Incarichi",
     "tasksPageNew": "Crea nuovo incarico",
     "tasksPageError": "Impossibile caricare gli incarichi",
@@ -142,15 +83,6 @@
     "myTasksPageEmptyDescription": "Puoi stare tranquillo, hai la settimana libera!",
     "myTasksTab": "Le mie attività",
     "allTasksTab": "Tutte le attività",
-    "task": "Incarico",
-    "taskAssignedTo": "assegnato a {to}",
-    "@taskAssignedTo": {
-        "placeholders": {
-            "to": {
-                "type": "String"
-            }
-        }
-    },
     "taskFromDate": "Dal {from}",
     "@taskFromDate": {
         "placeholders": {
@@ -167,26 +99,15 @@
             }
         }
     },
-    "taskStartDateInput": "Data di inizio",
-    "taskStartDateInputErrorAfterEndDate": "La data di inizio deve essere precedente alla data di fine",
-    "taskEndDateInput": "Data di fine",
-    "taskEndDateInputErrorBeforeStartDate": "La data di fine deve essere successiva alla data di inizio",
-    "taskDateInputErrorMissing": "Data non valida",
-    "taskAssignedToInput": "Assegnato a",
-    "taskAssignedToInputMissing": "Assegna l'incarico a qualcuno",
-    "taskRepeat": "Ripeti",
     "taskRepeatDaily": "Ogni giorno",
     "taskRepeatWeekly": "Ogni settimana",
     "taskRepeatMonthly": "Ogni mese",
     "taskRepeatYearly": "Ogni anno",
     "taskRepeatCustom": "Personalizzato",
-    "taskRepeatCustomPrompt": "Intervallo personalizzato",
-    "taskIntervalErrorMissing": "Inserisci un intervallo",
     "taskEditTooltip": "Modifica incarico",
-    "taskDeleteConfirmDialogTitle": "Elimina incarico",
-    "taskDeleteConfirmDialogContent": "Sei sicuro di voler eliminare l'incarico?",
+    "taskDeleteTitle": "Elimina incarico",
+    "taskDeleteContent": "Sei sicuro di voler eliminare l'incarico?",
     "housePage": "Casa",
-    "activityLogPage": "Registro attività",
     "tradesSection": "Scambi",
     "tradesSectionError": "Impossibile caricare gli scambi",
     "tradeAmount": "Hai ricevuto {amount}",
@@ -223,15 +144,22 @@
             }
         }
     },
-    "tradeInformationTitle": "Scambio",
-    "tradeConfirmDialogTitle": "Conferma scambio",
-    "tradeConfirmDialogContent": "Sei sicuro di voler confermare lo scambio?",
-    "tradeDenyDialogTitle": "Rifiuta scambio",
-    "tradeDenyDialogContent": "Sei sicuro di voler rifiutare lo scambio?",
+    "tradeConfirmTitle": "Conferma scambio",
+    "tradeConfirmContent": "Sei sicuro di voler confermare lo scambio?",
+    "tradeDenyTitle": "Rifiuta scambio",
+    "tradeDenyContent": "Sei sicuro di voler rifiutare lo scambio?",
     "usersSection": "Utenti",
     "userYou": "(Tu)",
     "userOwner": "(Proprietario)",
     "userInvite": "Invita utente...",
+    "userInviteMessage": "Unisciti alla mia casa di HouseWallet utilizzando questo codice: {code}",
+    "@userInviteMessage": {
+        "placeholders": {
+            "code": {
+                "type": "String"
+            }
+        }
+    },
     "userBalance": "Saldo: {balance}",
     "@userBalance": {
         "placeholders": {
@@ -241,41 +169,31 @@
         }
     },
     "userSendMoney": "Invia denaro",
-    "priceInputErrorMissing": "Inserisci un prezzo",
     "userKick": "Espelli utente",
+    "userKickTitle": "Conferma espulsione",
+    "userKickContent": "Sei sicuro di voler espellere {username} dalla casa? Dovrà essere invitato nuovamente per rientrarci",
+    "@userKickContent": {
+        "placeholders": {
+            "username": {
+                "type": "String"
+            }
+        }
+    },
     "userTransfer": "Trasferisci proprietà",
+    "userTransferTitle": "Conferma trasferimento",
+    "userTransferContent": "Sei sicuro di voler trasferire a {username} la proprietà dalla casa? Solo lui potrà annullare l'azione!",
+    "@userTransferContent": {
+        "placeholders": {
+            "username": {
+                "type": "String"
+            }
+        }
+    },
     "userLeave": "Esci dalla casa",
-    "userDialogContentError": "Impossibile completare l'azione, riprova più tardi",
-    "leaveDialogContentNotAllowed": "Non puoi uscire da una casa se sei il suo proprietario e non sei l'ultimo utente al suo interno! Trasferisci la proprietà della casa ad un altro utente e riprova",
-    "leaveConfirmDialogTitle": "Conferma uscita",
-    "leaveConfirmDialogContent": "Sei sicuro di voler uscire dalla casa? Dovrai essere invitato nuovamente per rientrarci",
-    "kickConfirmDialogTitle": "Conferma espulsione",
-    "kickConfirmDialogContent": "Sei sicuro di voler espellere {username} dalla casa? Dovrà essere invitato nuovamente per rientrarci",
-    "@kickConfirmDialogContent": {
-        "placeholders": {
-            "username": {
-                "type": "String"
-            }
-        }
-    },
-    "transferConfirmDialogTitle": "Conferma trasferimento",
-    "transferConfirmDialogContent": "Sei sicuro di voler trasferire a {username} la proprietà dalla casa? Solo lui potrà annullare l'azione!",
-    "@transferConfirmDialogContent": {
-        "placeholders": {
-            "username": {
-                "type": "String"
-            }
-        }
-    },
-    "leaveConfirmDialogContentLastUser": "Sei sicuro di voler uscire dalla casa?\nEssendo l'ultimo utente la casa verrà eliminata permanentemente!",
-    "shareContent": "Unisciti alla mia casa di HouseWallet utilizzando questo codice: {code}",
-    "@shareContent": {
-        "placeholders": {
-            "code": {
-                "type": "String"
-            }
-        }
-    },
+    "userLeaveTitle": "Conferma uscita",
+    "userLeaveContent": "Sei sicuro di voler uscire dalla casa? Dovrai essere invitato nuovamente per rientrarci",
+    "userLeaveLastUser": "Sei sicuro di voler uscire dalla casa?\nEssendo l'ultimo utente la casa verrà eliminata permanentemente!",
+    "userLeaveNotAllowed": "Non puoi uscire da una casa se sei il suo proprietario e non sei l'ultimo utente al suo interno! Trasferisci la proprietà della casa ad un altro utente e riprova",
     "iconPickerSearch": "Cerca un icona",
     "filterError": "Nessun risultato per \"{query}\"",
     "@filterError": {
@@ -286,19 +204,107 @@
         }
     },
     "imageError": "Errore nel caricamento dell'immagine",
-    "buttonYes": "Sì",
-    "buttonNo": "No",
-    "buttonOk": "OK",
-    "buttonPay": "Paga",
-    "buttonCancel": "Annulla",
+    "saveChanges": "Salva modifiche",
+    "discardChanges": "Annulla modifiche",
+    "saveChangesSuccess": "Modifiche salvate con successo",
+    "saveChangesError": "Impossibile salvare le modifiche\n({error})",
+    "@saveChangesError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "actionError": "Impossibile completare l'azione, riprova più tardi\n({error})",
+    "@actionError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
     "copied": "Copiato!",
     "error": "Errore",
-    "title": "Titolo",
+    "yes": "Sì",
+    "no": "No",
+    "ok": "OK",
+    "pay": "Paga",
+    "payWith": "Paga con",
+    "cancel": "Annulla",
+    "delete": "Elimina",
+    "login": "Accedi",
+    "logout": "Logout",
+    "createNewHouse": "Crea una nuova casa!",
+    "password": "Password",
+    "passwordMissing": "Inserisci la password",
+    "email": "Email",
+    "emailMissing": "Inserisci un indirizzo email",
+    "emailInvalid": "Inserisci un indirizzo email valido",
+    "groupCode": "Codice casa",
+    "groupCodeMissing": "Inserisci il codice",
+    "groupCodeInvalid": "Il codice che hai inserito non è valido, controlla se lo hai inserito correttamente o chiedi al proprietario della casa di inviartene un altro!",
+    "username": "Nome utente",
+    "usernameMissing": "Inserisci un nome utente",
+    "iban": "IBAN",
+    "paypal": "PayPal.me",
+    "theme": "Tema",
+    "themeDevice": "Dispositivo",
+    "themeLight": "Chiaro",
+    "themeDark": "Scuro",
     "name": "Nome",
-    "supermarket": "Supermercato",
-    "people": "Persone",
+    "nameMissing": "Inserisci un nome",
+    "title": "Titolo",
+    "titleMissing": "Inserisci un titolo",
     "peopleShares": "Divisione dei prezzi",
+    "peopleSharesMissing": "Scegli almeno una persona",
+    "category": "Categoria",
+    "noCategory": "Nessuna categoria",
+    "newCategory": "Nuova categoria",
+    "date": "Data",
+    "dateMissing": "Inserisci una data",
+    "description": "Descrizione",
+    "paidBy": "Pagato da",
+    "paidByUser": "Pagato da {user}",
+    "@paidByUser": {
+        "placeholders": {
+            "user": {
+                "type": "String"
+            }
+        }
+    },
+    "paidFor": "Pagato per",
+    "rangeMinPrice": "Prezzo minimo",
+    "rangeMinPriceError": "Il prezzo minimo deve essere minore o uguale al prezzo massimo",
+    "rangeMaxPrice": "Prezzo massimo",
+    "rangeMaxPriceError": "Il prezzo massimo deve essere maggiore o uguale al prezzo minimo",
+    "rangeStartDate": "Data iniziale",
+    "rangeStartDateInvalid": "La data iniziale deve essere precedente alla data finale",
+    "rangeEndDate": "Data finale",
+    "rangeEndDateInvalid": "La data finale deve essere successiva alla data iniziale",
+    "supermarket": "Supermercato",
+    "priceAndQuantity": "Prezzo e quantità",
     "price": "Prezzo",
+    "priceMissing": "Inserisci un prezzo",
     "quantity": "Quantità",
-    "delete": "Elimina"
+    "recipeItems": "Prodotti",
+    "recipeItemsMissing": "Inserisci almeno un prodotto",
+    "payAs": "Paga come",
+    "totalPrice": "Totale",
+    "startDate": "Data di inizio",
+    "startDateInvalid": "La data di inizio deve essere precedente alla data di fine",
+    "endDate": "Data di fine",
+    "endDateInvalid": "La data di fine deve essere successiva alla data di inizio",
+    "taskRepeat": "Ripeti",
+    "interval": "Intervallo",
+    "intervalMissing": "Inserisci un intervallo",
+    "assignedTo": "Assegnato a",
+    "assignedToMissing": "Scegli almeno una persona",
+    "assignedToUsers": "Assegnato a {users}",
+    "@assignedToUsers": {
+        "placeholders": {
+            "users": {
+                "type": "String"
+            }
+        }
+    }
 }

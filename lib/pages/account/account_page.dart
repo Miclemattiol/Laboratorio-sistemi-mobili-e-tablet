@@ -60,7 +60,7 @@ class _AccountPageState extends State<AccountPage> {
         } catch (_) {}
       }
     } on FirebaseException catch (error) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${appLocalizations.saveChangesDialogContentError}\n(${error.message})")));
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.saveChangesError(error.message.toString()))));
       setState(() => _uploadProgress = null);
     }
   }
@@ -71,11 +71,11 @@ class _AccountPageState extends State<AccountPage> {
 
     final username = await CustomDialog.prompt(
       context: context,
-      title: localizations(context).changeUsernameDialogTitle,
-      inputLabel: localizations(context).usernameInput,
+      title: localizations(context).changeUsernameTitle,
+      inputLabel: localizations(context).username,
       initialValue: currentUsername,
       onSaved: (newValue) => newValue?.trim(),
-      validator: (value) => (value ?? "").trim().isEmpty ? localizations(context).usernameInputErrorMissing : null,
+      validator: (value) => (value ?? "").trim().isEmpty ? localizations(context).usernameMissing : null,
     );
     if (username == null || username == currentUsername) return;
 
@@ -84,9 +84,9 @@ class _AccountPageState extends State<AccountPage> {
         User.usernameKey: username,
       });
 
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.saveChangesDialogContent)));
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.saveChanges)));
     } on FirebaseException catch (error) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${appLocalizations.saveChangesDialogContentError}\n(${error.message})")));
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.saveChangesError(error.message.toString()))));
     }
   }
 
@@ -103,9 +103,9 @@ class _AccountPageState extends State<AccountPage> {
       });
 
       _edited = false;
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.saveChangesDialogContent)));
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.saveChangesSuccess)));
     } on FirebaseException catch (error) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${appLocalizations.saveChangesDialogContentError}\n(${error.message})")));
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.saveChangesError(error.message.toString()))));
     } finally {
       setState(() => _loading = false);
     }
@@ -119,8 +119,8 @@ class _AccountPageState extends State<AccountPage> {
   void _changePassword() async {
     if (!await CustomDialog.confirm(
       context: context,
-      title: localizations(context).changePasswordDialogTitle,
-      content: localizations(context).changePasswordDialogContent,
+      title: localizations(context).changePasswordTitle,
+      content: localizations(context).changePasswordContent,
     )) return;
 
     try {
@@ -129,16 +129,16 @@ class _AccountPageState extends State<AccountPage> {
       if (mounted) {
         CustomDialog.alert(
           context: context,
-          title: localizations(context).changePasswordDialogTitle,
-          content: localizations(context).changePasswordDialogContentSendSuccess,
+          title: localizations(context).changePasswordTitle,
+          content: localizations(context).changePasswordSuccess,
         );
       }
     } on FirebaseAuthException catch (error) {
       if (mounted) {
         CustomDialog.alert(
           context: context,
-          title: localizations(context).changePasswordDialogTitle,
-          content: "${localizations(context).changePasswordDialogContentSendError}\n(${error.message})",
+          title: localizations(context).changePasswordTitle,
+          content: "${localizations(context).changePasswordError}\n(${error.message})",
         );
       }
     }
@@ -147,8 +147,8 @@ class _AccountPageState extends State<AccountPage> {
   void _logout() async {
     if (!await CustomDialog.confirm(
       context: context,
-      title: localizations(context).logoutDialogTitle,
-      content: localizations(context).logoutDialogContent,
+      title: localizations(context).logout,
+      content: localizations(context).logoutConfirm,
     )) return;
 
     FirebaseAuth.instance.signOut();
@@ -166,12 +166,12 @@ class _AccountPageState extends State<AccountPage> {
             IconButton(
               onPressed: _edited ? _discardChanges : null,
               icon: const Icon(Icons.undo),
-              tooltip: localizations(context).discardChangesTooltip,
+              tooltip: localizations(context).discardChanges,
             ),
             IconButton(
               onPressed: _edited ? _saveChanges : null,
               icon: const Icon(Icons.save),
-              tooltip: localizations(context).saveChangesTooltip,
+              tooltip: localizations(context).saveChanges,
             )
           ],
         ),
@@ -203,7 +203,7 @@ class _AccountPageState extends State<AccountPage> {
                                 Text(user.username, style: Theme.of(context).textTheme.headlineMedium),
                                 IconButton(
                                   icon: const Icon(Icons.edit),
-                                  tooltip: localizations(context).changeUsernameDialogTitle,
+                                  tooltip: localizations(context).changeUsernameTitle,
                                   onPressed: () => _changeUsername(user.username),
                                 )
                               ],
@@ -217,7 +217,7 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 TextFormField(
                   initialValue: user.iban,
-                  decoration: inputDecoration(localizations(context).ibanInput),
+                  decoration: inputDecoration(localizations(context).iban),
                   enabled: !_loading,
                   onChanged: (_) {
                     if (!_edited) setState(() => _edited = true);
@@ -226,7 +226,7 @@ class _AccountPageState extends State<AccountPage> {
                 ),
                 TextFormField(
                   initialValue: user.payPal,
-                  decoration: inputDecoration(localizations(context).paypalInput),
+                  decoration: inputDecoration(localizations(context).paypal),
                   enabled: !_loading,
                   onChanged: (_) {
                     if (!_edited) setState(() => _edited = true);
@@ -243,7 +243,7 @@ class _AccountPageState extends State<AccountPage> {
             Consumer<ThemeNotifier>(builder: (context, themeNotifier, _) {
               return DropdownListTile<ThemeMode>(
                 initialValue: themeNotifier.value,
-                title: Text(localizations(context).themeInput),
+                title: Text(localizations(context).theme),
                 values: [
                   DropdownMenuItem(value: ThemeMode.system, child: Text(localizations(context).themeDevice)),
                   DropdownMenuItem(value: ThemeMode.light, child: Text(localizations(context).themeLight)),
@@ -253,11 +253,11 @@ class _AccountPageState extends State<AccountPage> {
               );
             }),
             ListTile(
-              title: Text(localizations(context).changePasswordDialogTitle),
+              title: Text(localizations(context).changePasswordTitle),
               onTap: _changePassword,
             ),
             ListTile(
-              title: Text(localizations(context).logoutDialogTitle),
+              title: Text(localizations(context).logout),
               onTap: _logout,
             ),
           ],

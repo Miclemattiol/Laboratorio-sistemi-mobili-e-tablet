@@ -70,7 +70,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
       CustomDialog.alert(
         context: context,
         title: localizations(context).error,
-        content: "${localizations(context).saveChangesDialogContentError} (${error.message})",
+        content: localizations(context).saveChangesError(error.message.toString()),
       );
       setState(() => _loading = false);
     }
@@ -104,15 +104,15 @@ class _CategoryDialogState extends State<CategoryDialog> {
                   initialValue: widget.category?.data.name,
                   decoration: inputDecoration(localizations(context).name, true),
                   onSaved: (name) => _nameValue = name.toNullable(),
-                  validator: (value) => value?.trim().isEmpty == true ? localizations(context).nameInputErrorMissing : null,
+                  validator: (value) => value?.trim().isEmpty == true ? localizations(context).nameMissing : null,
                 ),
               ),
             ],
           ),
         ],
         actions: [
-          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel)),
-          ModalButton(enabled: !_loading, onPressed: _saveItem, child: Text(localizations(context).buttonOk)),
+          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).cancel)),
+          ModalButton(enabled: !_loading, onPressed: _saveItem, child: Text(localizations(context).ok)),
         ],
       ),
     );

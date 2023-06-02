@@ -34,8 +34,8 @@ class _SupermarketDialogState extends State<SupermarketDialog> {
         ),
       ],
       actions: [
-        ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).buttonCancel)),
-        ModalButton(onPressed: () => Navigator.of(context).pop<String?>(_supermarketValue), child: Text(localizations(context).buttonOk)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).cancel)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<String?>(_supermarketValue), child: Text(localizations(context).ok)),
       ],
     );
   }

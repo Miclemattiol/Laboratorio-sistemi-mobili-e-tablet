@@ -91,7 +91,7 @@ class PaymentTile extends StatelessWidget {
     final myUid = LoggedUser.of(context).uid;
 
     if (payment is PaymentRef) {
-      return localizations(context).paymentPaidFrom(payment.from.username);
+      return localizations(context).paidByUser(payment.from.username);
     } else {
       final trade = payment as TradeRef;
       if (trade.from.uid == myUid) {
@@ -113,7 +113,7 @@ class PaymentTile extends StatelessWidget {
         children: [
           Text(currencyFormat(context).format(payment.price)),
           Text(
-            localizations(context).paymentPaidImpact(currencyFormat(context).format(_calculateImpact(LoggedUser.of(context), payment))),
+            localizations(context).paymentImpact(currencyFormat(context).format(_calculateImpact(LoggedUser.of(context), payment))),
             style: const TextStyle(fontSize: 10),
           ),
         ],

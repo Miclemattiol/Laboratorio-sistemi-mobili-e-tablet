@@ -172,7 +172,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
       CustomDialog.alert(
         context: context,
         title: localizations(context).error,
-        content: "${localizations(context).saveChangesDialogContentError} (${error.message})",
+        content: localizations(context).saveChangesError(error.message.toString()),
       );
       setState(() => _loading = false);
     }
@@ -207,7 +207,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
                   initialValue: widget.payment?.data.title,
                   decoration: inputDecoration(localizations(context).title, true),
                   onSaved: (title) => _titleValue = title.toNullable(),
-                  validator: (value) => value?.trim().isEmpty == true ? localizations(context).titleInputErrorMissing : null,
+                  validator: (value) => value?.trim().isEmpty == true ? localizations(context).titleMissing : null,
                 ),
               ),
               ConstrainedBox(
@@ -217,7 +217,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
                   initialValue: widget.payment?.data.price.toDouble(),
                   decoration: inputDecoration(localizations(context).price, true),
                   onSaved: (price) => _priceValue = price,
-                  validator: (price) => (price == null || price <= 0) ? localizations(context).priceInvalid : null,
+                  validator: (price) => (price == null) ? localizations(context).priceMissing : null,
                 ),
               ),
             ],
@@ -228,43 +228,36 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
             initialValue: widget.payment?.data.to.map((key, value) => MapEntry(key, value.share)) ?? widget.house.users.map((key, value) => MapEntry(key, 1)),
             decoration: inputDecoration(localizations(context).peopleShares),
             onSaved: (to) => _toValue = to,
-            validator: (value) {
-              if (value.entries.isEmpty) return localizations(context).noPeopleSharesInputErrorMissing;
-              return null;
-            },
+            validator: (value) => (value.entries.isEmpty) ? localizations(context).peopleSharesMissing : null,
           ),
           CategoryFormField(
             categories: widget.categories,
             enabled: !_loading,
             initialValue: widget.payment?.data.category,
-            decoration: inputDecoration(localizations(context).paymentCategory),
+            decoration: inputDecoration(localizations(context).category),
             onSaved: (category) => _categoryValue = category,
           ),
           DatePickerFormField(
             enabled: !_loading,
             initialValue: widget.payment?.data.date ?? DateTime.now(),
-            firstDate: DateTime(DateTime.now().year - 10),
-            decoration: inputDecoration(localizations(context).paymentDate),
+            lastDate: DateTime.now(),
+            decoration: inputDecoration(localizations(context).date),
             onSaved: (date) => _dateValue = date,
-            validator: (value) {
-              if (value == null) return localizations(context).paymentDateInputErrorMissing;
-              if (value.isAfter(DateTime.now())) return localizations(context).paymentDateInputErrorFuture;
-              return null;
-            },
+            validator: (value) => (value == null) ? localizations(context).dateMissing : null,
           ),
           TextFormField(
             enabled: !_loading,
             minLines: 1,
             maxLines: 5,
             initialValue: widget.payment?.data.description,
-            decoration: inputDecoration(localizations(context).descriptionInput),
+            decoration: inputDecoration(localizations(context).description),
             keyboardType: TextInputType.multiline,
             onSaved: (description) => _descriptionValue = description.toNullable(),
           ),
         ],
         actions: [
-          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel)),
-          ModalButton(enabled: !_loading, onPressed: _savePayment, child: Text(localizations(context).buttonOk)),
+          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).cancel)),
+          ModalButton(enabled: !_loading, onPressed: _savePayment, child: Text(localizations(context).ok)),
         ],
       ),
     );

@@ -72,7 +72,7 @@ class _RecipeBottomSheetState extends State<RecipeBottomSheet> {
       CustomDialog.alert(
         context: context,
         title: localizations(context).error,
-        content: "${localizations(context).saveChangesDialogContentError} (${error.message})",
+        content: localizations(context).saveChangesError(error.message.toString()),
       );
       setState(() => _loading = false);
     }
@@ -90,20 +90,20 @@ class _RecipeBottomSheetState extends State<RecipeBottomSheet> {
             autofocus: widget.recipe?.data.title == null,
             enabled: !_loading,
             initialValue: widget.recipe?.data.title,
-            decoration: inputDecoration(localizations(context).title, true),
+            decoration: inputDecoration(localizations(context).title),
             onSaved: (title) => _titleValue = title.toNullable(),
-            validator: (value) => value?.trim().isEmpty == true ? localizations(context).titleInputErrorMissing : null,
+            validator: (value) => value?.trim().isEmpty == true ? localizations(context).titleMissing : null,
           ),
           RecipeFormField(
             initialValue: widget.initialItems ?? widget.recipe?.data.items,
-            decoration: inputDecoration(localizations(context).recipeItemsInput),
+            decoration: inputDecoration(localizations(context).recipeItems),
             onSaved: (items) => _itemsValue = items,
-            validator: (items) => items.isEmpty ? localizations(context).recipeItemsInputMissing : null,
+            validator: (items) => items.isEmpty ? localizations(context).recipeItemsMissing : null,
           ),
         ],
         actions: [
-          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel)),
-          ModalButton(enabled: !_loading, onPressed: _saveRecipe, child: Text(localizations(context).buttonOk)),
+          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).cancel)),
+          ModalButton(enabled: !_loading, onPressed: _saveRecipe, child: Text(localizations(context).ok)),
         ],
       ),
     );

@@ -51,7 +51,7 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
       widget.onComplete();
       navigator.pop();
     } on FirebaseException catch (error) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${appLocalizations.saveChangesDialogContentError}\n(${error.message})")));
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.saveChangesError(error.message.toString()))));
     }
   }
 
@@ -77,7 +77,7 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
             const Divider(height: 0),
             DropdownListTile<String>(
               initialValue: widget.loggedUser.uid,
-              title: Text(localizations(context).payAsInput),
+              title: Text(localizations(context).payAs),
               onChanged: (value) => _payAsValue = value ?? widget.loggedUser.uid,
               values: widget.house.users.values.map((user) {
                 return DropdownMenuItem(value: user.uid, child: Text(user.username));
@@ -90,8 +90,8 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
             PadRow(
               spacing: 1,
               children: [
-                Expanded(child: ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel))),
-                Expanded(child: ModalButton(onPressed: _confirmPurchase, child: Text(localizations(context).buttonPay))),
+                Expanded(child: ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).cancel))),
+                Expanded(child: ModalButton(onPressed: _confirmPurchase, child: Text(localizations(context).pay))),
               ],
             ),
           ],

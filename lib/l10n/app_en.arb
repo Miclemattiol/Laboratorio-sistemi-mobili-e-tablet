@@ -1,0 +1,310 @@
+{
+    "@@locale": "en",
+    "loginErrorUserDisabled": "Could not login:\nUser disabled",
+    "loginErrorUserNotFound": "Could not login:\nUser not found",
+    "loginErrorWrongPassword": "Could not login:\nWrong password",
+    "loginErrorTooManyRequests": "Could not login:\nToo many requests",
+    "loginErrorOther": "Could not login",
+    "loginErrorOtherDetails": "Could not login:\n{error}",
+    "@loginErrorOtherDetails": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "noHousePageTitle": "You are not part of any house!",
+    "noHousePageContent": "If you have a code, enter it here! 👇",
+    "noHousePageContentOr": "or",
+    "houseDataError": "Could not load house data",
+    "accountPage": "Account",
+    "accountPageError": "Could not load user data",
+    "changeUsernameTitle": "Change username",
+    "changePasswordTitle": "Change password",
+    "changePasswordContent": "An email with a link to change your password will be sent to you. Do you want to proceed?",
+    "changePasswordSuccess": "Email send, check your inbox and your spam",
+    "changePasswordError": "Could not send the password reset email",
+    "logoutConfirm": "Are you sure you want to logout?",
+    "notificationsPage": "Notifications",
+    "paymentsPage": "Transactions",
+    "paymentsPageNew": "Create new transaction",
+    "paymentsPageError": "Could not load transactions",
+    "paymentsPageEmpty": "No transactions",
+    "paymentsPageEmptyDescription": "Add one by pressing the button below!",
+    "paymentsPageEmptyFilterDescription": "Try changing the filters",
+    "filterTooltip": "Filter transactions",
+    "clearFilterTooltip": "Clear filters",
+    "paymentImpact": "Impact: {impact}",
+    "@paymentImpact": {
+        "placeholders": {
+            "impact": {
+                "type": "String"
+            }
+        }
+    },
+    "categoriesPage": "Categories",
+    "categoriesPageNew": "Create new category",
+    "categoriesPageError": "Could not load categories",
+    "categoriesPageEmpty": "No categories",
+    "categoriesPageEmptyDescription": "Add one by pressing the button below!",
+    "shoppingPage": "Shopping",
+    "shoppingPageNew": "Add new...",
+    "shoppingPageError": "Could not load shopping list",
+    "shoppingPageEmpty": "No items",
+    "shoppingPageEmptyDescription": "Add one by filling in the field below!",
+    "quickRecipeTooltip": "Add items to a new recipe",
+    "buyItemsTooltip": "Buy selected items",
+    "showDetailsTooltip": "Show additional details",
+    "hideDetailsTooltip": "Hide additional details",
+    "peopleChipLabelEveryone": "Everyone",
+    "peopleChipLabel": "{count, plural, =1{1 person} other{{count} people}}",
+    "@peopleChipLabel": {
+        "placeholders": {
+            "count": {
+                "type": "int"
+            }
+        }
+    },
+    "buyItemsPage": "Confirm purchase",
+    "recipesPage": "Recipes",
+    "recipesPageNew": "Create new recipe",
+    "recipesPageError": "Could not load recipes",
+    "recipesPageEmpty": "Nessuna ricetta",
+    "recipesPageEmptyDescription": "Add one by pressing the button below!",
+    "recipesPageNewItem": "Add item",
+    "addToShoppingListTooltip": "Add items to shopping list",
+    "addToShoppingListError": "Could not add items to the shopping list",
+    "addToShoppingListSuccess": "Items added to the shopping list",
+    "tasksPage": "Tasks",
+    "tasksPageNew": "Create new task",
+    "tasksPageError": "Could not load tasks",
+    "tasksPageEmpty": "No tasks",
+    "tasksPageEmptyDescription": "Add one by pressing the button below!",
+    "myTasksPageEmptyDescription": "You can relax, no tasks are assigned to you!",
+    "myTasksTab": "My tasks",
+    "allTasksTab": "All tasks",
+    "taskFromDate": "From {from}",
+    "@taskFromDate": {
+        "placeholders": {
+            "from": {
+                "type": "String"
+            }
+        }
+    },
+    "taskToDate": "To {to}",
+    "@taskToDate": {
+        "placeholders": {
+            "to": {
+                "type": "String"
+            }
+        }
+    },
+    "taskRepeatDaily": "Every day",
+    "taskRepeatWeekly": "Every week",
+    "taskRepeatMonthly": "Every month",
+    "taskRepeatYearly": "Every year",
+    "taskRepeatCustom": "Custom",
+    "taskEditTooltip": "Edit task",
+    "taskDeleteTitle": "Delete task",
+    "taskDeleteContent": "Are you sure you want to delete the task?",
+    "housePage": "House",
+    "tradesSection": "Trades",
+    "tradesSectionError": "Could not load trades",
+    "tradeAmount": "You received {amount}",
+    "@tradeAmount": {
+        "placeholders": {
+            "amount": {
+                "type": "String"
+            }
+        }
+    },
+    "tradeFrom": "from {from}",
+    "@tradeFrom": {
+        "placeholders": {
+            "from": {
+                "type": "String"
+            }
+        }
+    },
+    "tradeTo": "to {from}",
+    "@tradeTo": {
+        "placeholders": {
+            "from": {
+                "type": "String"
+            }
+        }
+    },
+    "tradeFromMe": "Sent money",
+    "tradeToMe": "Received money",
+    "tradeOthers": "Sent money to {to}",
+    "@tradeOthers": {
+        "placeholders": {
+            "to": {
+                "type": "String"
+            }
+        }
+    },
+    "tradeConfirmTitle": "Confirm trade",
+    "tradeConfirmContent": "Are you sure you want to confirm the trade?",
+    "tradeDenyTitle": "Deny trade",
+    "tradeDenyContent": "Are you sure you want to deny the trade?",
+    "usersSection": "Users",
+    "userYou": "(You)",
+    "userOwner": "(Owner)",
+    "userInvite": "Invite user...",
+    "userInviteMessage": "Join my house on HouseWallet using this code: {code}",
+    "@userInviteMessage": {
+        "placeholders": {
+            "code": {
+                "type": "String"
+            }
+        }
+    },
+    "userBalance": "Balance: {balance}",
+    "@userBalance": {
+        "placeholders": {
+            "balance": {
+                "type": "String"
+            }
+        }
+    },
+    "userSendMoney": "Send money",
+    "userKick": "Kick user",
+    "userKickTitle": "Confirm kick",
+    "userKickContent": "Are you sure you want to kick {username} from the house? They'll have to be invited again to rejoin",
+    "@userKickContent": {
+        "placeholders": {
+            "username": {
+                "type": "String"
+            }
+        }
+    },
+    "userTransfer": "Transfer ownership",
+    "userTransferTitle": "Confirm transfer",
+    "userTransferContent": "Are you sure you want to transfer the house's ownership to {username}? The action can be undone only by them!",
+    "@userTransferContent": {
+        "placeholders": {
+            "username": {
+                "type": "String"
+            }
+        }
+    },
+    "userLeave": "Leave house",
+    "userLeaveTitle": "Confirm exit",
+    "userLeaveContent": "Are you sure you want to leave the house? You'll have to be invited again to rejoin",
+    "userLeaveLastUser": "Are you sure you want to leave the house?\nSince you are the last user, the house will be permanently deleted!",
+    "userLeaveNotAllowed": "You can't leave a house if you are it's owner and if you aren't the last user! Transfer the ownership to someone and try again",
+    "iconPickerSearch": "Search an icon",
+    "filterError": "No results for \"{query}\"",
+    "@filterError": {
+        "placeholders": {
+            "query": {
+                "type": "String"
+            }
+        }
+    },
+    "imageError": "Could not lead the image",
+    "saveChanges": "Save changes",
+    "discardChanges": "Discard changes",
+    "saveChangesSuccess": "Changes saved successfully",
+    "saveChangesError": "Could not save changes\n({error})",
+    "@saveChangesError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "actionError": "Could not complete the action, try again later\n({error})",
+    "@actionError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
+    "copied": "Copied!",
+    "error": "Error",
+    "yes": "Yes",
+    "no": "No",
+    "ok": "OK",
+    "pay": "Pay",
+    "payWith": "Pay with",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "login": "Login",
+    "logout": "Logout",
+    "createNewHouse": "Create a new house!",
+    "password": "Password",
+    "passwordMissing": "Enter the password",
+    "email": "Email",
+    "emailMissing": "Enter an email address",
+    "emailInvalid": "Enter a valid email address",
+    "groupCode": "House code",
+    "groupCodeMissing": "Enter the code",
+    "groupCodeInvalid": "The code you entered is not valid, check that you have entered it correctly or ask the house's owner to send you a new one!",
+    "username": "Username",
+    "usernameMissing": "Enter a username",
+    "iban": "IBAN",
+    "paypal": "PayPal.me",
+    "theme": "Theme",
+    "themeDevice": "Device",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "name": "Name",
+    "nameMissing": "Enter a name",
+    "title": "Title",
+    "titleMissing": "Enter a title",
+    "peopleShares": "Price division",
+    "peopleSharesMissing": "Choose at least one person",
+    "category": "Category",
+    "noCategory": "No category",
+    "newCategory": "New category",
+    "date": "Date",
+    "dateMissing": "Enter a date",
+    "description": "Description",
+    "paidBy": "Paid by",
+    "paidByUser": "Paid by {user}",
+    "@paidByUser": {
+        "placeholders": {
+            "user": {
+                "type": "String"
+            }
+        }
+    },
+    "paidFor": "Paid for",
+    "rangeMinPrice": "Minimum price",
+    "rangeMinPriceError": "The minimum price must be less than or equal to the maximum price",
+    "rangeMaxPrice": "Maximum price",
+    "rangeMaxPriceError": "The maximum price must be greater than or equal to the minimum price",
+    "rangeStartDate": "Start date",
+    "rangeStartDateInvalid": "The start date must be before the end date",
+    "rangeEndDate": "End date",
+    "rangeEndDateInvalid": "The end date must be after the start date",
+    "supermarket": "Supermarket",
+    "priceAndQuantity": "Price and quantity",
+    "price": "Price",
+    "priceMissing": "Enter a price",
+    "quantity": "Quantity",
+    "recipeItems": "Items",
+    "recipeItemsMissing": "Enter at least one item",
+    "payAs": "Pay as",
+    "totalPrice": "Total",
+    "startDate": "Start date",
+    "startDateInvalid": "The start date must be before the end date",
+    "endDate": "End date",
+    "endDateInvalid": "The end date must be after the start date",
+    "taskRepeat": "Repeat",
+    "interval": "Interval",
+    "intervalMissing": "Enter an interval",
+    "assignedTo": "Assigned to",
+    "assignedToMissing": "Enter at least one person",
+    "assignedToUsers": "Assigned to {users}",
+    "@assignedToUsers": {
+        "placeholders": {
+            "users": {
+                "type": "String"
+            }
+        }
+    }
+}

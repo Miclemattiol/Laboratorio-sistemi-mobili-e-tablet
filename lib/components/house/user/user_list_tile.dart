@@ -51,9 +51,9 @@ class _UserListTileState extends State<UserListTile> {
         HouseData.codesKey: FieldValue.arrayUnion([code]),
       });
 
-      Share.share(appLocalizations.shareContent(code));
+      Share.share(appLocalizations.userInviteMessage(code));
     } on FirebaseException catch (error) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("${appLocalizations.userDialogContentError}\n(${error.message})")));
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
     } finally {
       setState(() => _loading = false);
     }

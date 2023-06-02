@@ -13,8 +13,8 @@ class TradeListTile extends StatelessWidget {
   void _confirm(BuildContext context) async {
     if (!await CustomDialog.confirm(
       context: context,
-      title: localizations(context).tradeConfirmDialogTitle,
-      content: "${trade.data.description ?? "(Nessuna descrizione fornita)"}\n\n${localizations(context).tradeConfirmDialogContent}",
+      title: localizations(context).tradeConfirmTitle,
+      content: "${trade.data.description ?? "(Nessuna descrizione fornita)"}\n\n${localizations(context).tradeConfirmContent}",
     )) return;
 
     trade.reference.update({
@@ -25,8 +25,8 @@ class TradeListTile extends StatelessWidget {
   void _deny(BuildContext context) async {
     if (!await CustomDialog.confirm(
       context: context,
-      title: localizations(context).tradeDenyDialogTitle,
-      content: "${trade.data.description ?? "(Nessuna descrizione fornita)"}\n\n${localizations(context).tradeDenyDialogContent}",
+      title: localizations(context).tradeDenyTitle,
+      content: "${trade.data.description ?? "(Nessuna descrizione fornita)"}\n\n${localizations(context).tradeDenyContent}",
     )) return;
 
     trade.reference.delete();
@@ -44,13 +44,13 @@ class TradeListTile extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.check),
             splashRadius: 24,
-            tooltip: localizations(context).tradeConfirmDialogTitle,
+            tooltip: localizations(context).tradeConfirmTitle,
             onPressed: () => _confirm(context),
           ),
           IconButton(
             icon: const Icon(Icons.close),
             splashRadius: 24,
-            tooltip: localizations(context).tradeDenyDialogTitle,
+            tooltip: localizations(context).tradeDenyTitle,
             onPressed: () => _deny(context),
           )
         ],

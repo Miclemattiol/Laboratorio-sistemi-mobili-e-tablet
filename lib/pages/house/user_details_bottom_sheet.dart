@@ -33,14 +33,14 @@ class UserDetailsBottomSheet extends StatelessWidget {
       return CustomDialog.alert(
         context: context,
         title: localizations(context).error,
-        content: localizations(context).leaveDialogContentNotAllowed,
+        content: localizations(context).userLeaveNotAllowed,
       );
     }
 
     if (!await CustomDialog.confirm(
       context: context,
-      title: localizations(context).leaveConfirmDialogTitle,
-      content: isLastUser ? localizations(context).leaveConfirmDialogContentLastUser : localizations(context).leaveConfirmDialogContent,
+      title: localizations(context).userLeaveTitle,
+      content: isLastUser ? localizations(context).userLeaveLastUser : localizations(context).userLeaveContent,
     )) return;
 
     try {
@@ -57,7 +57,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
         CustomDialog.alert(
           context: context,
           title: localizations(context).error,
-          content: "${localizations(context).userDialogContentError} (${error.message})",
+          content: localizations(context).actionError(error.message.toString()),
         );
       }
     }
@@ -68,8 +68,8 @@ class UserDetailsBottomSheet extends StatelessWidget {
 
     if (!await CustomDialog.confirm(
       context: context,
-      title: localizations(context).kickConfirmDialogTitle,
-      content: localizations(context).kickConfirmDialogContent(user.username),
+      title: localizations(context).userKickTitle,
+      content: localizations(context).userKickContent(user.username),
     )) return;
 
     try {
@@ -82,7 +82,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
         CustomDialog.alert(
           context: context,
           title: localizations(context).error,
-          content: "${localizations(context).userDialogContentError} (${error.message})",
+          content: localizations(context).actionError(error.message.toString()),
         );
       }
     }
@@ -93,8 +93,8 @@ class UserDetailsBottomSheet extends StatelessWidget {
 
     if (!await CustomDialog.confirm(
       context: context,
-      title: localizations(context).transferConfirmDialogTitle,
-      content: localizations(context).transferConfirmDialogContent(user.username),
+      title: localizations(context).userTransferTitle,
+      content: localizations(context).userTransferContent(user.username),
     )) return;
 
     try {
@@ -107,7 +107,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
         CustomDialog.alert(
           context: context,
           title: localizations(context).error,
-          content: "${localizations(context).userDialogContentError} (${error.message})",
+          content: localizations(context).actionError(error.message.toString()),
         );
       }
     }

@@ -44,8 +44,8 @@ class _PeopleDialogState extends State<PeopleDialog> {
         );
       }).toList(),
       actions: [
-        ModalButton(onPressed: () => Navigator.of(context).pop<Set<String>?>(), child: Text(localizations(context).buttonCancel)),
-        ModalButton(onPressed: () => Navigator.of(context).pop<Set<String>?>(_value), child: Text(localizations(context).buttonOk)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<Set<String>?>(), child: Text(localizations(context).cancel)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<Set<String>?>(_value), child: Text(localizations(context).ok)),
       ],
     );
   }

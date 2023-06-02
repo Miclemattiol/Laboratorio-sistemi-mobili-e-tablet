@@ -64,21 +64,21 @@ class _LoginPageState extends State<LoginPage> {
                   spacing: 8,
                   children: [
                     TextFormField(
-                      decoration: inputDecoration(localizations(context).emailInput),
+                      decoration: inputDecoration(localizations(context).email),
                       enabled: !_loading,
                       validator: (email) {
-                        if (email == null || email.trim().isEmpty) return localizations(context).emailInputErrorMissing;
-                        if (!EmailValidator.validate(email.trim())) return localizations(context).emailInputErrorInvalid;
+                        if (email == null || email.trim().isEmpty) return localizations(context).emailMissing;
+                        if (!EmailValidator.validate(email.trim())) return localizations(context).emailInvalid;
                         return null;
                       },
                       keyboardType: TextInputType.emailAddress,
                       onSaved: (email) => _emailValue = email,
                     ),
                     TextFormField(
-                      decoration: inputDecoration(localizations(context).passwordInput),
+                      decoration: inputDecoration(localizations(context).password),
                       obscureText: true,
                       enabled: !_loading,
-                      validator: (password) => (password == null || password.trim().isEmpty) ? localizations(context).passwordInputErrorMissing : null,
+                      validator: (password) => (password == null || password.trim().isEmpty) ? localizations(context).passwordMissing : null,
                       onSaved: (password) => _passwordValue = password,
                       onEditingComplete: _loading ? null : _login,
                     ),
@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 ElevatedButton(
                   onPressed: _loading ? null : _login,
-                  child: Text(localizations(context).loginButton),
+                  child: Text(localizations(context).login),
                 )
               ],
             ),

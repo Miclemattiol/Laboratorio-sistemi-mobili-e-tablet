@@ -41,7 +41,7 @@ class CustomDialog extends StatelessWidget {
           Text(content, textAlign: TextAlign.center),
         ],
         actions: [
-          ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonOk)),
+          ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).ok)),
         ],
       ),
     );
@@ -62,8 +62,8 @@ class CustomDialog extends StatelessWidget {
           Text(content, textAlign: TextAlign.center),
         ],
         actions: [
-          ModalButton(onPressed: () => Navigator.of(context).pop<bool>(false), child: Text(localizations(context).buttonNo)),
-          ModalButton(onPressed: () => Navigator.of(context).pop<bool>(true), child: Text(localizations(context).buttonYes)),
+          ModalButton(onPressed: () => Navigator.of(context).pop<bool>(false), child: Text(localizations(context).no)),
+          ModalButton(onPressed: () => Navigator.of(context).pop<bool>(true), child: Text(localizations(context).yes)),
         ],
       ),
     );
@@ -111,8 +111,8 @@ class CustomDialog extends StatelessWidget {
             ),
           ],
           actions: [
-            ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).buttonCancel)),
-            ModalButton(onPressed: submit, child: Text(localizations(context).buttonOk)),
+            ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).cancel)),
+            ModalButton(onPressed: submit, child: Text(localizations(context).ok)),
           ],
         ),
       ),

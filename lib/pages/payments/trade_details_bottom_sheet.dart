@@ -57,7 +57,7 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
       CustomDialog.alert(
         context: context,
         title: localizations(context).error,
-        content: "${localizations(context).saveChangesDialogContentError} (${error.message})",
+        content: localizations(context).saveChangesError(error.message.toString()),
       );
       setState(() => _loading = false);
     }
@@ -77,17 +77,13 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
             decoration: inputDecoration(localizations(context).quantity),
             decimal: true,
             onSaved: (amount) => _amountValue = amount,
-            validator: (amount) {
-              if (amount == null) return localizations(context).priceInputErrorMissing;
-              if (amount <= 0) return localizations(context).priceInvalid;
-              return null;
-            },
+            validator: (amount) => (amount == null) ? localizations(context).priceMissing : null,
           ),
           DatePickerFormField(
             enabled: !_loading,
             initialValue: widget.trade.data.date,
             firstDate: DateTime(DateTime.now().year - 10),
-            decoration: inputDecoration(localizations(context).paymentDate),
+            decoration: inputDecoration(localizations(context).date),
             onSaved: (date) => _dateValue = date,
           ),
           TextFormField(
@@ -95,14 +91,14 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
             minLines: 1,
             maxLines: 5,
             initialValue: widget.trade.data.description,
-            decoration: inputDecoration(localizations(context).descriptionInput),
+            decoration: inputDecoration(localizations(context).description),
             keyboardType: TextInputType.multiline,
             onSaved: (description) => _descriptionValue = description.toNullable(),
           ),
         ],
         actions: [
-          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel)),
-          ModalButton(enabled: !_loading, onPressed: _saveTrade, child: Text(localizations(context).buttonOk)),
+          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).cancel)),
+          ModalButton(enabled: !_loading, onPressed: _saveTrade, child: Text(localizations(context).ok)),
         ],
       ),
     );

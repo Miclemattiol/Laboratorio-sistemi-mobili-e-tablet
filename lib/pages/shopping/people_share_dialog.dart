@@ -73,8 +73,8 @@ class _PeopleSharesDialogState extends State<PeopleSharesDialog> {
         );
       }).toList(),
       actions: [
-        ModalButton(onPressed: () => Navigator.of(context).pop<Map<String, int>?>(), child: Text(localizations(context).buttonCancel)),
-        ModalButton(onPressed: _submit, child: Text(localizations(context).buttonOk)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<Map<String, int>?>(), child: Text(localizations(context).cancel)),
+        ModalButton(onPressed: _submit, child: Text(localizations(context).ok)),
       ],
     );
   }

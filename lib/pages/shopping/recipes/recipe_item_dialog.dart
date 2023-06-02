@@ -54,7 +54,7 @@ class _RecipeItemDialogState extends State<RecipeItemDialog> {
             initialValue: widget.initialValue?.title,
             decoration: inputDecoration(localizations(context).title, true),
             onSaved: (title) => _titleValue = title.toNullable(),
-            validator: (value) => value?.trim().isEmpty == true ? localizations(context).titleInputErrorMissing : null,
+            validator: (value) => value?.trim().isEmpty == true ? localizations(context).titleMissing : null,
           ),
           NumberFormField(
             initialValue: widget.initialValue?.price,
@@ -74,8 +74,8 @@ class _RecipeItemDialogState extends State<RecipeItemDialog> {
           ),
         ],
         actions: [
-          ModalButton(onPressed: () => Navigator.of(context).pop<RecipeItem?>(), child: Text(localizations(context).buttonCancel)),
-          ModalButton(onPressed: _saveItem, child: Text(localizations(context).buttonOk)),
+          ModalButton(onPressed: () => Navigator.of(context).pop<RecipeItem?>(), child: Text(localizations(context).cancel)),
+          ModalButton(onPressed: _saveItem, child: Text(localizations(context).ok)),
         ],
       ),
     );

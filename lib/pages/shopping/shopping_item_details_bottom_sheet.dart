@@ -58,7 +58,7 @@ class _ShoppingItemDetailsBottomSheetState extends State<ShoppingItemDetailsBott
       CustomDialog.alert(
         context: context,
         title: localizations(context).error,
-        content: "${localizations(context).saveChangesDialogContentError} (${error.message})",
+        content: localizations(context).saveChangesError(error.message.toString()),
       );
       setState(() => _loading = false);
     }
@@ -81,7 +81,7 @@ class _ShoppingItemDetailsBottomSheetState extends State<ShoppingItemDetailsBott
                   enabled: !_loading,
                   initialValue: widget.shoppingItem.data.title,
                   decoration: inputDecoration(localizations(context).title),
-                  validator: (title) => (title == null || title.trim().isEmpty) ? localizations(context).titleInputErrorMissing : null,
+                  validator: (title) => (title == null || title.trim().isEmpty) ? localizations(context).titleMissing : null,
                   onSaved: (title) => _titleValue = title,
                 ),
               ),
@@ -129,8 +129,8 @@ class _ShoppingItemDetailsBottomSheetState extends State<ShoppingItemDetailsBott
           ),
         ],
         actions: [
-          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel)),
-          ModalButton(enabled: !_loading, onPressed: _saveShoppingItem, child: Text(localizations(context).buttonOk)),
+          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).cancel)),
+          ModalButton(enabled: !_loading, onPressed: _saveShoppingItem, child: Text(localizations(context).ok)),
         ],
       ),
     );

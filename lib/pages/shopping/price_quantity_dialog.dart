@@ -58,8 +58,8 @@ class _PriceQuantityDialogState extends State<PriceQuantityDialog> {
         )
       ],
       actions: [
-        ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).buttonCancel)),
-        ModalButton(onPressed: () => Navigator.of(context).pop<PriceQuantity?>(PriceQuantity(_priceValue, _quantityValue)), child: Text(localizations(context).buttonOk)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).cancel)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<PriceQuantity?>(PriceQuantity(_priceValue, _quantityValue)), child: Text(localizations(context).ok)),
       ],
     );
   }

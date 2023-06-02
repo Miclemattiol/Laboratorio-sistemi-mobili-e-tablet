@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/tasks/calendar.dart';
-import 'package:house_wallet/components/tasks/participants_list.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/data/firestore.dart';
@@ -28,8 +27,8 @@ class TaskDetailsPage extends StatelessWidget {
 
     if (!await CustomDialog.confirm(
       context: context,
-      title: localizations(context).taskDeleteConfirmDialogTitle,
-      content: localizations(context).taskDeleteConfirmDialogContent,
+      title: localizations(context).taskDeleteTitle,
+      content: localizations(context).taskDeleteContent,
     )) return;
 
     await task.reference.delete();
@@ -55,7 +54,7 @@ class TaskDetailsPage extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.delete),
             splashRadius: 24,
-            tooltip: localizations(context).taskDeleteConfirmDialogTitle,
+            tooltip: localizations(context).taskDeleteTitle,
             onPressed: () => _delete(context),
           ),
           IconButton(
@@ -80,7 +79,7 @@ class TaskDetailsPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          localizations(context).descriptionInput,
+                          localizations(context).description,
                           style: Theme.of(context).textTheme.titleMedium,
                         ),
                         Text(
@@ -89,7 +88,15 @@ class TaskDetailsPage extends StatelessWidget {
                         ),
                       ],
                     ),
-                  ParticipantsList(task.data.assignedTo.toSet()),
+                  PadColumn(
+                    children: [
+                      Text(
+                        localizations(context).assignedTo,
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      ...task.data.assignedTo.map((participant) => Text(participant.username)).toList()
+                    ],
+                  )
                 ],
               ),
             ),

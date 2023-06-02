@@ -84,7 +84,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
       CustomDialog.alert(
         context: context,
         title: localizations(context).error,
-        content: "${localizations(context).saveChangesDialogContentError} (${error.message})",
+        content: localizations(context).saveChangesError(error.message.toString()),
       );
       setState(() => _loading = false);
     }
@@ -103,18 +103,18 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
             initialValue: widget.task?.data.title,
             decoration: inputDecoration(localizations(context).title),
             onSaved: (title) => _titleValue = title,
-            validator: (title) => (title == null || title.isEmpty) ? localizations(context).titleInputErrorMissing : null,
+            validator: (title) => (title == null || title.isEmpty) ? localizations(context).titleMissing : null,
           ),
           DatePickerFormField.dateOnly(
             enabled: !_loading,
             initialValue: widget.task?.data.from,
-            decoration: inputDecoration(localizations(context).taskStartDateInput),
+            decoration: inputDecoration(localizations(context).startDate),
             onSaved: (from) => _fromValue = from,
             validator: (from) {
               if (from == null) {
-                return localizations(context).taskDateInputErrorMissing;
+                return localizations(context).dateMissing;
               } else if (_toValue?.isBefore(from) ?? false) {
-                return localizations(context).taskStartDateInputErrorAfterEndDate;
+                return localizations(context).startDateInvalid;
               }
               return null;
             },
@@ -122,13 +122,13 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
           DatePickerFormField.dateOnly(
             enabled: !_loading,
             initialValue: widget.task?.data.to,
-            decoration: inputDecoration(localizations(context).taskEndDateInput),
+            decoration: inputDecoration(localizations(context).endDate),
             onSaved: (to) => _toValue = to,
             validator: (to) {
               if (to == null) {
-                return localizations(context).taskDateInputErrorMissing;
+                return localizations(context).dateMissing;
               } else if (_fromValue?.isAfter(to) ?? false) {
-                return localizations(context).taskEndDateInputErrorBeforeStartDate;
+                return localizations(context).endDateInvalid;
               }
               return null;
             },
@@ -136,12 +136,12 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
           RepeatIntervalFormField(
             enabled: !_loading,
             initialValues: RepeatData(widget.task?.data.repeating, widget.task?.data.interval),
-            intervalInputDecoration: inputDecoration(localizations(context).taskRepeatCustomPrompt),
+            intervalInputDecoration: inputDecoration(localizations(context).interval),
             onSaved: (repeat) => _repeatValue = repeat,
             validator: (value) {
               if (value?.repeat == RepeatOptions.custom) {
                 if (value!.interval == null || value.interval! < 1) {
-                  return localizations(context).taskIntervalErrorMissing;
+                  return localizations(context).intervalMissing;
                 }
               }
               return null;
@@ -150,24 +150,24 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
           PeopleFormField(
             enabled: !_loading,
             house: widget.house,
-            decoration: inputDecoration(localizations(context).taskAssignedToInput),
+            decoration: inputDecoration(localizations(context).assignedTo),
             initialValue: widget.task?.data.assignedTo.map((user) => user.uid).toSet() ?? widget.house.users.keys.toSet(),
             onSaved: (assignedTo) => _assignedToValue = assignedTo,
-            validator: (assignedTo) => (assignedTo.isEmpty) ? localizations(context).taskAssignedToInputMissing : null,
+            validator: (assignedTo) => (assignedTo.isEmpty) ? localizations(context).assignedToMissing : null,
           ),
           TextFormField(
             enabled: !_loading,
             minLines: 1,
             maxLines: 5,
             initialValue: widget.task?.data.description,
-            decoration: inputDecoration(localizations(context).descriptionInput),
+            decoration: inputDecoration(localizations(context).description),
             keyboardType: TextInputType.multiline,
             onSaved: (description) => _descriptionValue = description.toNullable(),
           ),
         ],
         actions: [
-          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel)),
-          ModalButton(enabled: !_loading, onPressed: _saveTask, child: Text(localizations(context).buttonOk)),
+          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).cancel)),
+          ModalButton(enabled: !_loading, onPressed: _saveTask, child: Text(localizations(context).ok)),
         ],
       ),
     );
