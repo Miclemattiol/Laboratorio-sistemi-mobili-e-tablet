@@ -81,7 +81,7 @@ class ImageAvatar extends StatelessWidget {
       return Stack(
         children: [
           _mainWidget(),
-          _progressWidget(context)
+          _progressWidget(context),
         ],
       );
     }

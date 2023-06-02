@@ -71,6 +71,7 @@ class CategoriesPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         heroTag: null,
         onPressed: () => showDialog(context: context, builder: (context) => CategoryDialog(house: house)),
+        tooltip: localizations(context).categoriesPageNew,
         child: const Icon(Icons.add),
       ),
     );

@@ -39,9 +39,7 @@ class _NoHousePageState extends State<NoHousePage> {
       }
 
       await App.groupsFirestoreReference.doc(groups.first.id).update({
-        HouseData.codesKey: FieldValue.arrayRemove([
-          _codeValue
-        ]),
+        HouseData.codesKey: FieldValue.arrayRemove([_codeValue]),
         "${HouseData.usersKey}.$myUid": 0,
       });
     } on FirebaseException catch (error) {
@@ -61,9 +59,7 @@ class _NoHousePageState extends State<NoHousePage> {
 
       await App.groupsFirestoreReference.add(HouseData(
         owner: myUid,
-        users: {
-          myUid: 0
-        },
+        users: {myUid: 0},
         codes: [],
       ));
     } on FirebaseException catch (error) {

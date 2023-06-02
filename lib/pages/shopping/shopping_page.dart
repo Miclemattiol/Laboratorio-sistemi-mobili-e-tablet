@@ -17,9 +17,23 @@ import 'package:house_wallet/pages/shopping/shopping_bottom_sheet.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:shimmer/shimmer.dart';
 
-enum _PopupMenu {
-  recipes,
-  quickAddRecipe
+enum _PopupMenu { recipes, quickAddRecipe }
+
+class ShoppingPageStyle extends ThemeExtension<ShoppingPageStyle> {
+  static ShoppingPageStyle of(BuildContext context) => Theme.of(context).extension<ShoppingPageStyle>() ?? const ShoppingPageStyle(shoppingPostItColor: Color(0xFFE6D676));
+
+  final Color shoppingPostItColor;
+
+  const ShoppingPageStyle({required this.shoppingPostItColor});
+
+  @override
+  ShoppingPageStyle copyWith({Color? shoppingPostItColor}) => ShoppingPageStyle(shoppingPostItColor: shoppingPostItColor ?? this.shoppingPostItColor);
+
+  @override
+  ShoppingPageStyle lerp(ShoppingPageStyle? other, double t) {
+    if (other == null) return this;
+    return ShoppingPageStyle(shoppingPostItColor: Color.lerp(shoppingPostItColor, other.shoppingPostItColor, t)!);
+  }
 }
 
 class ShoppingPage extends StatefulWidget {
@@ -41,9 +55,9 @@ class _ShoppingPageState extends State<ShoppingPage> {
         padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
         child: Container(
           clipBehavior: Clip.antiAlias,
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
-            color: Color(0xFFE6D676), //TODO color theme
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(10)),
+            color: ShoppingPageStyle.of(context).shoppingPostItColor,
           ),
           child: child,
         ),
@@ -54,9 +68,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
   List<FirestoreDocument<ShoppingItemRef>> _checkedItems() {
     return _checkedIds.expand<FirestoreDocument<ShoppingItemRef>>((id) {
       if (_shoppingItems.containsKey(id)) {
-        return [
-          _shoppingItems[id]!
-        ];
+        return [_shoppingItems[id]!];
       }
       return [];
     }).toList();

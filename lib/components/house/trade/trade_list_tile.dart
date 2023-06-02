@@ -18,7 +18,7 @@ class TradeListTile extends StatelessWidget {
     )) return;
 
     trade.reference.update({
-      Trade.acceptedKey: true
+      Trade.acceptedKey: true,
     });
   }
 

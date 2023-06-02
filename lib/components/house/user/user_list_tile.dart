@@ -48,9 +48,7 @@ class _UserListTileState extends State<UserListTile> {
       final code = _generateRandomCode(12);
 
       await HouseDataRef.of(context, listen: false).reference.update({
-        HouseData.codesKey: FieldValue.arrayUnion([
-          code
-        ]),
+        HouseData.codesKey: FieldValue.arrayUnion([code]),
       });
 
       Share.share(appLocalizations.shareContent(code));
@@ -96,7 +94,7 @@ class _UserListTileState extends State<UserListTile> {
           .5,
           .5,
           .5 + .5 * greenValue,
-          .5 + .5 * greenValue
+          .5 + .5 * greenValue,
         ],
       ),
     );

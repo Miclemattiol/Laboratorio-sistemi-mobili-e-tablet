@@ -78,11 +78,9 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
     return CustomBottomSheet(
       padding: const EdgeInsets.all(8),
       spacing: 0,
-      decoration: const BoxDecoration(
-        color: Color(0xFFE6D676), //TODO theme
-        boxShadow: [
-          BoxShadow(blurRadius: 4),
-        ],
+      decoration: BoxDecoration(
+        color: ShoppingPageStyle.of(context).shoppingPostItColor,
+        boxShadow: const [BoxShadow(blurRadius: 4)],
       ),
       body: [
         Row(
@@ -93,7 +91,7 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
                 onChanged: (value) => _titleValue = value,
                 decoration: InputDecoration(
                   prefixIcon: const Icon(Icons.add),
-                  hintText: localizations(context).addNewInput,
+                  hintText: localizations(context).shoppingPageNew,
                   border: InputBorder.none,
                 ),
                 onEditingComplete: _addShoppingItem,

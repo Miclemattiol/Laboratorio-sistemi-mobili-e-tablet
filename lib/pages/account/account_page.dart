@@ -51,7 +51,7 @@ class _AccountPageState extends State<AccountPage> {
       setState(() => _uploadProgress = null);
 
       await MainPage.userFirestoreRef(loggedUser.uid).update({
-        User.imageUrlKey: imageUrl
+        User.imageUrlKey: imageUrl,
       });
 
       if (currentImage != null) {
@@ -247,7 +247,7 @@ class _AccountPageState extends State<AccountPage> {
                 values: [
                   DropdownMenuItem(value: ThemeMode.system, child: Text(localizations(context).themeDevice)),
                   DropdownMenuItem(value: ThemeMode.light, child: Text(localizations(context).themeLight)),
-                  DropdownMenuItem(value: ThemeMode.dark, child: Text(localizations(context).themeDark))
+                  DropdownMenuItem(value: ThemeMode.dark, child: Text(localizations(context).themeDark)),
                 ],
                 onChanged: (newValue) => themeNotifier.value = newValue,
               );

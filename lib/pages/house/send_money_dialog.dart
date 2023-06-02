@@ -122,7 +122,7 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text("Paga con"),
-                  Image.memory(_payPalLogo, height: 18)
+                  Image.memory(_payPalLogo, height: 18),
                 ],
               ),
             ),

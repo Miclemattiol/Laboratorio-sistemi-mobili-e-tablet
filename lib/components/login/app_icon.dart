@@ -15,10 +15,7 @@ class AppIcon extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(size / 2),
           gradient: const LinearGradient(
-            colors: [
-              Color(0xFF50CEFF),
-              Color(0XFF000A8F)
-            ],
+            colors: [Color(0xFF50CEFF), Color(0XFF000A8F)],
             transform: GradientRotation(pi / 4),
           ),
         ),

@@ -6,7 +6,6 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/themes.dart';
-import 'package:house_wallet/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
 class TasksTab extends StatelessWidget {
@@ -23,7 +22,7 @@ class TasksTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tasks = snapshot.data?.where((task) => !myTasks || task.data.assignedTo.map((user) => user.uid).contains(LoggedUser.of(context).uid)).toList()?..sort((a, b) => (b.data.repeating != null).toInt() - (a.data.repeating != null).toInt());
+    final tasks = snapshot.data?.where((task) => !myTasks || task.data.assignedTo.map((user) => user.uid).contains(LoggedUser.of(context).uid));
 
     if (tasks == null) {
       if (snapshot.connectionState == ConnectionState.waiting) {
@@ -64,7 +63,7 @@ class TasksTab extends StatelessWidget {
       child: ListView(
         children: [
           if (myTasks) Calendar(tasks.map((task) => task.data.range).toList()),
-          ...tasks.map(TaskListTile.new)
+          ...tasks.map(TaskListTile.new),
         ],
       ),
     );
