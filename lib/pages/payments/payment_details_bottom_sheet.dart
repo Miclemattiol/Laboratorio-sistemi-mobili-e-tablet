@@ -16,6 +16,7 @@ import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
+import 'package:house_wallet/data/payment_or_trade.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/data/payments/trade.dart';
@@ -75,50 +76,14 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
     return imageRef.getDownloadURL();
   }
 
-  void recalculateBalance(Set<String> users) async {
-    final transactions = [
-      ...(await PaymentsPage.paymentsFirestoreRef(widget.house.id).get()).docs.map((doc) => doc.data()),
-      ...(await TradesSection.firestoreRef(widget.house.id).get()).docs.map((doc) => doc.data()),
-    ].where(
-      (paymentTrade) {
-        if (paymentTrade is Payment) {
-          return paymentTrade.to.keys.toSet().intersection(users).isNotEmpty; //Se contiene almeno un utente che ha partecipato alla transazione
-        } else if (paymentTrade is Trade) {
-          return (users.contains(paymentTrade.from) || users.contains(paymentTrade.to)); //Se almeno uno degli utenti ha partecipato allo scambio
-        } else {
-          //It should never happen
-          return false; //TODO rimuovi l'else e cambia l'else-if in un else
-        }
-      },
-    );
-
-    for (final user in users) {
-      final balance = transactions.fold<num>(0, (previousValue, paymentTrade) {
-        if (paymentTrade is Payment) {
-          return previousValue + paymentTrade.impact(user);
-        } else if (paymentTrade is Trade) {
-          if (paymentTrade.from == user) {
-            return previousValue - paymentTrade.amount;
-          } else if (paymentTrade.to == user) {
-            return previousValue + paymentTrade.amount;
-          } else {
-            return previousValue;
-          }
-        } else {
-          //It should never happen
-          return previousValue; //TODO rimuovi l'else e cambia l'else-if in un else
-        }
-      });
-      //TODO push to firebase
-    }
-
-    // Rx.combineLatest2(
-    //           PaymentsPage.paymentsFirestoreRef(widget.house.id).get().map(PaymentRef.converter(context, snapshot.data)),
-    //           TradesSection.firestoreRef(HouseDataRef.of(context).id).where(Trade.acceptedKey, isEqualTo: true).snapshots().map(TradeRef.converter(context)),
-    //           (payments, trades) => [
-    //             ...payments,
-    //             ...trades
-    //           ].toList()
+  Map<String, num> recalculateBalance(String from, Map<String, num> to, num price, num? oldPrice) {
+    final userBalances = {
+      ...widget.house.balances
+    };
+    userBalances[from] = userBalances[from]! + price - (oldPrice ?? 0);
+    final parts = to.values.fold(.0, (sum, part) => sum + part);
+    to.forEach((user, part) => userBalances[user] = userBalances[user]! - (price * part / parts - (oldPrice ?? 0) * part / parts));
+    return userBalances;
   }
 
   void _savePayment() async {
