@@ -45,10 +45,22 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
 
     setState(() => _loading = true);
     try {
-      await widget.trade.reference.update({
-        Trade.descriptionKey: _descriptionValue,
-        Trade.amountKey: _amountValue!,
-        Trade.dateKey: _dateValue!,
+      final trade = widget.trade.data;
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        transaction.update(
+          widget.trade.reference,
+          {
+            Trade.descriptionKey: _descriptionValue,
+            Trade.amountKey: _amountValue!,
+            Trade.dateKey: _dateValue!,
+          },
+        );
+
+        widget.house.updateBalances(
+          transaction,
+          prevValues: SharesData(from: trade.from.uid, price: trade.price, shares: trade.shares),
+          newValues: SharesData(from: trade.from.uid, price: _amountValue!, shares: trade.shares),
+        );
       });
 
       navigator.pop();
@@ -57,7 +69,7 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
       CustomDialog.alert(
         context: context,
         title: localizations(context).error,
-        content: localizations(context).saveChangesError(error.message.toString()),
+        content: error.code == HouseDataRef.invalidUsersError ? localizations(context).balanceInvalidUser : localizations(context).saveChangesError(error.message.toString()),
       );
       setState(() => _loading = false);
     }
@@ -74,7 +86,7 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
           NumberFormField(
             enabled: !_loading,
             initialValue: widget.trade.data.price,
-            decoration: inputDecoration(localizations(context).quantity),
+            decoration: inputDecoration(localizations(context).amount),
             decimal: true,
             onSaved: (amount) => _amountValue = amount,
             validator: (amount) => (amount == null) ? localizations(context).priceMissing : null,

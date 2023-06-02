@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -16,10 +18,7 @@ class PaymentTile extends StatelessWidget {
   final List<FirestoreDocument<Category>> categories;
   final FirestoreDocument<PaymentOrTrade> doc;
 
-  PaymentTile(
-    this.doc, {
-    required this.categories,
-  }) : super(key: Key(doc.id));
+  PaymentTile(this.doc, {required this.categories}) : super(key: Key(doc.id));
 
   static Widget shimmer({required double titleWidth, required double subtitleWidth}) {
     return PadRow(
@@ -48,24 +47,6 @@ class PaymentTile extends StatelessWidget {
         )
       ],
     );
-  }
-
-  num _calculateImpact(LoggedUser loggedUser, PaymentRef payment) {
-    final totalShares = payment.to.values.fold<num>(0, (prev, element) => prev + element.share);
-    final pricePerShare = payment.price / totalShares;
-    final myShare = payment.to[loggedUser.uid]?.share;
-
-    if (payment.from.uid == loggedUser.uid) {
-      if (payment.to.containsKey(loggedUser.uid)) {
-        return pricePerShare * (totalShares - myShare!);
-      } else {
-        return payment.price;
-      }
-    } else if (payment.to.containsKey(loggedUser.uid)) {
-      return -pricePerShare * myShare!;
-    } else {
-      return 0;
-    }
   }
 
   String _title(BuildContext context) {
@@ -104,24 +85,17 @@ class PaymentTile extends StatelessWidget {
 
   Widget _trailing(BuildContext context) {
     final payment = doc.data;
+    final impact = HouseDataRef.calculateImpactForUser(LoggedUser.of(context).uid, from: payment.from.uid, price: payment.price, shares: payment.shares);
 
-    if (payment is PaymentRef) {
-      return PadColumn(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        spacing: 4,
-        children: [
-          Text(currencyFormat(context).format(payment.price)),
-          Text(
-            localizations(context).paymentImpact(currencyFormat(context).format(_calculateImpact(LoggedUser.of(context), payment))),
-            style: const TextStyle(fontSize: 10),
-          ),
-        ],
-      );
-    } else {
-      final trade = payment as TradeRef;
-      return Text(currencyFormat(context).format(trade.price));
-    }
+    return PadColumn(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.end,
+      spacing: 4,
+      children: [
+        Text(currencyFormat(context).format(payment.price)),
+        Text(localizations(context).balanceImpact("${impact > 0 ? "+" : ""}${currencyFormat(context).format(impact)}")),
+      ],
+    );
   }
 
   IconData _leading(BuildContext context) {
@@ -159,6 +133,31 @@ class PaymentTile extends StatelessWidget {
     );
   }
 
+  void _delete(BuildContext context) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final appLocalizations = localizations(context);
+
+    try {
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        transaction.delete(doc.reference);
+
+        HouseDataRef.of(context, listen: false).updateBalances(
+          transaction,
+          prevValues: SharesData(from: doc.data.from.uid, price: doc.data.price, shares: doc.data.shares),
+        );
+      });
+
+      final imageUrl = doc.data is PaymentRef ? (doc.data as PaymentRef).imageUrl : null;
+      if (imageUrl != null) {
+        try {
+          await FirebaseStorage.instance.refFromURL(imageUrl).delete();
+        } catch (_) {}
+      }
+    } on FirebaseException catch (error) {
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(error.code == HouseDataRef.invalidUsersError ? appLocalizations.balanceInvalidUser : appLocalizations.actionError(error.message.toString()))));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -168,7 +167,7 @@ class PaymentTile extends StatelessWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: (context) => doc.reference.delete(),
+            onPressed: _delete,
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
             icon: Icons.delete,

@@ -113,9 +113,10 @@ class _UserListTileState extends State<UserListTile> {
     final house = HouseDataRef.of(context);
     final myBalance = house.getBalance(widget.user!.uid);
     final maxBalance = house.balances.values.reduce((prev, value) => prev > value.abs() ? prev : value.abs());
+    final balanceRatio = myBalance / maxBalance;
 
     return Container(
-      decoration: _balanceBackground(myBalance / maxBalance),
+      decoration: _balanceBackground(balanceRatio.isNaN ? 0 : balanceRatio),
       child: ListTile(
         tileColor: Colors.transparent,
         leading: CircleAvatar(

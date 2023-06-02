@@ -72,7 +72,7 @@ class DatePickerFormField extends StatelessWidget {
             context: context,
             initialDate: initialDate,
             firstDate: firstDate,
-            lastDate: lastDate ?? DateTime(firstDate.year + 100),
+            lastDate: lastDate ?? DateTime(firstDate.year + 100, firstDate.month, firstDate.day),
             locale: const Locale("it", "IT"),
           );
     if (date == null) return;

@@ -17,6 +17,7 @@ class ImagePickerBottomSheet extends StatelessWidget {
 
   static Future<File?> pickImage(BuildContext context, {dynamic image}) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final appLocalizations = localizations(context);
 
     final source = await showModalBottomSheet(
       context: context,
@@ -29,7 +30,7 @@ class ImagePickerBottomSheet extends StatelessWidget {
       final file = await ImagePicker().pickImage(source: source);
       return file == null ? null : File(file.path);
     } on PlatformException catch (_) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text("Impossibile accedere alla ${source == ImageSource.camera ? "fotocamera" : "galleria"}\nControlla i permessi dell'app")));
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(source == ImageSource.camera ? appLocalizations.imagePickerCameraError : appLocalizations.imagePickerGalleryError)));
       return null;
     }
   }
@@ -61,12 +62,12 @@ class ImagePickerBottomSheet extends StatelessWidget {
           ),
         ListTile(
           leading: const Icon(Icons.camera_alt),
-          title: const Text("Scatta foto"),
+          title: Text(localizations(context).imagePickerCamera),
           onTap: () => Navigator.of(context).pop<ImageSource>(ImageSource.camera),
         ),
         ListTile(
           leading: const Icon(Icons.image),
-          title: const Text("Scegli foto"),
+          title: Text(localizations(context).imagePickerGallery),
           onTap: () => Navigator.of(context).pop<ImageSource>(ImageSource.gallery),
         ),
       ],

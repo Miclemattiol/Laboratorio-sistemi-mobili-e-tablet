@@ -34,8 +34,8 @@
     "paymentsPageEmptyFilterDescription": "Prova a cambiare i filtri",
     "filterTooltip": "Filtra transazioni",
     "clearFilterTooltip": "Rimuovi filtri",
-    "paymentImpact": "Impatto: {impact}",
-    "@paymentImpact": {
+    "balanceImpact": "Mio saldo: {impact}",
+    "@balanceImpact": {
         "placeholders": {
             "impact": {
                 "type": "String"
@@ -148,6 +148,7 @@
     "tradeConfirmContent": "Sei sicuro di voler confermare lo scambio?",
     "tradeDenyTitle": "Rifiuta scambio",
     "tradeDenyContent": "Sei sicuro di voler rifiutare lo scambio?",
+    "tradeDescriptionMissing": "(Nessuna descrizione fornita)",
     "usersSection": "Utenti",
     "userYou": "(Tu)",
     "userOwner": "(Proprietario)",
@@ -204,6 +205,7 @@
         }
     },
     "imageError": "Errore nel caricamento dell'immagine",
+    "balanceInvalidUser": "Impossibile modificare transazioni o scambi che riguardano degli utenti che hanno abbandonato la casa",
     "saveChanges": "Salva modifiche",
     "discardChanges": "Annulla modifiche",
     "saveChangesSuccess": "Modifiche salvate con successo",
@@ -223,6 +225,10 @@
             }
         }
     },
+    "imagePickerCamera": "Scatta foto",
+    "imagePickerCameraError": "Impossibile accedere alla fotocamera\nControlla i permessi dell'app",
+    "imagePickerGallery": "Scegli foto",
+    "imagePickerGalleryError": "Impossibile accedere alla galleria\nControlla i permessi dell'app",
     "copied": "Copiato!",
     "error": "Errore",
     "yes": "Sì",
@@ -260,11 +266,12 @@
     "category": "Categoria",
     "noCategory": "Nessuna categoria",
     "newCategory": "Nuova categoria",
+    "amount": "Importo",
     "date": "Data",
     "dateMissing": "Inserisci una data",
     "description": "Descrizione",
     "paidBy": "Pagato da",
-    "paidByUser": "Pagato da {user}",
+    "paidByUser": "pagato da {user}",
     "@paidByUser": {
         "placeholders": {
             "user": {

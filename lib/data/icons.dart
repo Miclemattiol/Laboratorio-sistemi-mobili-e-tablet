@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-//TODO choose only icons that make sense
 const icons = {
   "ten_k": Icons.ten_k,
   "ten_mp": Icons.ten_mp,

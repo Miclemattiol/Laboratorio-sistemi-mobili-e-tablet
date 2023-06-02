@@ -27,6 +27,8 @@ class User {
         imageUrl = null,
         payPal = null;
 
+  bool get isInvalid => uid.isEmpty;
+
   factory User.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc, [SnapshotOptions? _]) {
     final data = doc.data()!;
     return User(

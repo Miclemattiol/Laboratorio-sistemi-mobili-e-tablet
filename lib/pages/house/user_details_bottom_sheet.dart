@@ -23,6 +23,22 @@ class UserDetailsBottomSheet extends StatelessWidget {
     super.key,
   });
 
+  Future<void> _handleUserLeaving(String uid) async {
+    final userBalance = house.getBalance(uid);
+    final otherUser = () {
+      if (userBalance < 0) {
+        return house.balances.entries.reduce((prev, element) => element.value > prev.value ? element : prev).key;
+      } else {
+        return house.balances.entries.reduce((prev, element) => element.value < prev.value ? element : prev).key;
+      }
+    }();
+
+    return house.reference.update({
+      "${HouseData.usersKey}.$uid": FieldValue.delete(),
+      if (userBalance != 0) "${HouseData.usersKey}.$otherUser": house.getBalance(otherUser) + userBalance,
+    });
+  }
+
   void _leave(BuildContext context) async {
     final navigator = Navigator.of(context);
     final isOwner = loggedUser.uid == house.owner.uid;
@@ -47,9 +63,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
       if (isLastUser) {
         await house.reference.delete();
       } else {
-        await house.reference.update({
-          "${HouseData.usersKey}.${loggedUser.uid}": FieldValue.delete(),
-        });
+        await _handleUserLeaving(loggedUser.uid);
       }
       navigator.pop();
     } on FirebaseException catch (error) {
@@ -73,9 +87,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
     )) return;
 
     try {
-      await house.reference.update({
-        "${HouseData.usersKey}.${user.uid}": FieldValue.delete(),
-      });
+      await _handleUserLeaving(user.uid);
       navigator.pop();
     } on FirebaseException catch (error) {
       if (context.mounted) {

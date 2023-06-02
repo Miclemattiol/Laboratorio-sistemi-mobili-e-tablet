@@ -90,11 +90,8 @@ class TaskDetailsPage extends StatelessWidget {
                     ),
                   PadColumn(
                     children: [
-                      Text(
-                        localizations(context).assignedTo,
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      ...task.data.assignedTo.map((participant) => Text(participant.username)).toList()
+                      Text(localizations(context).assignedTo, style: Theme.of(context).textTheme.titleMedium),
+                      ...task.data.assignedTo.map((participant) => Text(participant.username)),
                     ],
                   )
                 ],

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
@@ -7,7 +8,6 @@ import 'package:house_wallet/components/form/category_form_field.dart';
 import 'package:house_wallet/components/form/date_picker_form_field.dart';
 import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/form/people_share_form_field.dart';
-import 'package:house_wallet/components/house/trade/trades_section.dart';
 import 'package:house_wallet/components/image_picker_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
@@ -16,10 +16,8 @@ import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
-import 'package:house_wallet/data/payment_or_trade.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
-import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/categories/category_dialog.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
@@ -76,16 +74,6 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
     return imageRef.getDownloadURL();
   }
 
-  Map<String, num> recalculateBalance(String from, Map<String, num> to, num price, num? oldPrice) {
-    final userBalances = {
-      ...widget.house.balances
-    };
-    userBalances[from] = userBalances[from]! + price - (oldPrice ?? 0);
-    final parts = to.values.fold(.0, (sum, part) => sum + part);
-    to.forEach((user, part) => userBalances[user] = userBalances[user]! - (price * part / parts - (oldPrice ?? 0) * part / parts));
-    return userBalances;
-  }
-
   void _savePayment() async {
     final navigator = Navigator.of(context);
 
@@ -103,30 +91,52 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
       }
 
       if (widget.payment == null) {
-        await PaymentsPage.paymentsFirestoreRef(widget.house.id).add(Payment(
-          title: _titleValue!,
-          category: _categoryValue,
-          description: _descriptionValue,
-          price: _priceValue!,
-          imageUrl: _imageValue == null ? null : await _uploadImage(_imageValue!),
-          date: _dateValue!,
-          from: widget.loggedUser.uid,
-          to: _toValue,
-        ));
+        await FirebaseFirestore.instance.runTransaction((transaction) async {
+          transaction.set<Payment>(
+            PaymentsPage.paymentsFirestoreRef(widget.house.id).doc(),
+            Payment(
+              title: _titleValue!,
+              category: _categoryValue,
+              description: _descriptionValue,
+              price: _priceValue!,
+              imageUrl: _imageValue == null ? null : await _uploadImage(_imageValue!),
+              date: _dateValue!,
+              from: widget.loggedUser.uid,
+              to: _toValue,
+            ),
+          );
+
+          widget.house.updateBalances(
+            transaction,
+            newValues: SharesData(from: widget.loggedUser.uid, price: _priceValue!, shares: _toValue),
+          );
+        });
       } else {
-        await widget.payment!.reference.update({
-          Payment.titleKey: _titleValue!,
-          Payment.categoryKey: _categoryValue,
-          Payment.descriptionKey: _descriptionValue,
-          Payment.priceKey: _priceValue!,
-          Payment.imageUrlKey: _imageValue == null ? widget.payment!.data.imageUrl : await _uploadImage(_imageValue!),
-          Payment.dateKey: _dateValue!,
-          Payment.toKey: _toValue,
+        final payment = widget.payment!.data;
+        await FirebaseFirestore.instance.runTransaction((transaction) async {
+          transaction.update(
+            widget.payment!.reference,
+            {
+              Payment.titleKey: _titleValue!,
+              Payment.categoryKey: _categoryValue,
+              Payment.descriptionKey: _descriptionValue,
+              Payment.priceKey: _priceValue!,
+              Payment.imageUrlKey: _imageValue == null ? payment.imageUrl : await _uploadImage(_imageValue!),
+              Payment.dateKey: _dateValue!,
+              Payment.toKey: _toValue,
+            },
+          );
+
+          widget.house.updateBalances(
+            transaction,
+            prevValues: SharesData(from: payment.from.uid, price: payment.price, shares: payment.shares),
+            newValues: SharesData(from: payment.from.uid, price: _priceValue!, shares: _toValue),
+          );
         });
 
-        if (_imageValue != null && widget.payment!.data.imageUrl != null) {
+        if (_imageValue != null && payment.imageUrl != null) {
           try {
-            await FirebaseStorage.instance.refFromURL(widget.payment!.data.imageUrl!).delete();
+            await FirebaseStorage.instance.refFromURL(payment.imageUrl!).delete();
           } catch (_) {}
         }
       }
@@ -137,7 +147,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
       CustomDialog.alert(
         context: context,
         title: localizations(context).error,
-        content: localizations(context).saveChangesError(error.message.toString()),
+        content: error.code == HouseDataRef.invalidUsersError ? localizations(context).balanceInvalidUser : localizations(context).saveChangesError(error.message.toString()),
       );
       setState(() => _loading = false);
     }

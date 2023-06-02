@@ -4,6 +4,18 @@ import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:provider/provider.dart';
 
+class SharesData {
+  final String from;
+  final num price;
+  final Map<String, int> shares;
+
+  const SharesData({
+    required this.from,
+    required this.price,
+    required this.shares,
+  });
+}
+
 class HouseData {
   final String owner;
   final Map<String, num> users;
@@ -52,10 +64,57 @@ class HouseDataRef {
     required this.balances,
   });
 
+  static const invalidUsersError = "invalid_users";
+
   String get id => reference.id;
 
   User getUser(String uid) => users[uid] ?? const User.invalid();
   num getBalance(String uid) => balances[uid] ?? 0;
+
+  static num calculateImpactForUser(String uid, {required String from, required num price, required Map<String, int> shares}) {
+    final totalShares = shares.values.fold<num>(0, (prev, share) => prev + share);
+    final pricePerShare = price / totalShares;
+    final myShare = shares[uid];
+
+    if (from == uid) {
+      if (shares.containsKey(uid)) {
+        return pricePerShare * (totalShares - myShare!);
+      } else {
+        return price;
+      }
+    } else if (shares.containsKey(uid)) {
+      return -pricePerShare * myShare!;
+    } else {
+      return 0;
+    }
+  }
+
+  void updateBalances(Transaction transaction, {SharesData? prevValues, SharesData? newValues}) {
+    if (prevValues == null && newValues == null) return;
+
+    final balancesToUpdate = <String, num>{};
+
+    if (prevValues != null) {
+      for (final user in {prevValues.from, ...prevValues.shares.keys}) {
+        balancesToUpdate[user] = (balancesToUpdate[user] ?? 0) - calculateImpactForUser(user, from: prevValues.from, price: prevValues.price, shares: prevValues.shares);
+      }
+    }
+
+    if (newValues != null) {
+      for (final user in {newValues.from, ...newValues.shares.keys}) {
+        balancesToUpdate[user] = (balancesToUpdate[user] ?? 0) + calculateImpactForUser(user, from: newValues.from, price: newValues.price, shares: newValues.shares);
+      }
+    }
+
+    if (balancesToUpdate.values.every((balance) => balance == 0)) return;
+
+    for (final user in balancesToUpdate.keys) {
+      if (getUser(user).isInvalid) throw FirebaseException(plugin: "", code: invalidUsersError);
+      balancesToUpdate[user] = (balancesToUpdate[user] ?? 0) + getBalance(user);
+    }
+
+    transaction.update(reference, balancesToUpdate.map((key, value) => MapEntry("${HouseData.usersKey}.$key", value)));
+  }
 
   static HouseDataRef? Function(QuerySnapshot<User> data) converter(FirestoreDocument<HouseData>? house) {
     return (data) {

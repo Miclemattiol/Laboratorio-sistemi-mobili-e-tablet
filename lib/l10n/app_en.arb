@@ -34,8 +34,8 @@
     "paymentsPageEmptyFilterDescription": "Try changing the filters",
     "filterTooltip": "Filter transactions",
     "clearFilterTooltip": "Clear filters",
-    "paymentImpact": "Impact: {impact}",
-    "@paymentImpact": {
+    "balanceImpact": "My balance: {impact}",
+    "@balanceImpact": {
         "placeholders": {
             "impact": {
                 "type": "String"
@@ -148,6 +148,7 @@
     "tradeConfirmContent": "Are you sure you want to confirm the trade?",
     "tradeDenyTitle": "Deny trade",
     "tradeDenyContent": "Are you sure you want to deny the trade?",
+    "tradeDescriptionMissing": "(No description provided)",
     "usersSection": "Users",
     "userYou": "(You)",
     "userOwner": "(Owner)",
@@ -204,6 +205,7 @@
         }
     },
     "imageError": "Could not lead the image",
+    "balanceInvalidUser": "Unable to edit transactions or trades involving users that have left the house",
     "saveChanges": "Save changes",
     "discardChanges": "Discard changes",
     "saveChangesSuccess": "Changes saved successfully",
@@ -223,6 +225,10 @@
             }
         }
     },
+    "imagePickerCamera": "Take a photo",
+    "imagePickerCameraError": "Could not access the camera\nCheck the app's permissions",
+    "imagePickerGallery": "Choose a photo",
+    "imagePickerGalleryError": "Could not access the gallery\nCheck the app's permissions",
     "copied": "Copied!",
     "error": "Error",
     "yes": "Yes",
@@ -260,11 +266,12 @@
     "category": "Category",
     "noCategory": "No category",
     "newCategory": "New category",
+    "amount": "Amount",
     "date": "Date",
     "dateMissing": "Enter a date",
     "description": "Description",
     "paidBy": "Paid by",
-    "paidByUser": "Paid by {user}",
+    "paidByUser": "paid by {user}",
     "@paidByUser": {
         "placeholders": {
             "user": {
