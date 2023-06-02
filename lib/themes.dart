@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/shopping/shopping_page.dart';
 import 'package:provider/provider.dart';
 
 class ThemeNotifier extends ValueNotifier<ThemeMode> {
@@ -72,6 +73,9 @@ ThemeData get lightTheme {
     bottomSheetTheme: const BottomSheetThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
     ),
+    extensions: const {
+      ShoppingPageStyle(shoppingPostItColor: Color(0xFFE6D676)),
+    },
   );
 }
 
@@ -103,5 +107,8 @@ ThemeData get darkTheme {
     bottomSheetTheme: const BottomSheetThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
     ),
+    extensions: const {
+      ShoppingPageStyle(shoppingPostItColor: Color(0xFF7C7341)),
+    },
   );
 }

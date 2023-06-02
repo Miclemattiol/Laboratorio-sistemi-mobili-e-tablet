@@ -93,11 +93,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
             stream: Rx.combineLatest2(
               PaymentsPage.paymentsFirestoreRef(houseId).snapshots().map(PaymentRef.converter(context, snapshot.data)),
               TradesSection.firestoreRef(HouseDataRef.of(context).id).where(Trade.acceptedKey, isEqualTo: true).snapshots().map(TradeRef.converter(context)),
-              (payments, trades) => [
-                ...payments,
-                ...trades
-              ].toList()
-                ..sort((payment, trade) => trade.data.date.compareTo(payment.data.date)),
+              (payments, trades) => [...payments, ...trades].toList()..sort((payment, trade) => trade.data.date.compareTo(payment.data.date)),
             ),
             builder: (context, snapshot) {
               final payments = snapshot.data;
@@ -169,6 +165,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
           ? FloatingActionButton(
               heroTag: null,
               onPressed: () => _addPayment(context),
+              tooltip: localizations(context).paymentsPageNew,
               child: const Icon(Icons.add),
             )
           : null,

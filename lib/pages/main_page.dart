@@ -71,31 +71,11 @@ class _MainPageStackState extends State<_MainPageStack> {
 
   List<PageData> _pages() {
     return [
-      PageData(
-        icon: Icons.person,
-        label: localizations(context).accountPage,
-        widget: const AccountPage(),
-      ),
-      PageData(
-        icon: Icons.attach_money,
-        label: localizations(context).paymentsPage,
-        widget: const PaymentsPage(),
-      ),
-      PageData(
-        icon: Icons.shopping_cart,
-        label: localizations(context).shoppingPage,
-        widget: const ShoppingPage(),
-      ),
-      PageData(
-        icon: Icons.assignment,
-        label: localizations(context).tasksPage,
-        widget: const TasksPage(),
-      ),
-      PageData(
-        icon: Icons.groups,
-        label: localizations(context).housePage,
-        widget: const HousePage(),
-      )
+      PageData(icon: Icons.person, label: localizations(context).accountPage, widget: const AccountPage()),
+      PageData(icon: Icons.attach_money, label: localizations(context).paymentsPage, widget: const PaymentsPage()),
+      PageData(icon: Icons.shopping_cart, label: localizations(context).shoppingPage, widget: const ShoppingPage()),
+      PageData(icon: Icons.assignment, label: localizations(context).tasksPage, widget: const TasksPage()),
+      PageData(icon: Icons.groups, label: localizations(context).housePage, widget: const HousePage()),
     ];
   }
 

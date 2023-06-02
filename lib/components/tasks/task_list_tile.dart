@@ -27,7 +27,7 @@ class TaskListTile extends StatelessWidget {
             spacing: 6,
             children: [
               Container(height: 14, width: titleWidth, color: Colors.white),
-              Container(height: 14, width: subtitleWidth, color: Colors.white)
+              Container(height: 14, width: subtitleWidth, color: Colors.white),
             ],
           ),
         ),
@@ -70,7 +70,7 @@ class TaskListTile extends StatelessWidget {
           spacing: 2,
           children: [
             Text(localizations(context).taskFromDate(taskDateFormat(context).format(task.data.from))),
-            Text(localizations(context).taskToDate(taskDateFormat(context).format(task.data.to)))
+            Text(localizations(context).taskToDate(taskDateFormat(context).format(task.data.to))),
           ],
         ),
         onTap: () => Navigator.of(context).push(SlidingPageRoute(TaskDetailsPage(task, house: HouseDataRef.of(context, listen: false), loggedUser: LoggedUser.of(context, listen: false)), fullscreenDialog: true)),

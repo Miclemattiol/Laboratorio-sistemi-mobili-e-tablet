@@ -41,14 +41,8 @@ class _TasksPageState extends State<TasksPage> {
 
   List<TabData> _tabs(BuildContext context, AsyncSnapshot<Iterable<FirestoreDocument<TaskRef>>> snapshot) {
     return [
-      TabData(
-        label: localizations(context).myTasksTab,
-        widget: TasksTab(snapshot: snapshot, myTasks: true, onNotification: onNotification),
-      ),
-      TabData(
-        label: localizations(context).allTasksTab,
-        widget: TasksTab(snapshot: snapshot, myTasks: false, onNotification: onNotification),
-      ),
+      TabData(label: localizations(context).myTasksTab, widget: TasksTab(snapshot: snapshot, myTasks: true, onNotification: onNotification)),
+      TabData(label: localizations(context).allTasksTab, widget: TasksTab(snapshot: snapshot, myTasks: false, onNotification: onNotification)),
     ];
   }
 
@@ -67,7 +61,7 @@ class _TasksPageState extends State<TasksPage> {
   Widget build(BuildContext context) {
     final houseId = HouseDataRef.of(context).id;
     return StreamBuilder(
-      stream: TasksPage.tasksFirestoreRef(houseId).snapshots().map(TaskRef.converter(context)),
+      stream: TasksPage.tasksFirestoreRef(houseId).orderBy(Task.repeatingKey, descending: true).orderBy(Task.fromKey).orderBy(Task.toKey).snapshots().map(TaskRef.converter(context)),
       builder: (context, snapshot) {
         final tabs = _tabs(context, snapshot);
         return DefaultTabController(
@@ -82,6 +76,7 @@ class _TasksPageState extends State<TasksPage> {
                 ? FloatingActionButton(
                     heroTag: null,
                     onPressed: () => _addTask(context),
+                    tooltip: localizations(context).tasksPageNew,
                     child: const Icon(Icons.add),
                   )
                 : null,

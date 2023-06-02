@@ -85,9 +85,7 @@ class NumberFormField<T extends num> extends StatelessWidget {
       textAlign: textAlign,
       enabled: enabled,
       keyboardType: TextInputType.numberWithOptions(signed: signed, decimal: decimal),
-      inputFormatters: [
-        getFormatter()
-      ],
+      inputFormatters: [getFormatter()],
     );
   }
 }

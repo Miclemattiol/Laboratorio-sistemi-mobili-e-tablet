@@ -13,12 +13,14 @@ class ParticipantsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PadColumn(children: [
-      Text(
-        localizations(context).taskAssignedToInput,
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
-      ...participants.map((e) => Text(e.username)).toList()
-    ]);
+    return PadColumn(
+      children: [
+        Text(
+          localizations(context).taskAssignedToInput,
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
+        ...participants.map((participant) => Text(participant.username)).toList()
+      ],
+    );
   }
 }

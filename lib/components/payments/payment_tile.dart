@@ -33,7 +33,7 @@ class PaymentTile extends StatelessWidget {
             spacing: 6,
             children: [
               Container(height: 14, width: titleWidth, color: Colors.white),
-              Container(height: 14, width: subtitleWidth, color: Colors.white)
+              Container(height: 14, width: subtitleWidth, color: Colors.white),
             ],
           ),
         ),

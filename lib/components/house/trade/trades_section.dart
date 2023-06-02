@@ -20,9 +20,7 @@ class TradesSection extends StatelessWidget {
       title: localizations(context).tradesSection,
       children: () {
         if (trades == null) {
-          return [
-            ListTile(title: Text("${localizations(context).tradesSectionError} (${snapshot.error})"))
-          ];
+          return [ListTile(title: Text("${localizations(context).tradesSectionError} (${snapshot.error})"))];
         }
 
         return trades.map(TradeListTile.new).toList();

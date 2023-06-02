@@ -95,6 +95,7 @@ class _RecipesPageState extends State<RecipesPage> {
           ? FloatingActionButton(
               heroTag: null,
               onPressed: () => _addRecipe(context),
+              tooltip: localizations(context).recipesPageNew,
               child: const Icon(Icons.add),
             )
           : null,

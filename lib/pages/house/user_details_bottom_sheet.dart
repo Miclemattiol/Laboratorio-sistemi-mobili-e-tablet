@@ -48,7 +48,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
         await house.reference.delete();
       } else {
         await house.reference.update({
-          "${HouseData.usersKey}.${loggedUser.uid}": FieldValue.delete()
+          "${HouseData.usersKey}.${loggedUser.uid}": FieldValue.delete(),
         });
       }
       navigator.pop();
@@ -74,7 +74,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
 
     try {
       await house.reference.update({
-        "${HouseData.usersKey}.${user.uid}": FieldValue.delete()
+        "${HouseData.usersKey}.${user.uid}": FieldValue.delete(),
       });
       navigator.pop();
     } on FirebaseException catch (error) {
@@ -99,7 +99,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
 
     try {
       await house.reference.update({
-        HouseData.ownerKey: user.uid
+        HouseData.ownerKey: user.uid,
       });
       navigator.pop();
     } on FirebaseException catch (error) {
@@ -127,7 +127,10 @@ class UserDetailsBottomSheet extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text(localizations(context).userBalance(currencyFormat(context).format(house.getBalance(user.uid)))),
+          child: Text(() {
+            final balance = house.getBalance(user.uid);
+            return localizations(context).userBalance("${balance > 0 ? "+" : ""}${currencyFormat(context).format(balance)}");
+          }()),
         ),
         if (loggedUser.uid == user.uid) ...[
           ElevatedButton(

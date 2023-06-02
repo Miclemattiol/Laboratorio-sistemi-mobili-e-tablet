@@ -93,9 +93,7 @@ class App extends StatelessWidget {
               Locale("it"),
               // Locale("en"), //TODO translations
             ],
-            navigatorObservers: [
-              ClearFocusOnPush()
-            ],
+            navigatorObservers: [ClearFocusOnPush()],
           );
         }),
       ),

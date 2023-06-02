@@ -91,7 +91,7 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
               spacing: 1,
               children: [
                 Expanded(child: ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).buttonCancel))),
-                Expanded(child: ModalButton(onPressed: _confirmPurchase, child: Text(localizations(context).buttonPay)))
+                Expanded(child: ModalButton(onPressed: _confirmPurchase, child: Text(localizations(context).buttonPay))),
               ],
             ),
           ],
