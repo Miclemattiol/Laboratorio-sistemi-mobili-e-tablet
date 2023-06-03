@@ -39,6 +39,19 @@ class UserDetailsBottomSheet extends StatelessWidget {
     });
   }
 
+  Future<void> _deleteHouse() async {
+    const collections = ["categories", "recipes", "shopping", "tasks", "trades", "transactions"];
+    final references = (await Future.wait(collections.map((collection) async => (await house.reference.collection(collection).get()).docs.map((doc) => doc.reference)))).expand((references) => references);
+
+    return FirebaseFirestore.instance.runTransaction((transaction) async {
+      transaction.delete(house.reference);
+
+      for (final reference in references) {
+        transaction.delete(reference);
+      }
+    });
+  }
+
   void _leave(BuildContext context) async {
     final navigator = Navigator.of(context);
     final isOwner = loggedUser.uid == house.owner.uid;
@@ -61,7 +74,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
 
     try {
       if (isLastUser) {
-        await house.reference.delete(); //TODO check
+        await _deleteHouse();
       } else {
         await _handleUserLeaving(loggedUser.uid);
       }
