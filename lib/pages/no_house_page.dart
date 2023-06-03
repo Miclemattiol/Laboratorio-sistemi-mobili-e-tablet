@@ -107,7 +107,7 @@ class _NoHousePageState extends State<NoHousePage> {
         padding: const EdgeInsets.only(top: 18),
         child: FloatingActionButton(
           onPressed: _loading ? null : FirebaseAuth.instance.signOut,
-          tooltip: localizations(context).logout,
+          tooltip: localizations(context).signOut,
           child: const Icon(Icons.logout),
         ),
       ),

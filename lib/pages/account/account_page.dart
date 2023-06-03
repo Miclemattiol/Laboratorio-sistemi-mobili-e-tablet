@@ -147,7 +147,7 @@ class _AccountPageState extends State<AccountPage> {
   void _logout() async {
     if (!await CustomDialog.confirm(
       context: context,
-      title: localizations(context).logout,
+      title: localizations(context).signOut,
       content: localizations(context).logoutConfirm,
     )) return;
 
@@ -257,7 +257,7 @@ class _AccountPageState extends State<AccountPage> {
               onTap: _changePassword,
             ),
             ListTile(
-              title: Text(localizations(context).logout),
+              title: Text(localizations(context).signOut),
               onTap: _logout,
             ),
           ],

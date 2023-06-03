@@ -3,7 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/login/app_icon.dart';
+import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/sign_up_page.dart';
 import 'package:house_wallet/themes.dart';
 
 class LoginPage extends StatefulWidget {
@@ -13,7 +15,6 @@ class LoginPage extends StatefulWidget {
   State<LoginPage> createState() => _LoginPageState();
 }
 
-//TODO create new account
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
@@ -56,8 +57,8 @@ class _LoginPageState extends State<LoginPage> {
         child: Center(
           child: SingleChildScrollView(
             child: PadColumn(
-              padding: const EdgeInsets.all(16),
               spacing: 24,
+              padding: const EdgeInsets.all(16),
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const AppIcon(),
@@ -67,13 +68,13 @@ class _LoginPageState extends State<LoginPage> {
                     TextFormField(
                       decoration: inputDecoration(localizations(context).email),
                       enabled: !_loading,
+                      keyboardType: TextInputType.emailAddress,
                       validator: (email) {
                         if (email == null || email.trim().isEmpty) return localizations(context).emailMissing;
                         if (!EmailValidator.validate(email.trim())) return localizations(context).emailInvalid;
                         return null;
                       },
-                      keyboardType: TextInputType.emailAddress,
-                      onSaved: (email) => _emailValue = email,
+                      onSaved: (email) => _emailValue = (email ?? "").trim(),
                     ),
                     TextFormField(
                       decoration: inputDecoration(localizations(context).password),
@@ -85,10 +86,19 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ],
                 ),
-                ElevatedButton(
-                  onPressed: _loading ? null : _login,
-                  child: Text(localizations(context).login),
-                )
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ElevatedButton(
+                      onPressed: _loading ? null : _login,
+                      child: Text(localizations(context).signIn),
+                    ),
+                    ElevatedButton(
+                      onPressed: _loading ? null : () => Navigator.of(context).push(SlidingPageRoute(const SignUpPage())),
+                      child: Text(localizations(context).signUp),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),
