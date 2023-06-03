@@ -9,7 +9,7 @@ class ShoppingItem {
   final int? quantity;
   final String? supermarket;
   final String title;
-  final Map<String, int> to;
+  final Shares to;
 
   static const priceKey = "price";
   static const quantityKey = "quantity";
@@ -63,6 +63,8 @@ class ShoppingItemRef {
     required this.title,
     required this.to,
   });
+
+  Shares get shares => to.map((key, value) => MapEntry(key, value.share));
 
   static FirestoreConverter<ShoppingItem, ShoppingItemRef> converter(BuildContext context) {
     final houseRef = HouseDataRef.of(context);

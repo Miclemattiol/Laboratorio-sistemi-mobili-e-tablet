@@ -26,7 +26,7 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
   bool _detailsCollapsed = true;
 
   String? _titleValue;
-  late Map<String, int> _toValue = _users.map((key, value) => MapEntry(key, 1));
+  late Shares _toValue = _users.map((key, value) => MapEntry(key, 1));
   String? _supermarketValue;
   PriceQuantity? _priceQuantityValue;
 
@@ -59,20 +59,6 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
     }
   }
 
-  String? _priceQuantityLabel() {
-    if (_priceQuantityValue?.quantity == null && _priceQuantityValue?.price == null) return null;
-
-    String label = "";
-    if (_priceQuantityValue!.quantity != null) {
-      label += "x${_priceQuantityValue!.quantity}";
-    }
-    if (_priceQuantityValue!.price != null) {
-      if (label.isNotEmpty) label += "  •  ";
-      label += currencyFormat(context).format(_priceQuantityValue!.price);
-    }
-    return label.trim();
-  }
-
   @override
   Widget build(BuildContext context) {
     return CustomBottomSheet(
@@ -90,7 +76,7 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
                 controller: _titleController,
                 onChanged: (value) => _titleValue = value,
                 decoration: InputDecoration(
-                  prefixIcon: const Icon(Icons.add),
+                  prefixIcon: GestureDetector(onTap: _addShoppingItem, child: const Icon(Icons.add)),
                   hintText: localizations(context).shoppingPageNew,
                   border: InputBorder.none,
                 ),
@@ -126,7 +112,7 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
                           : localizations(context).peopleChipLabel(_toValue.length),
                   onTap: () async {
                     final house = HouseDataRef.of(context, listen: false);
-                    final to = await showDialog<Map<String, int>>(context: context, builder: (_) => PeopleSharesDialog(house: house, initialValues: _toValue));
+                    final to = await showDialog<Shares>(context: context, builder: (_) => PeopleSharesDialog(house: house, initialValues: _toValue));
                     if (to == null) return;
                     setState(() => _toValue = to);
                   },
@@ -144,7 +130,7 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
                 DetailsItemChip(
                   icon: Icons.attach_money,
                   tooltip: localizations(context).priceAndQuantity,
-                  label: _priceQuantityLabel(),
+                  label: _priceQuantityValue?.label(context),
                   onTap: () async {
                     final priceQuantity = await showDialog<PriceQuantity>(context: context, builder: (context) => PriceQuantityDialog(initialValue: _priceQuantityValue));
                     if (priceQuantity == null) return;

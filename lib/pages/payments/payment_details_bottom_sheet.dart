@@ -61,7 +61,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
   num? _priceValue;
   File? _imageValue;
   DateTime? _dateValue;
-  Map<String, int> _toValue = {};
+  Shares _toValue = {};
 
   Future<String> _uploadImage(File image) async {
     final upload = FirebaseStorage.instance.ref("groups/${widget.house.id}/payments/${const Uuid().v1()}.png").putFile(image);

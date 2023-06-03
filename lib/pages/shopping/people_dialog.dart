@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
@@ -20,7 +21,7 @@ class PeopleDialog extends StatefulWidget {
 }
 
 class _PeopleDialogState extends State<PeopleDialog> {
-  late final users = widget.house.users.values.where((user) => user.uid.isNotEmpty);
+  late final users = widget.house.users.values.where((user) => user.uid.isNotEmpty).sorted((a, b) => a.username.compareTo(b.username));
   late final Set<String> _value = Set.from(widget.initialValue ?? {});
 
   @override

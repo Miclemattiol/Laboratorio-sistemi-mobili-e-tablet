@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
+import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/account/account_page.dart';
@@ -72,8 +73,8 @@ class _MainPageStackState extends State<_MainPageStack> {
   List<PageData> _pages() {
     return [
       PageData(icon: Icons.person, label: localizations(context).accountPage, widget: const AccountPage()),
-      PageData(icon: Icons.attach_money, label: localizations(context).paymentsPage, widget: const PaymentsPage()),
-      PageData(icon: Icons.shopping_cart, label: localizations(context).shoppingPage, widget: const ShoppingPage()),
+      PageData(icon: Icons.attach_money, label: localizations(context).paymentsPage, widget: Consumer<Categories?>(builder: (context, value, _) => PaymentsPage(value ?? []))),
+      PageData(icon: Icons.shopping_cart, label: localizations(context).shoppingPage, widget: Consumer<Categories?>(builder: (context, value, _) => ShoppingPage(value ?? []))),
       PageData(icon: Icons.assignment, label: localizations(context).tasksPage, widget: const TasksPage()),
       PageData(icon: Icons.groups, label: localizations(context).housePage, widget: const HousePage()),
     ];
@@ -81,31 +82,37 @@ class _MainPageStackState extends State<_MainPageStack> {
 
   @override
   Widget build(BuildContext context) {
+    final house = HouseDataRef.of(context);
     final pages = _pages();
     _selectedIndex = _selectedIndex.clamp(0, pages.length - 1);
     return ChangeNotifierProvider(
       create: (context) => BadgesNotifier(),
-      builder: (context, child) => Scaffold(
-        body: IndexedStack(
-          index: _selectedIndex,
-          children: pages.map((page) => page.widget).toList(),
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: _selectedIndex,
-          onTap: (index) {
-            prefs.setLastSection(index);
-            setState(() => _selectedIndex = index);
-          },
-          items: () {
-            final badges = BadgesNotifier.of(context).badges;
-            return pages.map((page) {
-              final badge = badges[page.widget.runtimeType] ?? 0;
-              return BottomNavigationBarItem(
-                icon: badge == 0 ? Icon(page.icon) : Badge(label: Text("$badge"), child: Icon(page.icon)),
-                label: page.label,
-              );
-            }).toList();
-          }(),
+      builder: (context, child) => StreamProvider<Categories?>(
+        initialData: null,
+        create: (context) => PaymentsPage.categoriesFirestoreRef(house.id).orderBy(Category.nameKey).snapshots().map((data) => defaultFirestoreConverter(data).toList()),
+        catchError: (context, error) => null,
+        child: Scaffold(
+          body: IndexedStack(
+            index: _selectedIndex,
+            children: pages.map((page) => page.widget).toList(),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            currentIndex: _selectedIndex,
+            onTap: (index) {
+              prefs.setLastSection(index);
+              setState(() => _selectedIndex = index);
+            },
+            items: () {
+              final badges = BadgesNotifier.of(context).badges;
+              return pages.map((page) {
+                final badge = badges[page.widget.runtimeType] ?? 0;
+                return BottomNavigationBarItem(
+                  icon: badge == 0 ? Icon(page.icon) : Badge(label: Text("$badge"), child: Icon(page.icon)),
+                  label: page.label,
+                );
+              }).toList();
+            }(),
+          ),
         ),
       ),
     );

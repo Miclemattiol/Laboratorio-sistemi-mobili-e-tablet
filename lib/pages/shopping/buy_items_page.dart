@@ -1,24 +1,35 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart' hide Category;
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/components/form/category_form_field.dart';
 import 'package:house_wallet/components/shopping/shopping_item_tile_buy_page.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
+import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/dropdown_list_tile.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
+import 'package:house_wallet/data/payments/category.dart';
+import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/payments/categories/category_dialog.dart';
+import 'package:house_wallet/pages/payments/payments_page.dart';
+import 'package:house_wallet/pages/shopping/price_quantity_dialog.dart';
+import 'package:house_wallet/themes.dart';
 
 class BuyItemsPage extends StatefulWidget {
+  final List<FirestoreDocument<ShoppingItemRef>> shoppingItems;
+  final List<FirestoreDocument<Category>> categories;
   final LoggedUser loggedUser;
   final HouseDataRef house;
-  final List<FirestoreDocument<ShoppingItemRef>> shoppingItems;
   final void Function() onComplete;
 
   const BuyItemsPage(
     this.shoppingItems, {
+    required this.categories,
     required this.loggedUser,
     required this.house,
     required this.onComplete,
@@ -30,23 +41,90 @@ class BuyItemsPage extends StatefulWidget {
 }
 
 class _BuyItemsPageState extends State<BuyItemsPage> {
-  late final Map<String, num?> _prices = Map.fromEntries(widget.shoppingItems.map((item) => MapEntry(item.id, item.data.price)).toList());
+  late final Map<String, PriceQuantity?> _pricesQuantities = Map.fromEntries(widget.shoppingItems.map((item) => MapEntry(item.id, PriceQuantity(item.data.price, item.data.quantity))).toList());
+  late String _payAsValue = widget.loggedUser.uid;
 
-  late String _payAsValue = widget.loggedUser.uid; //TODO use this value when adding the payment
+  Future<String?> _categoryPrompt() async {
+    String? categoryValue;
+
+    void returnValue(BuildContext context) async {
+      final navigator = Navigator.of(context);
+
+      if (categoryValue == CategoryFormField.newCategoryKey) {
+        categoryValue = await showDialog<String?>(context: context, builder: (context) => CategoryDialog(house: widget.house));
+        if (categoryValue == null) return navigator.pop<String?>();
+      }
+
+      if (mounted) {
+        Navigator.of(context).pop<String?>(categoryValue ?? CategoryFormField.noCategoryKey);
+      }
+    }
+
+    return await showDialog<String>(
+      context: context,
+      builder: (context) => CustomDialog(
+        dismissible: false,
+        padding: const EdgeInsets.all(24),
+        crossAxisAlignment: CrossAxisAlignment.center,
+        body: [
+          CategoryFormField(
+            categories: widget.categories,
+            decoration: inputDecoration(localizations(context).category),
+            onChanged: (category) => categoryValue = category,
+          ),
+        ],
+        actions: [
+          ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).cancel)),
+          ModalButton(onPressed: () => returnValue(context), child: Text(localizations(context).ok)),
+        ],
+      ),
+    );
+  }
 
   void _confirmPurchase() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     final appLocalizations = localizations(context);
 
-    try {
-      final batch = FirebaseFirestore.instance.batch();
+    final category = await _categoryPrompt();
+    if (category == null) return;
 
-      for (final item in widget.shoppingItems) {
-        batch.delete(item.reference);
-      }
-      _payAsValue; //TODO add payment
-      await batch.commit();
+    final groupedItems = <Shares, List<ShoppingItemRef>>{};
+    List<ShoppingItemRef> getShareList(shares) => groupedItems.entries.firstWhere((entry) => mapEquals(entry.key, shares), orElse: () => MapEntry(shares, groupedItems[shares] = [])).value;
+
+    for (final item in widget.shoppingItems) {
+      final shares = item.data.shares.isNotEmpty ? item.data.shares : widget.house.users.map((key, _) => MapEntry(key, 1));
+      getShareList(shares).add(item.data);
+    }
+
+    try {
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        for (final item in widget.shoppingItems) {
+          transaction.delete(item.reference);
+        }
+
+        for (final group in groupedItems.entries) {
+          final price = group.value.fold<num>(0, (prev, value) => prev + (value.price ?? 0) * (value.quantity ?? 1));
+          transaction.set<Payment>(
+            PaymentsPage.paymentsFirestoreRef(widget.house.id).doc(),
+            Payment(
+              title: appLocalizations.shoppingPage,
+              category: category == CategoryFormField.noCategoryKey ? null : category,
+              description: group.value.map((item) => item.title).join(", "),
+              price: price,
+              imageUrl: null,
+              date: DateTime.now(),
+              from: _payAsValue,
+              to: group.key,
+            ),
+          );
+
+          widget.house.updateBalances(
+            transaction,
+            newValues: SharesData(from: widget.loggedUser.uid, price: price, shares: group.key),
+          );
+        }
+      });
 
       widget.onComplete();
       navigator.pop();
@@ -66,7 +144,8 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
         children: widget.shoppingItems.map((item) {
           return ShoppingItemTileBuyPage(
             item,
-            onChanged: (value) => setState(() => _prices[item.id] = value),
+            value: _pricesQuantities[item.id] ?? const PriceQuantity(null, null),
+            onChanged: (value) => setState(() => _pricesQuantities[item.id] = value),
           );
         }).toList(),
       ),
@@ -85,7 +164,10 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
             ),
             ListTile(
               title: Text(localizations(context).totalPrice, style: Theme.of(context).textTheme.headlineMedium),
-              trailing: Text(currencyFormat(context).format(_prices.values.fold<num>(0, (prev, price) => prev + (price ?? 0))), style: Theme.of(context).textTheme.headlineSmall),
+              trailing: Text(
+                currencyFormat(context).format(_pricesQuantities.values.fold<num>(0, (prev, value) => prev + (value?.quantity ?? 1) * (value?.price ?? 0))),
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
             ),
             PadRow(
               spacing: 1,

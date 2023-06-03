@@ -32,7 +32,7 @@ class DetailsItemChip extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             padding: EdgeInsets.symmetric(vertical: 8, horizontal: hasData ? 16 : 8),
             children: [
-              Icon(icon, color: hasData ? Theme.of(context).colorScheme.onTertiary : Colors.black),
+              Icon(icon, color: hasData ? Theme.of(context).colorScheme.onTertiary : Theme.of(context).colorScheme.onBackground),
               if (hasData) Text(label!, style: TextStyle(color: Theme.of(context).colorScheme.onTertiary)),
             ],
           ),

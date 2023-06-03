@@ -7,6 +7,7 @@ import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
+import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/shopping/recipe.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
@@ -37,7 +38,9 @@ class ShoppingPageStyle extends ThemeExtension<ShoppingPageStyle> {
 }
 
 class ShoppingPage extends StatefulWidget {
-  const ShoppingPage({super.key});
+  final Categories categories;
+
+  const ShoppingPage(this.categories, {super.key});
 
   static CollectionReference<ShoppingItem> firestoreRef(String houseId) => FirebaseFirestore.instance.collection("/groups/$houseId/shopping").withConverter(fromFirestore: ShoppingItem.fromFirestore, toFirestore: ShoppingItem.toFirestore);
 
@@ -92,6 +95,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                       SlidingPageRoute(
                         BuyItemsPage(
                           _checkedItems(),
+                          categories: widget.categories,
                           loggedUser: LoggedUser.of(context, listen: false),
                           house: HouseDataRef.of(context, listen: false),
                           onComplete: () => setState(() => _checkedIds.clear()),

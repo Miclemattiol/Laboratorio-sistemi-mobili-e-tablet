@@ -8,7 +8,7 @@ import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/payments/categories/categories_page.dart';
+import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:house_wallet/utils.dart';
 
@@ -46,12 +46,12 @@ class _CategoryDialogState extends State<CategoryDialog> {
 
     setState(() => _loading = true);
     try {
-      if ((await CategoriesPage.firestoreRef(widget.house.id).where(Category.iconKey, isEqualTo: _iconValue!.codePoint).where(Category.nameKey, isEqualTo: _nameValue).count().get()).count != 0) {
+      if ((await PaymentsPage.categoriesFirestoreRef(widget.house.id).where(Category.iconKey, isEqualTo: _iconValue!.codePoint).where(Category.nameKey, isEqualTo: _nameValue).count().get()).count != 0) {
         throw FirebaseException(plugin: "", message: "duplicate");
       }
 
       if (widget.category == null) {
-        final ref = await CategoriesPage.firestoreRef(widget.house.id).add(Category(
+        final ref = await PaymentsPage.categoriesFirestoreRef(widget.house.id).add(Category(
           icon: _iconValue!,
           name: _nameValue!,
         ));

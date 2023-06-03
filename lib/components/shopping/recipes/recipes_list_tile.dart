@@ -7,6 +7,7 @@ import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/shopping/recipe.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/shopping/people_share_dialog.dart';
 import 'package:house_wallet/pages/shopping/recipes/recipe_bottom_sheet.dart';
 import 'package:house_wallet/pages/shopping/shopping_page.dart';
 
@@ -42,6 +43,9 @@ class RecipeListTile extends StatelessWidget {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final appLocalizations = localizations(context);
 
+    final to = await showDialog<Shares>(context: context, builder: (context) => PeopleSharesDialog(house: house, initialValues: house.users.map((key, value) => MapEntry(key, 1))));
+    if (to == null) return;
+
     try {
       final batch = FirebaseFirestore.instance.batch();
 
@@ -53,7 +57,7 @@ class RecipeListTile extends StatelessWidget {
             quantity: item.quantity,
             supermarket: item.supermarket,
             title: item.title,
-            to: {},
+            to: to,
           ),
         );
       }

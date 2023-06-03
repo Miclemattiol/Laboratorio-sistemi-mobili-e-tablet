@@ -182,7 +182,7 @@
     },
     "userTransfer": "Transfer ownership",
     "userTransferTitle": "Confirm transfer",
-    "userTransferContent": "Are you sure you want to transfer the house's ownership to {username}? The action can be undone only by them!",
+    "userTransferContent": "Are you sure you want to transfer the house's ownership to {username}? The action can only be undone by them!",
     "@userTransferContent": {
         "placeholders": {
             "username": {

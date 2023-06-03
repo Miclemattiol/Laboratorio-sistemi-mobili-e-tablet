@@ -4,12 +4,12 @@ import 'package:house_wallet/pages/shopping/people_share_dialog.dart';
 
 class PeopleSharesFormField extends StatelessWidget {
   final HouseDataRef house;
-  final Map<String, int>? initialValue;
+  final Shares? initialValue;
   final AutovalidateMode? autovalidateMode;
   final InputDecoration? decoration;
-  final String? Function(Map<String, int> value)? validator;
-  final void Function(Map<String, int> value)? onSaved;
-  final void Function(Map<String, int> value)? onChanged;
+  final String? Function(Shares value)? validator;
+  final void Function(Shares value)? onSaved;
+  final void Function(Shares value)? onChanged;
   final bool enabled;
 
   const PeopleSharesFormField({
@@ -24,8 +24,8 @@ class PeopleSharesFormField extends StatelessWidget {
     super.key,
   });
 
-  void _pickPeople(BuildContext context, FormFieldState<Map<String, int>?> state) async {
-    final value = await showDialog<Map<String, int>>(
+  void _pickPeople(BuildContext context, FormFieldState<Shares?> state) async {
+    final value = await showDialog<Shares>(
       context: context,
       builder: (_) => PeopleSharesDialog(house: house, initialValues: state.value),
     );
@@ -37,7 +37,7 @@ class PeopleSharesFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FormField<Map<String, int>>(
+    return FormField<Shares>(
       initialValue: initialValue ?? {},
       autovalidateMode: autovalidateMode,
       validator: (value) => validator?.call(value ?? {}),

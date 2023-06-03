@@ -95,7 +95,7 @@ class CategoryFormField extends StatelessWidget {
               ? (value) {
                   final newValue = value == noCategoryKey ? null : value;
                   state.didChange(newValue);
-                  onChanged?.call(newValue!);
+                  onChanged?.call(newValue);
                 }
               : null,
         ),

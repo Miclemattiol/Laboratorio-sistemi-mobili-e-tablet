@@ -30,7 +30,10 @@ class RecipeItemListTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
-            child: Text(item == null ? localizations(context).recipesPageNewItem : item!.title),
+            child: Text(
+              item == null ? localizations(context).recipesPageNewItem : item!.title,
+              style: item == null ? const TextStyle(fontStyle: FontStyle.italic) : null,
+            ),
           ),
           IconButton(
             tooltip: item == null ? localizations(context).recipesPageNewItem : localizations(context).delete,

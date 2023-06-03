@@ -4,10 +4,12 @@ import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:provider/provider.dart';
 
+typedef Shares = Map<String, int>;
+
 class SharesData {
   final String from;
   final num price;
-  final Map<String, int> shares;
+  final Shares shares;
 
   const SharesData({
     required this.from,
@@ -71,8 +73,8 @@ class HouseDataRef {
   User getUser(String uid) => users[uid] ?? const User.invalid();
   num getBalance(String uid) => balances[uid] ?? 0;
 
-  static num calculateImpactForUser(String uid, {required String from, required num price, required Map<String, int> shares}) {
-    final totalShares = shares.values.fold<num>(0, (prev, share) => prev + share);
+  static num calculateImpactForUser(String uid, {required String from, required num price, required Shares shares}) {
+    final totalShares = shares.values.reduce((prev, value) => prev + value);
     final pricePerShare = price / totalShares;
     final myShare = shares[uid];
 

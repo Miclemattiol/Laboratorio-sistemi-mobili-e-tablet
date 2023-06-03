@@ -61,6 +61,9 @@ class TradeRef extends PaymentOrTrade {
     required super.description,
   });
 
+  @override
+  Shares get shares => {to.uid: 1};
+
   static FirestoreConverter<Trade, TradeRef> converter(BuildContext context) {
     final houseRef = HouseDataRef.of(context);
     return firestoreConverter((doc) {

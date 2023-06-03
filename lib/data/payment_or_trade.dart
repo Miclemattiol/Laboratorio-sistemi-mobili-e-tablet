@@ -1,5 +1,4 @@
-import 'package:house_wallet/data/payments/payment.dart';
-import 'package:house_wallet/data/payments/trade.dart';
+import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/user.dart';
 
 abstract class PaymentOrTrade {
@@ -15,5 +14,5 @@ abstract class PaymentOrTrade {
     required this.description,
   });
 
-  Map<String, int> get shares => this is PaymentRef ? (this as PaymentRef).to.map((key, value) => MapEntry(key, value.share)) : {(this as TradeRef).to.uid: 1};
+  Shares get shares;
 }

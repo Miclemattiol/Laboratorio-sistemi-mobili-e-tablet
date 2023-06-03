@@ -35,7 +35,7 @@ class _ShoppingItemDetailsBottomSheetState extends State<ShoppingItemDetailsBott
   int? _quantityValue;
   String? _supermarketValue;
   String? _titleValue;
-  Map<String, int>? _toValue;
+  Shares? _toValue;
 
   void _saveShoppingItem() async {
     final navigator = Navigator.of(context);

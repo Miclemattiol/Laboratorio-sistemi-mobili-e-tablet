@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/payments/categories/category_list_tile.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
@@ -7,6 +6,7 @@ import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/categories/category_dialog.dart';
+import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -18,14 +18,12 @@ class CategoriesPage extends StatelessWidget {
     super.key,
   });
 
-  static CollectionReference<Category> firestoreRef(String houseId) => FirebaseFirestore.instance.collection("/groups/$houseId/categories").withConverter(fromFirestore: Category.fromFirestore, toFirestore: Category.toFirestore);
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarFix(title: Text(localizations(context).categoriesPage)),
       body: StreamBuilder(
-        stream: firestoreRef(house.id).snapshots().map(defaultFirestoreConverter),
+        stream: PaymentsPage.categoriesFirestoreRef(house.id).orderBy(Category.nameKey).snapshots().map(defaultFirestoreConverter),
         builder: (context, snapshot) {
           final categories = snapshot.data;
 

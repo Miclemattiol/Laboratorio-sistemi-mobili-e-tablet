@@ -11,6 +11,18 @@ class PriceQuantity {
   final int? quantity;
 
   const PriceQuantity(this.price, this.quantity);
+
+  String? label(BuildContext context) {
+    if (price != null) {
+      return "${quantity ?? 1} x ${currencyFormat(context).format(price)}";
+    }
+
+    if (quantity != null) {
+      return "${quantity ?? 1}x";
+    }
+
+    return null;
+  }
 }
 
 class PriceQuantityDialog extends StatefulWidget {
@@ -40,18 +52,18 @@ class _PriceQuantityDialogState extends State<PriceQuantityDialog> {
           spacing: 16,
           children: [
             Expanded(
+              child: NumberFormField<int>(
+                initialValue: widget.initialValue?.quantity,
+                decoration: inputDecoration(localizations(context).quantity),
+                onChanged: (value) => _quantityValue = value,
+              ),
+            ),
+            Expanded(
               child: NumberFormField(
                 initialValue: widget.initialValue?.price,
                 decimal: true,
                 decoration: inputDecoration(localizations(context).price),
                 onChanged: (value) => _priceValue = value,
-              ),
-            ),
-            Expanded(
-              child: NumberFormField<int>(
-                initialValue: widget.initialValue?.quantity,
-                decoration: inputDecoration(localizations(context).quantity),
-                onChanged: (value) => _quantityValue = value,
               ),
             ),
           ],

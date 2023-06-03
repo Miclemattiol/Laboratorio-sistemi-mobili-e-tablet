@@ -94,7 +94,7 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
           DatePickerFormField(
             enabled: !_loading,
             initialValue: widget.trade.data.date,
-            firstDate: DateTime(DateTime.now().year - 10),
+            lastDate: DateTime.now(),
             decoration: inputDecoration(localizations(context).date),
             onSaved: (date) => _dateValue = date,
           ),

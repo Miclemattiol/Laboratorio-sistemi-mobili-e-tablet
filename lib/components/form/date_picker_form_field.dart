@@ -64,15 +64,16 @@ class DatePickerFormField extends StatelessWidget {
 
   void _pickDateTime(BuildContext context, FormFieldState<DateTime?> state) async {
     final initialDate = state.value ?? DateTime.now();
-    final firstDate = this.firstDate ?? (lastDate != null ? DateTime(lastDate!.year - 100, lastDate!.month, lastDate!.day) : DateTime.now());
+    final firstDate = this.firstDate ?? (this.lastDate != null ? DateTime(this.lastDate!.year - 100, this.lastDate!.month, this.lastDate!.day) : DateTime.now());
+    final lastDate = this.lastDate ?? DateTime(firstDate.year + 100, firstDate.month, firstDate.day);
 
     DateTime? date = !pickDate
         ? DateTime(0)
         : await showDatePicker(
             context: context,
             initialDate: initialDate,
-            firstDate: firstDate,
-            lastDate: lastDate ?? DateTime(firstDate.year + 100, firstDate.month, firstDate.day),
+            firstDate: state.value?.isBefore(firstDate) == true ? state.value! : firstDate,
+            lastDate: state.value?.isAfter(lastDate) == true ? state.value! : lastDate,
             locale: const Locale("it", "IT"),
           );
     if (date == null) return;

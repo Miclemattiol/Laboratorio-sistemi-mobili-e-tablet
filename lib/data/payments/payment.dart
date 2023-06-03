@@ -14,7 +14,7 @@ class Payment {
   final String? imageUrl;
   final num price;
   final String title;
-  final Map<String, int> to;
+  final Shares to;
 
   static const categoryKey = "category";
   static const dateKey = "date";
@@ -62,25 +62,6 @@ class Payment {
       toKey: trade.to,
     };
   }
-
-  impact(String uid) {
-    //to test
-    final totalShares = to.values.fold<num>(0, (prev, element) => prev + element);
-    final pricePerShare = price / totalShares;
-    final myShare = to[uid];
-
-    if (from == uid) {
-      if (to.containsKey(uid)) {
-        return pricePerShare * (totalShares - myShare!);
-      } else {
-        return price;
-      }
-    } else if (to.containsKey(uid)) {
-      return -pricePerShare * myShare!;
-    } else {
-      return 0;
-    }
-  }
 }
 
 class PaymentRef extends PaymentOrTrade {
@@ -100,6 +81,9 @@ class PaymentRef extends PaymentOrTrade {
     required this.to,
   });
 
+  @override
+  Shares get shares => to.map((key, value) => MapEntry(key, value.share));
+
   static FirestoreConverter<Payment, PaymentRef> converter(BuildContext context, Iterable<FirestoreDocument<Category>>? categories) {
     final houseRef = HouseDataRef.of(context);
     final categoriesMap = Map.fromEntries((categories ?? []).map((category) => MapEntry(category.id, category)));
@@ -116,24 +100,5 @@ class PaymentRef extends PaymentOrTrade {
         to: payment.to.map((uid, share) => MapEntry(uid, UserShare(houseRef.getUser(uid), share))),
       );
     });
-  }
-
-  impact(String uid) {
-    //To test
-    final totalShares = to.values.fold<num>(0, (prev, element) => prev + element.share);
-    final pricePerShare = price / totalShares;
-    final myShare = to[uid]?.share;
-
-    if (from.uid == uid) {
-      if (to.containsKey(uid)) {
-        return pricePerShare * (totalShares - myShare!);
-      } else {
-        return price;
-      }
-    } else if (to.containsKey(uid)) {
-      return -pricePerShare * myShare!;
-    } else {
-      return 0;
-    }
   }
 }

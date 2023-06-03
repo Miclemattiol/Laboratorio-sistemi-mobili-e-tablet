@@ -61,7 +61,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
 
     try {
       if (isLastUser) {
-        await house.reference.delete();
+        await house.reference.delete(); //TODO check
       } else {
         await _handleUserLeaving(loggedUser.uid);
       }
