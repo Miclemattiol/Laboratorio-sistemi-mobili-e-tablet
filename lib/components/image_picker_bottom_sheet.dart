@@ -99,7 +99,7 @@ class ImagePage extends StatelessWidget {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
-      floatingActionButton: const CloseButton(),
+      floatingActionButton: CloseButton(style: ButtonStyle(backgroundColor: MaterialStatePropertyAll(Theme.of(context).colorScheme.background.withOpacity(.25)))),
     );
   }
 }

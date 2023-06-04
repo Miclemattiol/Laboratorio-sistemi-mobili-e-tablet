@@ -8,6 +8,8 @@ import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/sign_up_page.dart';
 import 'package:house_wallet/themes.dart';
 
+//TODO forgot password
+//TODO Check if signUp works
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -48,7 +50,6 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  //TODO add test app functionality with demo values?
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,6 +85,16 @@ class _LoginPageState extends State<LoginPage> {
                       onSaved: (password) => _passwordValue = password,
                       onEditingComplete: _loading ? null : _login,
                     ),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: InkWell(
+                        onTap: () {},
+                        child: Text(
+                          "Password dimenticata?",
+                          style: TextStyle(color: Color(0xFF55D6F5)), //TODO color
+                        ),
+                      ),
+                    )
                   ],
                 ),
                 Column(

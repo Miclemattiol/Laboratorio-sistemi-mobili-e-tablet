@@ -19,7 +19,7 @@ class Category {
   factory Category.fromFirestore(DocumentSnapshot<Map<String, dynamic>> doc, [SnapshotOptions? _]) {
     final data = doc.data()!;
     return Category(
-      icon: IconData(data[iconKey], fontFamily: "MaterialIcons"),
+      icon: IconData(data[iconKey], fontFamily: "MaterialIcons"), //TODO fix for flutter build apk
       name: data[nameKey],
     );
   }

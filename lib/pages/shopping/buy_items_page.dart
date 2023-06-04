@@ -119,9 +119,10 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
             ),
           );
 
+          //TODO only the last one is executed
           widget.house.updateBalances(
             transaction,
-            newValues: SharesData(from: widget.loggedUser.uid, price: price, shares: group.key),
+            newValues: SharesData(from: _payAsValue, price: price, shares: group.key),
           );
         }
       });

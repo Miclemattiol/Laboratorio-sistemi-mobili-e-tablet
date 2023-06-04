@@ -50,6 +50,7 @@ class PaymentDetailsBottomSheet extends StatefulWidget {
   State<PaymentDetailsBottomSheet> createState() => _PaymentDetailsBottomSheetState();
 }
 
+//TODO add paidBy field
 class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;

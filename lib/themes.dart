@@ -41,7 +41,6 @@ BoxConstraints multiInputRowConstraints(BuildContext context) => BoxConstraints(
 
 const animationDuration = Duration(milliseconds: 200);
 
-//TODO themes
 ThemeData get lightTheme {
   final colorScheme = ColorScheme.fromSeed(seedColor: const Color(0xFFA6D0DD), brightness: Brightness.light);
   final theme = ThemeData(colorScheme: colorScheme);
@@ -108,7 +107,7 @@ ThemeData get darkTheme {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
     ),
     extensions: const {
-      ShoppingPageStyle(shoppingPostItColor: Color(0xFF7C7341)),
+      ShoppingPageStyle(shoppingPostItColor: Color(0xFF8B7624)),
     },
   );
 }

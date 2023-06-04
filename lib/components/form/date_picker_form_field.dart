@@ -74,7 +74,7 @@ class DatePickerFormField extends StatelessWidget {
             initialDate: initialDate,
             firstDate: state.value?.isBefore(firstDate) == true ? state.value! : firstDate,
             lastDate: state.value?.isAfter(lastDate) == true ? state.value! : lastDate,
-            locale: const Locale("it", "IT"),
+            locale: Localizations.localeOf(context),
           );
     if (date == null) return;
     TimeOfDay? time = await (() async => !pickTime || !context.mounted
@@ -84,7 +84,7 @@ class DatePickerFormField extends StatelessWidget {
             initialTime: TimeOfDay.fromDateTime(initialDate),
             builder: (context, child) {
               return Localizations(
-                locale: const Locale("it", "IT"),
+                locale: Localizations.localeOf(context),
                 delegates: GlobalMaterialLocalizations.delegates,
                 child: child,
               );

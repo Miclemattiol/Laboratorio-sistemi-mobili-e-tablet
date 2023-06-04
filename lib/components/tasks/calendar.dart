@@ -43,7 +43,7 @@ class _CalendarState extends State<Calendar> {
     return DateTime(initialDate.year, initialDate.month);
   }();
 
-  Color get _headerTextColor => Theme.of(context).colorScheme.onPrimaryContainer;
+  Color get _headerTextColor => Theme.of(context).colorScheme.onPrimary;
 
   List<List<_RangeColor>> _calculateRanges() {
     if (widget.ranges.isEmpty) return [];
@@ -191,7 +191,7 @@ class _CalendarState extends State<Calendar> {
     }
 
     final textColor = () {
-      if (isToday) return Theme.of(context).colorScheme.onPrimary;
+      if (isToday) return Theme.of(context).colorScheme.onPrimaryContainer;
       if (date.month != _date.month) return Theme.of(context).disabledColor;
       return null;
     }();
@@ -205,7 +205,7 @@ class _CalendarState extends State<Calendar> {
               width: _todaySize,
               height: _todaySize,
               decoration: BoxDecoration(
-                color: isToday ? Theme.of(context).colorScheme.primary : null,
+                color: isToday ? Theme.of(context).colorScheme.primaryContainer : null,
                 borderRadius: BorderRadius.circular(_todaySize / 2),
               ),
               child: Center(child: Text("${date.day}", textAlign: TextAlign.center, style: TextStyle(color: textColor))),
@@ -245,7 +245,7 @@ class _CalendarState extends State<Calendar> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              color: Theme.of(context).colorScheme.primaryContainer,
+              color: Theme.of(context).colorScheme.primary,
               child: Column(
                 children: [
                   _buildMonthPicker(),
