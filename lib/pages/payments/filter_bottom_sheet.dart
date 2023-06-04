@@ -128,12 +128,12 @@ class _FilterBottomSheetState extends State<FilterBottomSheet> {
               TextFormField(
                 initialValue: widget.currentFilter.title,
                 decoration: inputDecoration(localizations(context).title),
-                onSaved: (title) => _titleValue = (title ?? "").trim(),
+                onSaved: (title) => _titleValue = title.nullTrim(),
               ),
               TextFormField(
                 initialValue: widget.currentFilter.description,
                 decoration: inputDecoration(localizations(context).description),
-                onSaved: (description) => _descriptionValue = (description ?? "").trim(),
+                onSaved: (description) => _descriptionValue = description.nullTrim(),
               ),
               CategoriesFormField(
                 values: widget.categories,

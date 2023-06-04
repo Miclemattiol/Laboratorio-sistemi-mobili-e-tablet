@@ -72,10 +72,10 @@ class _AccountPageState extends State<AccountPage> {
     final username = await CustomDialog.prompt(
       context: context,
       title: localizations(context).changeUsernameTitle,
-      inputLabel: localizations(context).username,
+      inputDecoration: inputDecoration(localizations(context).username),
       initialValue: currentUsername,
-      onSaved: (newValue) => newValue?.trim(),
-      validator: (value) => (value ?? "").trim().isEmpty ? localizations(context).usernameMissing : null,
+      onSaved: (username) => username?.trim(),
+      validator: (username) => username.nullTrim().isEmpty ? localizations(context).usernameMissing : null,
     );
     if (username == null || username == currentUsername) return;
 
@@ -138,7 +138,7 @@ class _AccountPageState extends State<AccountPage> {
         CustomDialog.alert(
           context: context,
           title: localizations(context).changePasswordTitle,
-          content: "${localizations(context).changePasswordError}\n(${error.message})",
+          content: localizations(context).changePasswordError(error.message.toString()),
         );
       }
     }

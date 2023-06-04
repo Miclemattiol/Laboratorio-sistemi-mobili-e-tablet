@@ -13,6 +13,7 @@
             }
         }
     },
+    "forgotPassword": "Password dimenticata?",
     "noHousePageTitle": "Non fai parte di nessuna casa!",
     "noHousePageContent": "Se hai un codice inseriscilo qui! 👇",
     "noHousePageContentOr": "oppure",
@@ -23,7 +24,14 @@
     "changePasswordTitle": "Cambia password",
     "changePasswordContent": "Ti verrà inviata un email con un link per cambiare la tua password. Vuoi procedere?",
     "changePasswordSuccess": "Email inviata, controlla la tua posta in arrivo e lo spam",
-    "changePasswordError": "Impossibile inviare l'email per il reset della password",
+    "changePasswordError": "Impossibile inviare l'email per il reset della password ({error})",
+    "@changePasswordError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
     "logoutConfirm": "Sei sicuro di voler effettuare il logout?",
     "notificationsPage": "Notifiche",
     "paymentsPage": "Transazioni",

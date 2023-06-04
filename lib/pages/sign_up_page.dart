@@ -69,8 +69,8 @@ class _SignUpPageState extends State<SignUpPage> {
               TextFormField(
                 decoration: inputDecoration(localizations(context).username),
                 enabled: !_loading,
-                validator: (username) => (username == null || username.trim().isEmpty) ? localizations(context).usernameMissing : null,
-                onSaved: (username) => _usernameValue = username,
+                validator: (username) => username.nullTrim().isEmpty ? localizations(context).usernameMissing : null,
+                onSaved: (username) => _usernameValue = username.nullTrim(),
               ),
               TextFormField(
                 decoration: inputDecoration(localizations(context).email),
@@ -81,7 +81,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   if (!EmailValidator.validate(email.trim())) return localizations(context).emailInvalid;
                   return null;
                 },
-                onSaved: (email) => _emailValue = (email ?? "").trim(),
+                onSaved: (email) => _emailValue = email.nullTrim(),
               ),
               TextFormField(
                 decoration: inputDecoration(localizations(context).password),

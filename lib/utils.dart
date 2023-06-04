@@ -35,7 +35,8 @@ extension BoolExtension on bool {
 }
 
 extension NullStringExtension on String? {
-  String? toNullable() => (this ?? "").trim() == "" ? null : this!.trim();
+  String nullTrim() => (this ?? "").trim();
+  String? toNullable() => nullTrim() == "" ? null : this!.trim();
 
   bool containsCaseUnsensitive(Pattern other, [int startIndex = 0]) {
     if (other is String) {

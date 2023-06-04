@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/ui/modal_button.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/themes.dart';
 
 class CustomDialog extends StatelessWidget {
   final List<Widget> body;
@@ -73,8 +72,9 @@ class CustomDialog extends StatelessWidget {
   static Future<String?> prompt({
     required BuildContext context,
     required String title,
-    required String inputLabel,
+    InputDecoration? inputDecoration,
     String? initialValue,
+    TextInputType? keyboardType,
     String? Function(String? newValue)? onSaved,
     String? Function(String? value)? validator,
     String? content,
@@ -104,7 +104,9 @@ class CustomDialog extends StatelessWidget {
               child: TextFormField(
                 autofocus: true,
                 initialValue: initialValue,
-                decoration: inputDecoration(inputLabel),
+                keyboardType: keyboardType,
+                decoration: inputDecoration,
+                onEditingComplete: submit,
                 onSaved: (newValue) => value = onSaved?.call(newValue) ?? newValue,
                 validator: validator,
               ),

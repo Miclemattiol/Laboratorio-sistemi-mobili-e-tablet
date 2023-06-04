@@ -6,6 +6,7 @@ import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 
 class NoHousePage extends StatefulWidget {
   const NoHousePage({super.key});
@@ -88,7 +89,7 @@ class _NoHousePageState extends State<NoHousePage> {
                     suffixIcon: GestureDetector(onTap: _loading ? null : _joinGroup, child: const Icon(Icons.send)),
                   ),
                   enabled: !_loading,
-                  validator: (code) => (code ?? "").trim().isEmpty ? localizations(context).groupCodeMissing : null,
+                  validator: (code) => code.nullTrim().isEmpty ? localizations(context).groupCodeMissing : null,
                   onSaved: (code) => _codeValue = code,
                   onEditingComplete: _loading ? null : _joinGroup,
                 ),

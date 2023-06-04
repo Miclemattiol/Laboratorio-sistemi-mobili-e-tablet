@@ -13,6 +13,7 @@
             }
         }
     },
+    "forgotPassword": "Forgot password?",
     "noHousePageTitle": "You are not part of any house!",
     "noHousePageContent": "If you have a code, enter it here! 👇",
     "noHousePageContentOr": "or",
@@ -23,7 +24,14 @@
     "changePasswordTitle": "Change password",
     "changePasswordContent": "An email with a link to change your password will be sent to you. Do you want to proceed?",
     "changePasswordSuccess": "Email send, check your inbox and your spam",
-    "changePasswordError": "Could not send the password reset email",
+    "changePasswordError": "Could not send the password reset email ({error})",
+    "@changePasswordError": {
+        "placeholders": {
+            "error": {
+                "type": "String"
+            }
+        }
+    },
     "logoutConfirm": "Are you sure you want to logout?",
     "notificationsPage": "Notifications",
     "paymentsPage": "Transactions",

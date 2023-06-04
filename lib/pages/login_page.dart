@@ -3,13 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/login/app_icon.dart';
+import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/sign_up_page.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 
-//TODO forgot password
-//TODO Check if signUp works
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -50,6 +50,44 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  void _forgotPassword() async {
+    final email = await CustomDialog.prompt(
+      context: context,
+      title: localizations(context).changePasswordTitle,
+      content: localizations(context).changePasswordContent,
+      inputDecoration: inputDecoration(localizations(context).email),
+      initialValue: _emailValue,
+      keyboardType: TextInputType.emailAddress,
+      onSaved: (email) => email?.trim(),
+      validator: (email) {
+        if (email == null || email.trim().isEmpty) return localizations(context).emailMissing;
+        if (!EmailValidator.validate(email.trim())) return localizations(context).emailInvalid;
+        return null;
+      },
+    );
+    if (email == null) return;
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+
+      if (mounted) {
+        CustomDialog.alert(
+          context: context,
+          title: localizations(context).changePasswordTitle,
+          content: localizations(context).changePasswordSuccess,
+        );
+      }
+    } on FirebaseAuthException catch (error) {
+      if (mounted) {
+        CustomDialog.alert(
+          context: context,
+          title: localizations(context).changePasswordTitle,
+          content: localizations(context).changePasswordError(error.message.toString()),
+        );
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                         if (!EmailValidator.validate(email.trim())) return localizations(context).emailInvalid;
                         return null;
                       },
-                      onSaved: (email) => _emailValue = (email ?? "").trim(),
+                      onSaved: (email) => _emailValue = email.nullTrim(),
                     ),
                     TextFormField(
                       decoration: inputDecoration(localizations(context).password),
@@ -88,11 +126,8 @@ class _LoginPageState extends State<LoginPage> {
                     Align(
                       alignment: Alignment.centerRight,
                       child: InkWell(
-                        onTap: () {},
-                        child: Text(
-                          "Password dimenticata?",
-                          style: TextStyle(color: Color(0xFF55D6F5)), //TODO color
-                        ),
+                        onTap: _forgotPassword,
+                        child: Text(localizations(context).forgotPassword, style: TextStyle(color: Theme.of(context).colorScheme.primary)),
                       ),
                     )
                   ],
