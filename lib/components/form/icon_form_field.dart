@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:house_wallet/components/icon_picker.dart';
+import 'package:house_wallet/data/icons.dart';
 
 class IconFormField extends StatelessWidget {
-  final IconData? initialValue;
+  final String? initialValue;
   final AutovalidateMode? autovalidateMode;
   final InputDecoration? decoration;
-  final String? Function(IconData? value)? validator;
-  final void Function(IconData? value)? onSaved;
-  final void Function(IconData value)? onChanged;
+  final String? Function(String? value)? validator;
+  final void Function(String? value)? onSaved;
+  final void Function(String value)? onChanged;
   final bool enabled;
 
   const IconFormField({
@@ -21,7 +22,7 @@ class IconFormField extends StatelessWidget {
     super.key,
   });
 
-  void _pickIcon(BuildContext context, FormFieldState<IconData> state) async {
+  void _pickIcon(BuildContext context, FormFieldState<String> state) async {
     final icon = await IconPicker.pickIcon(context);
     if (icon == null) return;
     state.didChange(icon);
@@ -29,8 +30,8 @@ class IconFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FormField<IconData>(
-      initialValue: initialValue ?? Icons.shopping_cart,
+    return FormField<String>(
+      initialValue: initialValue ?? "shopping_cart",
       autovalidateMode: autovalidateMode,
       validator: (value) => validator?.call(value),
       onSaved: (newValue) => onSaved?.call(newValue),
@@ -43,7 +44,7 @@ class IconFormField extends StatelessWidget {
               enabled: enabled,
               errorText: decoration?.errorText ?? state.errorText,
             ),
-            child: Icon(state.value!, color: enabled ? null : Theme.of(context).disabledColor),
+            child: Icon(icons[state.value], color: enabled ? null : Theme.of(context).disabledColor),
           ),
         );
       },

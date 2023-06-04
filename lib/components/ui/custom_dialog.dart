@@ -127,23 +127,26 @@ class CustomDialog extends StatelessWidget {
       onWillPop: () async => dismissible,
       child: Dialog(
         clipBehavior: Clip.antiAlias,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              child: SingleChildScrollView(
-                child: PadColumn(
-                  spacing: spacing,
-                  padding: padding,
-                  mainAxisSize: mainAxisSize,
-                  mainAxisAlignment: mainAxisAlignment,
-                  crossAxisAlignment: crossAxisAlignment,
-                  children: body,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 500),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: SingleChildScrollView(
+                  child: PadColumn(
+                    spacing: spacing,
+                    padding: padding,
+                    mainAxisSize: mainAxisSize,
+                    mainAxisAlignment: mainAxisAlignment,
+                    crossAxisAlignment: crossAxisAlignment,
+                    children: body,
+                  ),
                 ),
               ),
-            ),
-            if (actions != null) PadRow(spacing: 1, children: actions!.map((action) => Expanded(child: action)).toList())
-          ],
+              if (actions != null) PadRow(spacing: 1, children: actions!.map((action) => Expanded(child: action)).toList())
+            ],
+          ),
         ),
       ),
     );

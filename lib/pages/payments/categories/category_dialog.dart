@@ -35,7 +35,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
 
-  IconData? _iconValue;
+  String? _iconValue;
   String? _nameValue;
 
   void _saveItem() async {
@@ -46,20 +46,20 @@ class _CategoryDialogState extends State<CategoryDialog> {
 
     setState(() => _loading = true);
     try {
-      if ((await PaymentsPage.categoriesFirestoreRef(widget.house.id).where(Category.iconKey, isEqualTo: _iconValue!.codePoint).where(Category.nameKey, isEqualTo: _nameValue).count().get()).count != 0) {
+      if ((await PaymentsPage.categoriesFirestoreRef(widget.house.id).where(Category.iconKey, isEqualTo: _iconValue!).where(Category.nameKey, isEqualTo: _nameValue!).count().get()).count != 0) {
         throw FirebaseException(plugin: "", message: "duplicate");
       }
 
       if (widget.category == null) {
         final ref = await PaymentsPage.categoriesFirestoreRef(widget.house.id).add(Category(
-          icon: _iconValue!,
+          iconName: _iconValue!,
           name: _nameValue!,
         ));
 
         navigator.pop<String>(ref.id);
       } else {
         await widget.category!.reference.update({
-          Category.iconKey: _iconValue!.codePoint,
+          Category.iconKey: _iconValue!,
           Category.nameKey: _nameValue!,
         });
 
@@ -92,7 +92,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
                 width: 48,
                 child: IconFormField(
                   enabled: !_loading,
-                  initialValue: widget.category?.data.icon,
+                  initialValue: widget.category?.data.iconName,
                   decoration: inputDecoration(),
                   onSaved: (icon) => _iconValue = icon,
                 ),

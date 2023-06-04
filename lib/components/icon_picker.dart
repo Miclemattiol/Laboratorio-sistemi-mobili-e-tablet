@@ -7,8 +7,8 @@ import 'package:house_wallet/main.dart';
 class IconPicker extends StatefulWidget {
   const IconPicker._();
 
-  static Future<IconData?> pickIcon(BuildContext context) {
-    return showDialog<IconData>(context: context, builder: (context) => const IconPicker._());
+  static Future<String?> pickIcon(BuildContext context) {
+    return showDialog<String>(context: context, builder: (context) => const IconPicker._());
   }
 
   @override
@@ -57,7 +57,7 @@ class _IconPickerState extends State<IconPicker> {
                 runSpacing: 12,
                 children: filteredIcons.map((icon) {
                   return GestureDetector(
-                    onTap: () => Navigator.of(context).pop<IconData>(icon.value),
+                    onTap: () => Navigator.of(context).pop<String>(icon.key),
                     child: Tooltip(
                       message: icon.key,
                       child: Icon(icon.value, size: 24),
@@ -70,7 +70,7 @@ class _IconPickerState extends State<IconPicker> {
         )
       ],
       actions: [
-        ModalButton(onPressed: () => Navigator.of(context).pop<IconData?>(), child: Text(localizations(context).cancel)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).cancel)),
       ],
     );
   }
