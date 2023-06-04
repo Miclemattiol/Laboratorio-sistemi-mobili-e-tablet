@@ -82,6 +82,11 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final initialValue = () {
+      final balance = widget.house.getBalance(widget.user.uid);
+      return balance <= 0 ? null : balance;
+    }();
+
     return Form(
       key: _formKey,
       child: CustomDialog(
@@ -90,10 +95,8 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
         body: [
           NumberFormField<num>(
             enabled: !_loading,
-            initialValue: () {
-              final balance = widget.house.getBalance(widget.user.uid);
-              return balance <= 0 ? null : balance;
-            }(),
+            autofocus: initialValue == null,
+            initialValue: initialValue,
             decoration: inputDecoration(localizations(context).price),
             decimal: true,
             validator: (price) => (price == null || price == 0) ? localizations(context).priceMissing : null,

@@ -2,8 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
-		<key>CFBundleDevelopmentRegion</key>
-		<string>$(DEVELOPMENT_LANGUAGE)</string>
+        <key>CFBundleDevelopmentRegion</key>
+        <array>
+            <string>en-US</string>
+            <string>it-IT</string>
+        </array>
+        <key>CFBundleLocalizations</key>
+        <array>
+            <string>en-US</string>
+            <string>it-IT</string>
+        </array>
 		<key>CFBundleDisplayName</key>
 		<string>House Wallet</string>
 		<key>CFBundleExecutable</key>
@@ -49,5 +57,9 @@
 		<true/>
 		<key>UIStatusBarHidden</key>
 		<false/>
+		<key>NSCameraUsageDescription</key>
+		<string>To add images to transactions and to change the profile image</string>
+		<key>NSPhotoLibraryUsageDescription</key>
+		<string>To add images to transactions and to change the profile image</string>
 	</dict>
 </plist>
