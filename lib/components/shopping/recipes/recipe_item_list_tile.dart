@@ -7,16 +7,19 @@ class RecipeItemListTile extends StatelessWidget {
   final RecipeItem? item;
   final void Function()? onPressed;
   final void Function()? onDelete;
+  final bool enabled;
 
   const RecipeItemListTile(
     RecipeItem this.item, {
     required this.onPressed,
     required this.onDelete,
+    this.enabled = true,
     super.key,
   });
 
   const RecipeItemListTile.createNew({
     required this.onPressed,
+    this.enabled = true,
     super.key,
   })  : item = null,
         onDelete = null;
@@ -24,7 +27,7 @@ class RecipeItemListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: onPressed,
+      onTap: enabled ? onPressed : null,
       child: PadRow(
         padding: const EdgeInsets.only(left: 4),
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -32,14 +35,17 @@ class RecipeItemListTile extends StatelessWidget {
           Expanded(
             child: Text(
               item == null ? localizations(context).recipesPageNewItem : item!.title,
-              style: item == null ? const TextStyle(fontStyle: FontStyle.italic) : null,
+              style: TextStyle(
+                fontStyle: item == null ? FontStyle.italic : null,
+                color: enabled ? null : Theme.of(context).disabledColor,
+              ),
             ),
           ),
           IconButton(
             tooltip: item == null ? localizations(context).recipesPageNewItem : localizations(context).delete,
             constraints: const BoxConstraints(),
             style: const ButtonStyle(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
-            onPressed: item == null ? onPressed : onDelete,
+            onPressed: enabled ? (item == null ? onPressed : onDelete) : null,
             icon: Icon(item == null ? Icons.add_circle : Icons.remove_circle),
           ),
         ],

@@ -43,7 +43,7 @@ class IconFormField extends StatelessWidget {
               enabled: enabled,
               errorText: decoration?.errorText ?? state.errorText,
             ),
-            child: Icon(state.value!),
+            child: Icon(state.value!, color: enabled ? null : Theme.of(context).disabledColor),
           ),
         );
       },

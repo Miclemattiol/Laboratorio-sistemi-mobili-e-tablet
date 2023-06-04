@@ -115,7 +115,7 @@ class DatePickerFormField extends StatelessWidget {
             isEmpty: state.value == null,
             child: Text(
               state.value != null ? "${pickDate ? DatePickerFormField.dateFormat.format(state.value!) : ""} ${pickTime ? DatePickerFormField.timeFormat.format(state.value!) : ""}".trim() : "",
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 14, color: enabled ? null : Theme.of(context).disabledColor),
             ),
           ),
         );

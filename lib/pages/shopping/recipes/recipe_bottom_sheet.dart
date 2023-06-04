@@ -87,14 +87,15 @@ class _RecipeBottomSheetState extends State<RecipeBottomSheet> {
         spacing: 16,
         body: [
           TextFormField(
-            autofocus: widget.recipe?.data.title == null,
             enabled: !_loading,
+            autofocus: widget.recipe?.data.title == null,
             initialValue: widget.recipe?.data.title,
             decoration: inputDecoration(localizations(context).title),
             onSaved: (title) => _titleValue = title.toNullable(),
             validator: (value) => value?.trim().isEmpty == true ? localizations(context).titleMissing : null,
           ),
           RecipeFormField(
+            enabled: !_loading,
             initialValue: widget.initialItems ?? widget.recipe?.data.items,
             decoration: inputDecoration(localizations(context).recipeItems),
             onSaved: (items) => _itemsValue = items,

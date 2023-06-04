@@ -64,12 +64,13 @@ class RecipeFormField extends StatelessWidget {
                 ...state.value!.mapIndexed((index, recipe) {
                   return RecipeItemListTile(
                     key: Key("$index${recipe.hashCode}"),
+                    enabled: enabled,
                     recipe,
-                    onPressed: enabled ? () => _editItem(context, state, index, recipe) : null,
-                    onDelete: enabled ? () => _deleteItem(state, index) : null,
+                    onPressed: () => _editItem(context, state, index, recipe),
+                    onDelete: () => _deleteItem(state, index),
                   );
                 }),
-                RecipeItemListTile.createNew(onPressed: enabled ? () => _addNewItem(context, state) : null),
+                RecipeItemListTile.createNew(enabled: enabled, onPressed: enabled ? () => _addNewItem(context, state) : null),
               ],
             ),
           ),

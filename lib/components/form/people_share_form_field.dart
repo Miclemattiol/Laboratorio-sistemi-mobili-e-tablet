@@ -54,7 +54,7 @@ class PeopleSharesFormField extends StatelessWidget {
             isEmpty: (state.value ?? {}).isEmpty,
             child: Text(
               (state.value ?? {}).isEmpty ? "" : state.value!.entries.map((entry) => "${house.getUser(entry.key).username} (${entry.value})").join(", "),
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 14, color: enabled ? null : Theme.of(context).disabledColor),
             ),
           ),
         );

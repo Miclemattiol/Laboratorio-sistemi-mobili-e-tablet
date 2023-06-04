@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/form/category_form_field.dart';
 import 'package:house_wallet/components/form/date_picker_form_field.dart';
+import 'package:house_wallet/components/form/dropdown_form_field.dart';
 import 'package:house_wallet/components/form/number_form_field.dart';
 import 'package:house_wallet/components/form/people_share_form_field.dart';
 import 'package:house_wallet/components/image_picker_bottom_sheet.dart';
@@ -50,7 +51,6 @@ class PaymentDetailsBottomSheet extends StatefulWidget {
   State<PaymentDetailsBottomSheet> createState() => _PaymentDetailsBottomSheetState();
 }
 
-//TODO add paidBy field
 class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
   final _formKey = GlobalKey<FormState>();
   bool _loading = false;
@@ -62,6 +62,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
   num? _priceValue;
   File? _imageValue;
   DateTime? _dateValue;
+  String? _fromValue;
   Shares _toValue = {};
 
   Future<String> _uploadImage(File image) async {
@@ -102,14 +103,14 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
               price: _priceValue!,
               imageUrl: _imageValue == null ? null : await _uploadImage(_imageValue!),
               date: _dateValue!,
-              from: widget.loggedUser.uid,
+              from: _fromValue!,
               to: _toValue,
             ),
           );
 
           widget.house.updateBalances(
             transaction,
-            newValues: SharesData(from: widget.loggedUser.uid, price: _priceValue!, shares: _toValue),
+            newValues: SharesData(from: _fromValue!, price: _priceValue!, shares: _toValue),
           );
         });
       } else {
@@ -124,6 +125,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
               Payment.priceKey: _priceValue!,
               Payment.imageUrlKey: _imageValue == null ? payment.imageUrl : await _uploadImage(_imageValue!),
               Payment.dateKey: _dateValue!,
+              Payment.fromKey: _fromValue!,
               Payment.toKey: _toValue,
             },
           );
@@ -131,7 +133,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
           widget.house.updateBalances(
             transaction,
             prevValues: SharesData(from: payment.from.uid, price: payment.price, shares: payment.shares),
-            newValues: SharesData(from: payment.from.uid, price: _priceValue!, shares: _toValue),
+            newValues: SharesData(from: _fromValue!, price: _priceValue!, shares: _toValue),
           );
         });
 
@@ -168,7 +170,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
             children: [
               ImageAvatar(
                 _imageValue ?? widget.payment?.data.imageUrl,
-                fallback: const Icon(Icons.image),
+                fallback: (enabled) => Icon(Icons.image, color: enabled ? null : Theme.of(context).disabledColor),
                 progress: _uploadProgress,
                 enabled: !_loading,
                 onTap: () async {
@@ -197,6 +199,13 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
                 ),
               ),
             ],
+          ),
+          DropdownFormField<String>(
+            enabled: !_loading,
+            initialValue: widget.payment?.data.from.uid ?? widget.loggedUser.uid,
+            items: Map.fromEntries(widget.house.users.values.map((user) => MapEntry(user.uid, Text(user.username)))),
+            decoration: inputDecoration(localizations(context).paidBy),
+            onSaved: (from) => _fromValue = from,
           ),
           PeopleSharesFormField(
             enabled: !_loading,

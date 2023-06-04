@@ -186,7 +186,7 @@ class _AccountPageState extends State<AccountPage> {
                   children: [
                     ImageAvatar(
                       user.imageUrl,
-                      fallback: const Icon(Icons.person),
+                      fallback: (enabled) => Icon(Icons.person, color: enabled ? null : Theme.of(context).disabledColor),
                       size: 128,
                       onTap: () => _changeProfilePicture(user.imageUrl),
                       progress: _uploadProgress,

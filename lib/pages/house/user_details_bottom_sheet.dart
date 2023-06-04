@@ -146,7 +146,11 @@ class UserDetailsBottomSheet extends StatelessWidget {
           spacing: 16,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            ImageAvatar(user.imageUrl, fallback: const Icon(Icons.person), onTap: user.imageUrl != null ? () => ImagePage.openImage(context, user.imageUrl) : null),
+            ImageAvatar(
+              user.imageUrl,
+              fallback: (_) => const Icon(Icons.person),
+              onTap: user.imageUrl != null ? () => ImagePage.openImage(context, user.imageUrl) : null,
+            ),
             Text(user.username),
           ],
         ),

@@ -54,7 +54,7 @@ class PeopleFormField extends StatelessWidget {
             isEmpty: (state.value ?? {}).isEmpty,
             child: Text(
               (state.value ?? {}).isEmpty ? "" : state.value!.map((user) => house.getUser(user).username).join(", "),
-              style: const TextStyle(fontSize: 16),
+              style: TextStyle(fontSize: 14, color: enabled ? null : Theme.of(context).disabledColor),
             ),
           ),
         );

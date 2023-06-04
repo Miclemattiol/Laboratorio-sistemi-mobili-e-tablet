@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/components/form/dropdown_form_field.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/main.dart';
@@ -9,6 +10,7 @@ class CategoryFormField extends StatelessWidget {
   final FirestoreDocument<Category>? initialValue;
   final AutovalidateMode? autovalidateMode;
   final InputDecoration? decoration;
+  final TextStyle? style;
   final String? Function(String? value)? validator;
   final void Function(String? value)? onSaved;
   final void Function(String? value)? onChanged;
@@ -19,6 +21,7 @@ class CategoryFormField extends StatelessWidget {
     this.initialValue,
     this.autovalidateMode,
     this.decoration,
+    this.style,
     this.validator,
     this.onSaved,
     this.onChanged,
@@ -29,77 +32,38 @@ class CategoryFormField extends StatelessWidget {
   static const noCategoryKey = "no_category";
   static const newCategoryKey = "new_category";
 
-  String? _getInitialValue() {
-    if (initialValue == null) return null;
-    final selectedId = initialValue!.id;
-    return categories.where((category) => category.id == selectedId).isEmpty ? null : selectedId;
+  Widget _buildItem(BuildContext context, {IconData? icon, required Text text}) {
+    return PadRow(
+      spacing: 16,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        if (icon != null) Icon(icon, color: enabled ? null : Theme.of(context).disabledColor),
+        text,
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return FormField<String>(
-      initialValue: _getInitialValue(),
+    final dropdownFormField = GlobalKey<FormFieldState>();
+    return DropdownFormField<String>(
+      dropdownWidgetKey: dropdownFormField,
+      initialValue: initialValue?.id,
       autovalidateMode: autovalidateMode,
+      decoration: decoration,
+      style: style,
       validator: validator,
       onSaved: onSaved,
+      onChanged: (value) {
+        if (value == noCategoryKey) return dropdownFormField.currentState!.didChange(null);
+        onChanged?.call(value);
+      },
       enabled: enabled,
-      builder: (state) => InputDecorator(
-        decoration: (decoration ?? const InputDecoration()).copyWith(
-          contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-          enabled: enabled,
-          errorText: decoration?.errorText ?? state.errorText,
-        ),
-        isEmpty: state.value == null,
-        child: DropdownButton<String>(
-          value: state.value,
-          isExpanded: true,
-          underline: const SizedBox.shrink(),
-          style: Theme.of(context).textTheme.bodyMedium,
-          items: [
-            DropdownMenuItem(
-              value: noCategoryKey,
-              child: PadRow(
-                spacing: 4,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(localizations(context).noCategory, style: const TextStyle(fontStyle: FontStyle.italic)),
-                ],
-              ),
-            ),
-            DropdownMenuItem(
-              value: newCategoryKey,
-              child: PadRow(
-                spacing: 4,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Icon(Icons.add),
-                  Text(localizations(context).newCategory, style: const TextStyle(fontStyle: FontStyle.italic)),
-                ],
-              ),
-            ),
-            ...categories.map((category) {
-              return DropdownMenuItem(
-                value: category.id,
-                child: PadRow(
-                  spacing: 4,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Icon(category.data.icon, color: enabled ? null : Theme.of(context).disabledColor),
-                    Text(category.data.name),
-                  ],
-                ),
-              );
-            })
-          ],
-          onChanged: enabled
-              ? (value) {
-                  final newValue = value == noCategoryKey ? null : value;
-                  state.didChange(newValue);
-                  onChanged?.call(newValue);
-                }
-              : null,
-        ),
-      ),
+      items: Map.fromEntries([
+        MapEntry(noCategoryKey, _buildItem(context, text: Text(localizations(context).noCategory, style: const TextStyle(fontStyle: FontStyle.italic)))),
+        MapEntry(newCategoryKey, _buildItem(context, icon: Icons.add, text: Text(localizations(context).newCategory, style: const TextStyle(fontStyle: FontStyle.italic)))),
+        ...categories.map((category) => MapEntry(category.id, _buildItem(context, icon: category.data.icon, text: Text(category.data.name)))),
+      ]),
     );
   }
 }

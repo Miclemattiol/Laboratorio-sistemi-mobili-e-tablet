@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class ImageAvatar extends StatelessWidget {
   final dynamic image;
-  final Widget fallback;
+  final Widget Function(bool enabled) fallback;
   final double size;
   final bool enabled;
   final double progressSize;
@@ -52,7 +52,7 @@ class ImageAvatar extends StatelessWidget {
                 ),
                 errorWidget: (context, url, error) => Container(
                   decoration: _border(context),
-                  child: fallback,
+                  child: fallback(enabled),
                 ),
                 fit: BoxFit.cover,
               ),
