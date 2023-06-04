@@ -143,7 +143,7 @@ class PaymentTile extends StatelessWidget {
 
         HouseDataRef.of(context, listen: false).updateBalances(
           transaction,
-          prevValues: SharesData(from: doc.data.from.uid, price: doc.data.price, shares: doc.data.shares),
+          [UpdateData(prevValues: SharesData(from: doc.data.from.uid, price: doc.data.price, shares: doc.data.shares))],
         );
       });
 

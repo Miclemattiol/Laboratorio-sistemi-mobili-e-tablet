@@ -6,6 +6,15 @@ import 'package:provider/provider.dart';
 
 typedef Shares = Map<String, int>;
 
+class UpdateData {
+  final SharesData? prevValues;
+  final SharesData? newValues;
+
+  const UpdateData({this.prevValues, this.newValues});
+
+  bool get isEmpty => prevValues == null && newValues == null;
+}
+
 class SharesData {
   final String from;
   final num price;
@@ -91,24 +100,28 @@ class HouseDataRef {
     }
   }
 
-  void updateBalances(Transaction transaction, {SharesData? prevValues, SharesData? newValues}) {
-    if (prevValues == null && newValues == null) return;
+  void updateBalances(Transaction transaction, List<UpdateData> updateValues) {
+    if (updateValues.isEmpty) return;
 
     final balancesToUpdate = <String, num>{};
 
-    if (prevValues != null) {
-      for (final user in {prevValues.from, ...prevValues.shares.keys}) {
-        balancesToUpdate[user] = (balancesToUpdate[user] ?? 0) - calculateImpactForUser(user, from: prevValues.from, price: prevValues.price, shares: prevValues.shares);
+    for (final updateValue in updateValues) {
+      final prevValues = updateValue.prevValues;
+      if (prevValues != null) {
+        for (final user in {prevValues.from, ...prevValues.shares.keys}) {
+          balancesToUpdate[user] = (balancesToUpdate[user] ?? 0) - calculateImpactForUser(user, from: prevValues.from, price: prevValues.price, shares: prevValues.shares);
+        }
+      }
+
+      final newValues = updateValue.newValues;
+      if (newValues != null) {
+        for (final user in {newValues.from, ...newValues.shares.keys}) {
+          balancesToUpdate[user] = (balancesToUpdate[user] ?? 0) + calculateImpactForUser(user, from: newValues.from, price: newValues.price, shares: newValues.shares);
+        }
       }
     }
 
-    if (newValues != null) {
-      for (final user in {newValues.from, ...newValues.shares.keys}) {
-        balancesToUpdate[user] = (balancesToUpdate[user] ?? 0) + calculateImpactForUser(user, from: newValues.from, price: newValues.price, shares: newValues.shares);
-      }
-    }
-
-    if (balancesToUpdate.values.every((balance) => balance == 0)) return;
+    if (balancesToUpdate.isEmpty || balancesToUpdate.values.every((balance) => balance == 0)) return;
 
     for (final user in balancesToUpdate.keys) {
       if (getUser(user).isInvalid) throw FirebaseException(plugin: "", code: invalidUsersError);

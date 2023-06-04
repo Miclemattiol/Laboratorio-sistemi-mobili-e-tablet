@@ -297,6 +297,7 @@
     "price": "Prezzo",
     "priceMissing": "Inserisci un prezzo",
     "quantity": "Quantità",
+    "quantityInvalid": "Inserisci una quantità valida",
     "recipeItems": "Prodotti",
     "recipeItemsMissing": "Inserisci almeno un prodotto",
     "payAs": "Paga come",

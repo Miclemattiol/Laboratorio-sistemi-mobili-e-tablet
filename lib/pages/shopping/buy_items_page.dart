@@ -89,12 +89,12 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
     final category = await _categoryPrompt();
     if (category == null) return;
 
-    final groupedItems = <Shares, List<ShoppingItemRef>>{};
-    List<ShoppingItemRef> getShareList(shares) => groupedItems.entries.firstWhere((entry) => mapEquals(entry.key, shares), orElse: () => MapEntry(shares, groupedItems[shares] = [])).value;
+    final groupedItems = <Shares, List<FirestoreDocument<ShoppingItemRef>>>{};
+    List<FirestoreDocument<ShoppingItemRef>> getShareList(shares) => groupedItems.entries.firstWhere((entry) => mapEquals(entry.key, shares), orElse: () => MapEntry(shares, groupedItems[shares] = [])).value;
 
     for (final item in widget.shoppingItems) {
       final shares = item.data.shares.isNotEmpty ? item.data.shares : widget.house.users.map((key, _) => MapEntry(key, 1));
-      getShareList(shares).add(item.data);
+      getShareList(shares).add(item);
     }
 
     try {
@@ -103,14 +103,21 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
           transaction.delete(item.reference);
         }
 
+        List<UpdateData> balanceUpdateData = [];
+
         for (final group in groupedItems.entries) {
-          final price = group.value.fold<num>(0, (prev, value) => prev + (value.price ?? 0) * (value.quantity ?? 1));
+          final price = group.value.fold<num>(0, (prev, item) {
+            final price = _pricesQuantities[item.id]?.price ?? 0;
+            final quantity = _pricesQuantities[item.id]?.quantity ?? 1;
+            return prev + price * quantity;
+          });
+
           transaction.set<Payment>(
             PaymentsPage.paymentsFirestoreRef(widget.house.id).doc(),
             Payment(
               title: appLocalizations.shoppingPage,
               category: category == CategoryFormField.noCategoryKey ? null : category,
-              description: group.value.map((item) => item.title).join(", "),
+              description: group.value.map((item) => item.data.title).join(", "),
               price: price,
               imageUrl: null,
               date: DateTime.now(),
@@ -119,12 +126,10 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
             ),
           );
 
-          //TODO only the last one is executed
-          widget.house.updateBalances(
-            transaction,
-            newValues: SharesData(from: _payAsValue, price: price, shares: group.key),
-          );
+          balanceUpdateData.add(UpdateData(newValues: SharesData(from: _payAsValue, price: price, shares: group.key)));
         }
+
+        widget.house.updateBalances(transaction, balanceUpdateData);
       });
 
       widget.onComplete();

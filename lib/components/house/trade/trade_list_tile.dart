@@ -33,7 +33,7 @@ class TradeListTile extends StatelessWidget {
 
         HouseDataRef.of(context, listen: false).updateBalances(
           transaction,
-          newValues: SharesData(from: trade.data.from.uid, price: trade.data.price, shares: trade.data.shares),
+          [UpdateData(newValues: SharesData(from: trade.data.from.uid, price: trade.data.price, shares: trade.data.shares))],
         );
       });
     } on FirebaseException catch (error) {

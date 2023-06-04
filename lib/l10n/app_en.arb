@@ -297,6 +297,7 @@
     "price": "Price",
     "priceMissing": "Enter a price",
     "quantity": "Quantity",
+    "quantityInvalid": "Enter a valid quantity",
     "recipeItems": "Items",
     "recipeItemsMissing": "Enter at least one item",
     "payAs": "Pay as",

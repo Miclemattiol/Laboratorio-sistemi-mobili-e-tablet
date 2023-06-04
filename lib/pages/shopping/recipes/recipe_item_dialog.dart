@@ -46,6 +46,7 @@ class _RecipeItemDialogState extends State<RecipeItemDialog> {
       key: _formKey,
       child: CustomDialog(
         dismissible: false,
+        spacing: 16,
         padding: const EdgeInsets.all(24),
         crossAxisAlignment: CrossAxisAlignment.center,
         body: [
@@ -65,6 +66,7 @@ class _RecipeItemDialogState extends State<RecipeItemDialog> {
           NumberFormField<int>(
             initialValue: widget.initialValue?.quantity,
             decoration: inputDecoration(localizations(context).quantity),
+            validator: (quantity) => quantity == 0 ? localizations(context).quantityInvalid : null,
             onSaved: (quantity) => _quantityValue = quantity,
           ),
           TextFormField(

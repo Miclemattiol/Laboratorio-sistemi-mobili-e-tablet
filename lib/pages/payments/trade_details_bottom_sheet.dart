@@ -58,8 +58,12 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
 
         widget.house.updateBalances(
           transaction,
-          prevValues: SharesData(from: trade.from.uid, price: trade.price, shares: trade.shares),
-          newValues: SharesData(from: trade.from.uid, price: _amountValue!, shares: trade.shares),
+          [
+            UpdateData(
+              prevValues: SharesData(from: trade.from.uid, price: trade.price, shares: trade.shares),
+              newValues: SharesData(from: trade.from.uid, price: _amountValue!, shares: trade.shares),
+            )
+          ],
         );
       });
 

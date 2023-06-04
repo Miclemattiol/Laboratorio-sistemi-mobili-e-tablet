@@ -110,7 +110,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
 
           widget.house.updateBalances(
             transaction,
-            newValues: SharesData(from: _fromValue!, price: _priceValue!, shares: _toValue),
+            [UpdateData(newValues: SharesData(from: _fromValue!, price: _priceValue!, shares: _toValue))],
           );
         });
       } else {
@@ -132,8 +132,12 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
 
           widget.house.updateBalances(
             transaction,
-            prevValues: SharesData(from: payment.from.uid, price: payment.price, shares: payment.shares),
-            newValues: SharesData(from: _fromValue!, price: _priceValue!, shares: _toValue),
+            [
+              UpdateData(
+                prevValues: SharesData(from: payment.from.uid, price: payment.price, shares: payment.shares),
+                newValues: SharesData(from: _fromValue!, price: _priceValue!, shares: _toValue),
+              )
+            ],
           );
         });
 

@@ -115,6 +115,7 @@ class _ShoppingItemDetailsBottomSheetState extends State<ShoppingItemDetailsBott
                   enabled: !_loading,
                   initialValue: widget.shoppingItem.data.quantity,
                   decoration: inputDecoration(localizations(context).quantity),
+                  validator: (quantity) => quantity == 0 ? localizations(context).quantityInvalid : null,
                   onSaved: (quantity) => _quantityValue = quantity,
                 ),
               ),
