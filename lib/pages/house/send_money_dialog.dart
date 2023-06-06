@@ -86,14 +86,7 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
     final initialValue = () {
       final loggedUserBalance = widget.house.getBalance(widget.loggedUser.uid);
       final targetBalance = widget.house.getBalance(widget.user.uid);
-      final num balance = () {
-        if (targetBalance > 0 && loggedUserBalance < 0) {
-          return min(-loggedUserBalance, targetBalance);
-        } else {
-          return -1;
-        }
-      }();
-      if (targetBalance > 0 && loggedUserBalance < 0) return balance <= 0 ? null : balance;
+      return (targetBalance > 0 && loggedUserBalance < 0) ? min(-loggedUserBalance, targetBalance) : null;
     }();
 
     return Form(

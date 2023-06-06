@@ -67,7 +67,7 @@ class TaskDetailsPage extends StatelessWidget {
       ),
       body: ListView(
         children: [
-          Calendar.singleTask(task.data.range),
+          Calendar.singleTask(task.data),
           Padding(
             padding: const EdgeInsets.all(16),
             child: SingleChildScrollView(

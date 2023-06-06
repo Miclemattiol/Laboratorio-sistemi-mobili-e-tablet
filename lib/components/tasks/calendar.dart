@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
+import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/utils.dart';
 import 'package:intl/intl.dart';
 
@@ -18,15 +19,16 @@ class _RangeColor {
   const _RangeColor(this.color, this.range);
 }
 
+//TODO show repeating tasks
 class Calendar extends StatefulWidget {
   final DateTime? initialDate;
   final List<DateTimeRange> ranges;
 
   const Calendar(this.ranges, {super.key}) : initialDate = null;
 
-  Calendar.singleTask(DateTimeRange range, {super.key})
-      : initialDate = range.start,
-        ranges = [range];
+  Calendar.singleTask(TaskRef task, {super.key})
+      : initialDate = task.repeating == null ? task.range.start : null,
+        ranges = [task.range];
 
   @override
   State<Calendar> createState() => _CalendarState();

@@ -9,7 +9,9 @@ import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/tasks/task_details_bottom_sheet.dart';
 import 'package:house_wallet/pages/tasks/tasks_tab.dart';
+import 'package:house_wallet/utils.dart';
 import 'package:intl/intl.dart';
+import 'package:rxdart/rxdart.dart';
 
 DateFormat taskDateFormat(BuildContext context) => DateFormat("dd/MM", Localizations.localeOf(context).languageCode);
 
@@ -57,11 +59,24 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
+  //TODO remove previous index (sorting) from firestore console
   @override
   Widget build(BuildContext context) {
     final houseId = HouseDataRef.of(context).id;
     return StreamBuilder(
-      stream: TasksPage.tasksFirestoreRef(houseId).orderBy(Task.repeatingKey, descending: true).orderBy(Task.fromKey).orderBy(Task.toKey).snapshots().map(TaskRef.converter(context)),
+      stream: Rx.combineLatest2(
+        TasksPage.tasksFirestoreRef(houseId).where(Task.repeatingKey, isNull: true).where(Task.toKey, isGreaterThan: Timestamp.now()).snapshots().map(TaskRef.converter(context)),
+        TasksPage.tasksFirestoreRef(houseId).where(Task.repeatingKey, isNull: false).snapshots().map(TaskRef.converter(context)),
+        (validNonRepeatingTasks, repeatingTasks) => [...validNonRepeatingTasks, ...repeatingTasks]..sort((a, b) {
+            final sortByRepeating = (b.data.repeating != null).toInt() - (a.data.repeating != null).toInt();
+            if (sortByRepeating != 0) return sortByRepeating;
+
+            final sortByFrom = a.data.from.compareTo(b.data.from);
+            if (sortByFrom != 0) return sortByFrom;
+
+            return a.data.to.compareTo(b.data.to);
+          }),
+      ),
       builder: (context, snapshot) {
         final tabs = _tabs(context, snapshot);
         return DefaultTabController(
