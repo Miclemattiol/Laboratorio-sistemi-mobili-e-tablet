@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -83,8 +84,16 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
   @override
   Widget build(BuildContext context) {
     final initialValue = () {
-      final balance = widget.house.getBalance(widget.user.uid);
-      return balance <= 0 ? null : balance;
+      final loggedUserBalance = widget.house.getBalance(widget.loggedUser.uid);
+      final targetBalance = widget.house.getBalance(widget.user.uid);
+      final num balance = () {
+        if (targetBalance > 0 && loggedUserBalance < 0) {
+          return min(-loggedUserBalance, targetBalance);
+        } else {
+          return -1;
+        }
+      }();
+      if (targetBalance > 0 && loggedUserBalance < 0) return balance <= 0 ? null : balance;
     }();
 
     return Form(
