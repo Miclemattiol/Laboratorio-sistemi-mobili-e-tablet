@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/user.dart';
+import 'package:house_wallet/utils.dart';
 import 'package:provider/provider.dart';
 
 typedef Shares = Map<String, int>;
@@ -139,7 +140,7 @@ class HouseDataRef {
         reference: house.reference,
         owner: users[house.data.owner] ?? const User.invalid(),
         users: Map.fromEntries(house.data.users.keys.map((uid) => MapEntry(uid, users[uid] ?? const User.invalid()))),
-        balances: house.data.users,
+        balances: house.data.users.map((key, value) => MapEntry(key, value.roundDecimals(2))),
       );
     };
   }

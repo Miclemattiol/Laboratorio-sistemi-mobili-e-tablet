@@ -32,8 +32,9 @@ class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loggedUser = LoggedUser.of(context);
+    final houseId = loggedUser.houses.isNotEmpty ? loggedUser.houses.first : "_";
     return StreamBuilder(
-      stream: MainPage.houseFirestoreRef(loggedUser.houses.first).snapshots().map((doc) => FirestoreDocument(doc, doc.data()!)),
+      stream: MainPage.houseFirestoreRef(houseId).snapshots().map((doc) => FirestoreDocument(doc, doc.data()!)),
       builder: (context, snapshot) {
         final house = snapshot.data;
         return StreamBuilder(

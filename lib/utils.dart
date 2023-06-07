@@ -1,3 +1,5 @@
+import 'dart:math';
+
 T tryOrDefault<T>(T Function() tryFunc, T defaultValue) {
   try {
     return tryFunc();
@@ -52,4 +54,11 @@ extension StringExtension on String {
 
 extension DateTimeExtension on DateTime {
   bool isSameDayAs(DateTime other) => year == other.year && month == other.month && day == other.day;
+}
+
+extension NumExtensions on num {
+  double roundDecimals(int places) {
+    final mod = pow(10, places);
+    return (this * mod).round() / mod;
+  }
 }
