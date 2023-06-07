@@ -10,6 +10,7 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/house/send_money_dialog.dart';
+import 'package:house_wallet/utils.dart';
 
 class UserDetailsBottomSheet extends StatelessWidget {
   final User user;
@@ -58,6 +59,8 @@ class UserDetailsBottomSheet extends StatelessWidget {
     final isLastUser = house.users.length == 1;
     final canLeave = !isOwner || isLastUser;
 
+    if (await isNotConnectedToInternet(context) || !context.mounted) return;
+
     if (!canLeave) {
       return CustomDialog.alert(
         context: context,
@@ -93,6 +96,8 @@ class UserDetailsBottomSheet extends StatelessWidget {
   void _kick(BuildContext context) async {
     final navigator = Navigator.of(context);
 
+    if (await isNotConnectedToInternet(context) || !context.mounted) return;
+
     if (!await CustomDialog.confirm(
       context: context,
       title: localizations(context).userKickTitle,
@@ -115,6 +120,8 @@ class UserDetailsBottomSheet extends StatelessWidget {
 
   void _transfer(BuildContext context) async {
     final navigator = Navigator.of(context);
+
+    if (await isNotConnectedToInternet(context) || !context.mounted) return;
 
     if (!await CustomDialog.confirm(
       context: context,
@@ -171,6 +178,7 @@ class UserDetailsBottomSheet extends StatelessWidget {
           ElevatedButton(
             onPressed: () async {
               final navigator = Navigator.of(context);
+              if (await isNotConnectedToInternet(context) || !context.mounted) return;
               if (await showDialog(context: context, builder: (context) => SendMoneyDialog(user, loggedUser: loggedUser, house: house)) != null) navigator.pop();
             },
             style: ElevatedButton.styleFrom(tapTargetSize: MaterialTapTargetSize.shrinkWrap),

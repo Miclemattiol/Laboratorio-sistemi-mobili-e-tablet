@@ -1,11 +1,30 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+import 'package:house_wallet/components/ui/custom_dialog.dart';
+import 'package:house_wallet/main.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+
 T tryOrDefault<T>(T Function() tryFunc, T defaultValue) {
   try {
     return tryFunc();
   } catch (_) {
     return defaultValue;
   }
+}
+
+Future<bool> isNotConnectedToInternet(BuildContext context) async {
+  if (await InternetConnectionChecker().connectionStatus == InternetConnectionStatus.disconnected) {
+    if (context.mounted) {
+      CustomDialog.alert(
+        context: context,
+        title: localizations(context).internetErrorTitle,
+        content: localizations(context).internetErrorContent,
+      );
+    }
+    return true;
+  }
+  return false;
 }
 
 class Range<T extends Comparable> {

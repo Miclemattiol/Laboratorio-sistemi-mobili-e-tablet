@@ -233,6 +233,8 @@
             }
         }
     },
+    "internetErrorTitle": "No internet connection",
+    "internetErrorContent": "To perform this action you must be connected to the internet. Check your connection and try again.",
     "imagePickerCamera": "Take a photo",
     "imagePickerCameraError": "Could not access the camera\nCheck the app's permissions",
     "imagePickerGallery": "Choose a photo",

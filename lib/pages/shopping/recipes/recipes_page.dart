@@ -9,6 +9,7 @@ import 'package:house_wallet/data/shopping/recipe.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/shopping/recipes/recipe_bottom_sheet.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
 class RecipesPage extends StatefulWidget {
@@ -94,7 +95,10 @@ class _RecipesPageState extends State<RecipesPage> {
       floatingActionButton: _showFab
           ? FloatingActionButton(
               heroTag: null,
-              onPressed: () => _addRecipe(context),
+              onPressed: () async {
+                if (await isNotConnectedToInternet(context) || !context.mounted) return;
+                _addRecipe(context);
+              },
               tooltip: localizations(context).recipesPageNew,
               child: const Icon(Icons.add),
             )

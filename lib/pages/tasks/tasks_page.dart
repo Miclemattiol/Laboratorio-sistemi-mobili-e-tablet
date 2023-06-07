@@ -90,7 +90,10 @@ class _TasksPageState extends State<TasksPage> {
             floatingActionButton: _showFab
                 ? FloatingActionButton(
                     heroTag: null,
-                    onPressed: () => _addTask(context),
+                    onPressed: () async {
+                      if (await isNotConnectedToInternet(context) || !context.mounted) return;
+                      _addTask(context);
+                    },
                     tooltip: localizations(context).tasksPageNew,
                     child: const Icon(Icons.add),
                   )

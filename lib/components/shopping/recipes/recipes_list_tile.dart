@@ -10,6 +10,7 @@ import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/shopping/people_share_dialog.dart';
 import 'package:house_wallet/pages/shopping/recipes/recipe_bottom_sheet.dart';
 import 'package:house_wallet/pages/shopping/shopping_page.dart';
+import 'package:house_wallet/utils.dart';
 
 class RecipeListTile extends StatelessWidget {
   final FirestoreDocument<Recipe> recipe;
@@ -43,6 +44,8 @@ class RecipeListTile extends StatelessWidget {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final appLocalizations = localizations(context);
 
+    if (await isNotConnectedToInternet(context) || !context.mounted) return;
+
     final to = await showDialog<Shares>(context: context, builder: (context) => PeopleSharesDialog(house: house, initialValues: house.users.map((key, value) => MapEntry(key, 1))));
     if (to == null) return;
 
@@ -68,6 +71,19 @@ class RecipeListTile extends StatelessWidget {
     }
   }
 
+  void _delete(BuildContext context) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final appLocalizations = localizations(context);
+
+    if (await isNotConnectedToInternet(context) || !context.mounted) return;
+
+    try {
+      await recipe.reference.delete();
+    } on FirebaseException catch (error) {
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -77,7 +93,7 @@ class RecipeListTile extends StatelessWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: (context) => recipe.reference.delete(),
+            onPressed: (_) => _delete(context),
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
             icon: Icons.delete,

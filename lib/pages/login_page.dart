@@ -28,6 +28,8 @@ class _LoginPageState extends State<LoginPage> {
     _formKey.currentState!.save();
     if (!_formKey.currentState!.validate()) return;
 
+    if (await isNotConnectedToInternet(context) || !context.mounted) return;
+
     setState(() => _loading = true);
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailValue!, password: _passwordValue!);

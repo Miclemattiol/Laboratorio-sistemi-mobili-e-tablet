@@ -12,6 +12,7 @@ import 'package:house_wallet/pages/shopping/price_quantity_dialog.dart';
 import 'package:house_wallet/pages/shopping/shopping_page.dart';
 import 'package:house_wallet/pages/shopping/supermarket_dialog.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 
 class ShoppingBottomSheet extends StatefulWidget {
   const ShoppingBottomSheet({super.key});
@@ -34,6 +35,8 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
     if ((_titleValue ?? "").isEmpty) return;
 
     try {
+      if (await isNotConnectedToInternet(context) || !context.mounted) return;
+
       await ShoppingPage.firestoreRef(HouseDataRef.of(context, listen: false).id).add(ShoppingItem(
         price: _priceQuantityValue?.price,
         quantity: _priceQuantityValue?.quantity,

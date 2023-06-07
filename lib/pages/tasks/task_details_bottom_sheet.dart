@@ -56,6 +56,8 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
 
     setState(() => _loading = true);
     try {
+      if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+
       if (widget.task == null) {
         await TasksPage.tasksFirestoreRef(widget.house.id).add(Task(
           title: _titleValue!,

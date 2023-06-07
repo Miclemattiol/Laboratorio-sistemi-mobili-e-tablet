@@ -54,6 +54,8 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
 
     setState(() => _loading = true);
     try {
+      if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+
       await TradesSection.firestoreRef(widget.house.id).add(Trade(
         amount: _priceValue!,
         from: widget.loggedUser.uid,
@@ -133,8 +135,8 @@ class _SendMoneyDialogState extends State<SendMoneyDialog> {
             ),
         ],
         actions: [
-          ModalButton(onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).cancel)),
-          ModalButton(onPressed: () => _addTrade(context), child: Text(localizations(context).pay)),
+          ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).cancel)),
+          ModalButton(enabled: !_loading, onPressed: () => _addTrade(context), child: Text(localizations(context).pay)),
         ],
       ),
     );

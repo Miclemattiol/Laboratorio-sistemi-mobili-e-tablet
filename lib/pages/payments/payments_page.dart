@@ -15,6 +15,7 @@ import 'package:house_wallet/pages/payments/categories/categories_page.dart';
 import 'package:house_wallet/pages/payments/filter_bottom_sheet.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -158,7 +159,10 @@ class _PaymentsPageState extends State<PaymentsPage> {
       floatingActionButton: _showFab
           ? FloatingActionButton(
               heroTag: null,
-              onPressed: () => _addPayment(context),
+              onPressed: () async {
+                if (await isNotConnectedToInternet(context) || !context.mounted) return;
+                _addPayment(context);
+              },
               tooltip: localizations(context).paymentsPageNew,
               child: const Icon(Icons.add),
             )

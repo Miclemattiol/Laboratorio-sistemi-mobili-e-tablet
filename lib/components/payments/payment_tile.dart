@@ -13,6 +13,7 @@ import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
 import 'package:house_wallet/pages/payments/trade_details_bottom_sheet.dart';
+import 'package:house_wallet/utils.dart';
 
 class PaymentTile extends StatelessWidget {
   final List<FirestoreDocument<Category>> categories;
@@ -138,6 +139,8 @@ class PaymentTile extends StatelessWidget {
     final appLocalizations = localizations(context);
 
     try {
+      if (await isNotConnectedToInternet(context) || !context.mounted) return;
+
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         transaction.delete(doc.reference);
 

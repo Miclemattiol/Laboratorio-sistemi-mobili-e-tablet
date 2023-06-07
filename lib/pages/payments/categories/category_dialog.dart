@@ -46,6 +46,8 @@ class _CategoryDialogState extends State<CategoryDialog> {
 
     setState(() => _loading = true);
     try {
+      if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+
       if ((await PaymentsPage.categoriesFirestoreRef(widget.house.id).where(Category.iconKey, isEqualTo: _iconValue!).where(Category.nameKey, isEqualTo: _nameValue!).count().get()).count != 0) {
         throw FirebaseException(plugin: "", message: "duplicate");
       }

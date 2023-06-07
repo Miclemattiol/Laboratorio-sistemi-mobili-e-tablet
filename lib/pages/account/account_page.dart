@@ -39,7 +39,9 @@ class _AccountPageState extends State<AccountPage> {
     final appLocalizations = localizations(context);
 
     final image = await ImagePickerBottomSheet.pickImage(context, image: currentImage);
-    if (image == null) return;
+    if (image == null || !mounted) return;
+
+    if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
 
     final upload = FirebaseStorage.instance.ref("users/${loggedUser.uid}-${DateTime.now().millisecondsSinceEpoch}.png").putFile(image);
 
@@ -69,6 +71,8 @@ class _AccountPageState extends State<AccountPage> {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final appLocalizations = localizations(context);
 
+    if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+
     final username = await CustomDialog.prompt(
       context: context,
       title: localizations(context).changeUsernameTitle,
@@ -84,7 +88,7 @@ class _AccountPageState extends State<AccountPage> {
         User.usernameKey: username,
       });
 
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.saveChanges)));
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.saveChangesSuccess)));
     } on FirebaseException catch (error) {
       scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.saveChangesError(error.message.toString()))));
     }
@@ -97,6 +101,8 @@ class _AccountPageState extends State<AccountPage> {
     _formKey.currentState!.save();
 
     try {
+      if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+
       await MainPage.userFirestoreRef(loggedUser.uid).update({
         User.ibanKey: _ibanValue,
         User.payPalKey: _payPalValue,
@@ -117,6 +123,8 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   void _changePassword() async {
+    if (await isNotConnectedToInternet(context) || !context.mounted) return;
+
     if (!await CustomDialog.confirm(
       context: context,
       title: localizations(context).changePasswordTitle,

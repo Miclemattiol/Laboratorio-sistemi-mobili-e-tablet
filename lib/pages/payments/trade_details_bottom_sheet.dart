@@ -45,6 +45,8 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
 
     setState(() => _loading = true);
     try {
+      if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+
       final trade = widget.trade.data;
       await FirebaseFirestore.instance.runTransaction((transaction) async {
         transaction.update(

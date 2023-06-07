@@ -6,6 +6,7 @@ import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/utils.dart';
 
 class TradeListTile extends StatelessWidget {
   final FirestoreDocument<TradeRef> trade;
@@ -15,6 +16,8 @@ class TradeListTile extends StatelessWidget {
   void _confirm(BuildContext context) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final appLocalizations = localizations(context);
+
+    if (await isNotConnectedToInternet(context) || !context.mounted) return;
 
     if (!await CustomDialog.confirm(
       context: context,
@@ -44,6 +47,8 @@ class TradeListTile extends StatelessWidget {
   void _deny(BuildContext context) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final appLocalizations = localizations(context);
+
+    if (await isNotConnectedToInternet(context) || !context.mounted) return;
 
     if (!await CustomDialog.confirm(
       context: context,

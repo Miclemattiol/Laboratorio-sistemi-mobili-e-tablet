@@ -19,6 +19,7 @@ import 'package:house_wallet/pages/payments/categories/category_dialog.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/pages/shopping/price_quantity_dialog.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 
 class BuyItemsPage extends StatefulWidget {
   final List<FirestoreDocument<ShoppingItemRef>> shoppingItems;
@@ -85,6 +86,8 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final navigator = Navigator.of(context);
     final appLocalizations = localizations(context);
+
+    if (await isNotConnectedToInternet(context) || !context.mounted) return;
 
     final category = await _categoryPrompt();
     if (category == null) return;

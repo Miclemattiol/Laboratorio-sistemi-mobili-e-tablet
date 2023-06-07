@@ -30,6 +30,8 @@ class _NoHousePageState extends State<NoHousePage> {
 
     setState(() => _loading = true);
     try {
+      if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+
       final myUid = LoggedUser.of(context, listen: false).uid;
       final groups = (await App.groupsFirestoreReference.where(HouseData.codesKey, arrayContains: _codeValue!).limit(1).get()).docs;
 
@@ -56,6 +58,8 @@ class _NoHousePageState extends State<NoHousePage> {
 
     setState(() => _loading = true);
     try {
+      if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+
       final myUid = LoggedUser.of(context, listen: false).uid;
 
       await App.groupsFirestoreReference.add(HouseData(

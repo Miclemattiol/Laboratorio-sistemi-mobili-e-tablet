@@ -35,6 +35,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
     setState(() => _loading = true);
     try {
+      if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+
       final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailValue!, password: _passwordValue!);
       navigator.pop();
 

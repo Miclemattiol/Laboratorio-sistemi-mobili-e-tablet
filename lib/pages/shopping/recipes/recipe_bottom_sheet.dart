@@ -54,6 +54,8 @@ class _RecipeBottomSheetState extends State<RecipeBottomSheet> {
 
     setState(() => _loading = true);
     try {
+      if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+
       if (widget.recipe == null) {
         await RecipesPage.firestoreRef(widget.house.id).add(Recipe(
           title: _titleValue!,

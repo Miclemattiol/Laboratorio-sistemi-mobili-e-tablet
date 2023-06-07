@@ -45,6 +45,8 @@ class _ShoppingItemDetailsBottomSheetState extends State<ShoppingItemDetailsBott
 
     setState(() => _loading = true);
     try {
+      if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+
       await widget.shoppingItem.reference.update({
         ShoppingItem.priceKey: _priceValue,
         ShoppingItem.quantityKey: _quantityValue,

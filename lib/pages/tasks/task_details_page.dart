@@ -9,6 +9,7 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/tasks/task_details_bottom_sheet.dart';
+import 'package:house_wallet/utils.dart';
 
 class TaskDetailsPage extends StatelessWidget {
   final FirestoreDocument<TaskRef> task;
@@ -24,6 +25,8 @@ class TaskDetailsPage extends StatelessWidget {
 
   void _delete(BuildContext context) async {
     final navigator = Navigator.of(context);
+
+    if (await isNotConnectedToInternet(context) || !context.mounted) return;
 
     if (!await CustomDialog.confirm(
       context: context,

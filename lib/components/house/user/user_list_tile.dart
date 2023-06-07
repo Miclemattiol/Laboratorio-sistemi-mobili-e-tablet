@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:house_wallet/data/house_data.dart';
@@ -7,6 +8,7 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/house/user_details_bottom_sheet.dart';
+import 'package:house_wallet/utils.dart';
 import 'package:share_plus/share_plus.dart';
 
 class UserListTile extends StatefulWidget {
@@ -39,19 +41,21 @@ class _UserListTileState extends State<UserListTile> {
     return List.generate(length, (index) => chars[random.nextInt(chars.length)]).join();
   }
 
-  void _createAndShareCode(BuildContext context) async {
+  void _createAndShareCode() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final appLocalizations = localizations(context);
 
     setState(() => _loading = true);
     try {
+      if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+
       final code = _generateRandomCode(12);
 
       await HouseDataRef.of(context, listen: false).reference.update({
         HouseData.codesKey: FieldValue.arrayUnion([code]),
       });
 
-      Share.share(appLocalizations.userInviteMessage(code));
+      await Share.share(appLocalizations.userInviteMessage(code));
     } on FirebaseException catch (error) {
       scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
     } finally {
@@ -104,9 +108,11 @@ class _UserListTileState extends State<UserListTile> {
   Widget build(BuildContext context) {
     if (widget.user == null) {
       return ListTile(
-        leading: const CircleAvatar(child: Icon(Icons.ios_share, size: 20)),
+        leading: CircleAvatar(
+          child: _loading ? const Padding(padding: EdgeInsets.all(12), child: CircularProgressIndicator(strokeWidth: 2)) : const Icon(Icons.ios_share, size: 20),
+        ),
         title: Text(localizations(context).userInvite),
-        onTap: _loading ? null : () => _createAndShareCode(context),
+        onTap: _loading ? null : _createAndShareCode,
       );
     }
 
@@ -120,7 +126,7 @@ class _UserListTileState extends State<UserListTile> {
       child: ListTile(
         tileColor: Colors.transparent,
         leading: CircleAvatar(
-          foregroundImage: NetworkImage(widget.user!.imageUrl ?? ""),
+          foregroundImage: CachedNetworkImageProvider(widget.user!.imageUrl ?? ""),
           onForegroundImageError: (exception, stackTrace) {},
           child: const Icon(Icons.person, size: 20),
         ),

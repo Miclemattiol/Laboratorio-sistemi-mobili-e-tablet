@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -9,6 +10,7 @@ import 'package:house_wallet/data/tasks/task.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/tasks/task_details_page.dart';
 import 'package:house_wallet/pages/tasks/tasks_page.dart';
+import 'package:house_wallet/utils.dart';
 
 class TaskListTile extends StatelessWidget {
   final FirestoreDocument<TaskRef> task;
@@ -44,6 +46,19 @@ class TaskListTile extends StatelessWidget {
     );
   }
 
+  void _delete(BuildContext context) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final appLocalizations = localizations(context);
+
+    if (await isNotConnectedToInternet(context) || !context.mounted) return;
+
+    try {
+      await task.reference.delete();
+    } on FirebaseException catch (error) {
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Slidable(
@@ -53,7 +68,7 @@ class TaskListTile extends StatelessWidget {
         motion: const ScrollMotion(),
         children: [
           SlidableAction(
-            onPressed: (context) => task.reference.delete(),
+            onPressed: (_) => _delete(context),
             backgroundColor: Colors.red,
             foregroundColor: Colors.white,
             icon: Icons.delete,

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/shopping/shopping_item_tile.dart';
@@ -16,6 +17,7 @@ import 'package:house_wallet/pages/shopping/recipes/recipe_bottom_sheet.dart';
 import 'package:house_wallet/pages/shopping/recipes/recipes_page.dart';
 import 'package:house_wallet/pages/shopping/shopping_bottom_sheet.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
 enum _PopupMenu { recipes, quickAddRecipe }
@@ -107,7 +109,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
             icon: const Icon(Icons.shopping_cart),
           ),
           PopupMenuButton<_PopupMenu>(
-            onSelected: (value) {
+            onSelected: (value) async {
               final house = HouseDataRef.of(context, listen: false);
 
               switch (value) {
@@ -115,6 +117,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                   Navigator.of(context).push(SlidingPageRoute(RecipesPage(house: house), fullscreenDialog: true));
                   break;
                 case _PopupMenu.quickAddRecipe:
+                  if (await isNotConnectedToInternet(context) || !context.mounted) return;
                   showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
@@ -193,6 +196,10 @@ class _ShoppingPageState extends State<ShoppingPage> {
                 }
 
                 _shoppingItems = Map.fromEntries(shoppingItems.map((item) => MapEntry(item.id, item)));
+
+                if (_checkedIds.whereNot((id) => _shoppingItems.containsKey(id)).isNotEmpty) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => _checkedIds.removeWhere((id) => !_shoppingItems.containsKey(id))));
+                }
 
                 if (shoppingItems.isEmpty) {
                   return centerSectionText(

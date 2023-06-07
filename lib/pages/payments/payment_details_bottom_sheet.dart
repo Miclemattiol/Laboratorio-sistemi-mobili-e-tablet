@@ -84,8 +84,11 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
 
     setState(() => _loading = true);
     try {
+      if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+
       if (_categoryValue == CategoryFormField.newCategoryKey) {
         _categoryValue = await showDialog<String?>(context: context, builder: (context) => CategoryDialog(house: widget.house));
+
         if (_categoryValue == null) {
           setState(() => _loading = false);
           return;

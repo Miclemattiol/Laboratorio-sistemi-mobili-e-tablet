@@ -8,6 +8,7 @@ import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/categories/category_dialog.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/themes.dart';
+import 'package:house_wallet/utils.dart';
 import 'package:shimmer/shimmer.dart';
 
 class CategoriesPage extends StatelessWidget {
@@ -68,7 +69,10 @@ class CategoriesPage extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         heroTag: null,
-        onPressed: () => showDialog(context: context, builder: (context) => CategoryDialog(house: house)),
+        onPressed: () async {
+          if (await isNotConnectedToInternet(context) || !context.mounted) return;
+          showDialog(context: context, builder: (context) => CategoryDialog(house: house));
+        },
         tooltip: localizations(context).categoriesPageNew,
         child: const Icon(Icons.add),
       ),
