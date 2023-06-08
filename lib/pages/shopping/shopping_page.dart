@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/shopping/shopping_item_tile.dart';
@@ -51,8 +50,8 @@ class ShoppingPage extends StatefulWidget {
 }
 
 class _ShoppingPageState extends State<ShoppingPage> {
-  Map<String, FirestoreDocument<ShoppingItemRef>> _shoppingItems = {};
-  final _checkedIds = <String>{};
+  late final _stream = ShoppingPage.firestoreRef(HouseDataRef.of(context).id).orderBy(ShoppingItem.timestampKey, descending: true).snapshots().map(ShoppingItemRef.converter(context));
+  final _checkedItems = <String, FirestoreDocument<ShoppingItemRef>>{};
 
   Widget _shoppingList(Widget child) {
     return SingleChildScrollView(
@@ -70,13 +69,113 @@ class _ShoppingPageState extends State<ShoppingPage> {
     );
   }
 
-  List<FirestoreDocument<ShoppingItemRef>> _checkedItems() {
-    return _checkedIds.expand<FirestoreDocument<ShoppingItemRef>>((id) {
-      if (_shoppingItems.containsKey(id)) {
-        return [_shoppingItems[id]!];
-      }
-      return [];
-    }).toList();
+  void _confirmPurchase() {
+    Navigator.of(context).push(
+      SlidingPageRoute(
+        BuyItemsPage(
+          _checkedItems.values.toList(),
+          categories: widget.categories,
+          loggedUser: LoggedUser.of(context, listen: false),
+          house: HouseDataRef.of(context, listen: false),
+          onComplete: () => setState(() => _checkedItems.clear()),
+        ),
+        fullscreenDialog: true,
+      ),
+    );
+  }
+
+  void _updateCheckedItems(Iterable<FirestoreDocument<ShoppingItemRef>> shoppingItems) {
+    final wasNotEmpty = _checkedItems.isNotEmpty;
+    final newItems = Map<String, FirestoreDocument<ShoppingItemRef>>.fromEntries(shoppingItems.map((item) => MapEntry(item.id, item)));
+
+    _checkedItems.removeWhere((key, value) => !newItems.containsKey(key));
+    for (final key in _checkedItems.keys) {
+      _checkedItems[key] = newItems[key]!;
+    }
+
+    if (wasNotEmpty && _checkedItems.isEmpty) setState(() {});
+  }
+
+  Widget _buildShimmer() {
+    return _shoppingList(Shimmer.fromColors(
+      baseColor: Theme.of(context).disabledColor,
+      highlightColor: Theme.of(context).disabledColor.withOpacity(.1),
+      child: Column(
+        children: [
+          ShoppingItemTile.shimmer(titleWidth: 128),
+          ShoppingItemTile.shimmer(titleWidth: 48),
+          ShoppingItemTile.shimmer(titleWidth: 80),
+          ShoppingItemTile.shimmer(titleWidth: 112),
+          ShoppingItemTile.shimmer(titleWidth: 64),
+          ShoppingItemTile.shimmer(titleWidth: 128),
+          ShoppingItemTile.shimmer(titleWidth: 96),
+        ],
+      ),
+    ));
+  }
+
+  List<Widget> _buildActions() {
+    final house = HouseDataRef.of(context, listen: false);
+    return [
+      IconButton(
+        tooltip: localizations(context).buyItemsTooltip,
+        onPressed: _checkedItems.isEmpty ? null : _confirmPurchase,
+        icon: const Icon(Icons.shopping_cart),
+      ),
+      PopupMenuButton<_PopupMenu>(
+        onSelected: (value) async {
+          switch (value) {
+            case _PopupMenu.recipes:
+              Navigator.of(context).push(SlidingPageRoute(RecipesPage(house: house), fullscreenDialog: true));
+              break;
+            case _PopupMenu.quickAddRecipe:
+              if (await isNotConnectedToInternet(context) || !context.mounted) return;
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                enableDrag: false,
+                builder: (context) => RecipeBottomSheet.quickAddRecipe(
+                  _checkedItems.values.map((item) {
+                    return RecipeItem(
+                      title: item.data.title,
+                      price: item.data.price,
+                      quantity: item.data.quantity,
+                      supermarket: item.data.supermarket,
+                    );
+                  }).toList(),
+                  house: house,
+                ),
+              );
+              break;
+          }
+        },
+        itemBuilder: (context) => [
+          PopupMenuItem(
+            value: _PopupMenu.recipes,
+            child: PadRow(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 16,
+              children: [
+                const Icon(Icons.assignment),
+                Expanded(child: Text(localizations(context).recipesPage)),
+              ],
+            ),
+          ),
+          PopupMenuItem(
+            value: _PopupMenu.quickAddRecipe,
+            enabled: _checkedItems.isNotEmpty,
+            child: PadRow(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: 16,
+              children: [
+                const Icon(Icons.add),
+                Expanded(child: Text(localizations(context).quickRecipeTooltip)),
+              ],
+            ),
+          ),
+        ],
+      )
+    ];
   }
 
   @override
@@ -87,119 +186,25 @@ class _ShoppingPageState extends State<ShoppingPage> {
         shadowColor: Colors.black,
         elevation: 3,
         scrolledUnderElevation: 3,
-        actions: [
-          IconButton(
-            tooltip: localizations(context).buyItemsTooltip,
-            onPressed: _checkedIds.isEmpty
-                ? null
-                : () {
-                    Navigator.of(context).push(
-                      SlidingPageRoute(
-                        BuyItemsPage(
-                          _checkedItems(),
-                          categories: widget.categories,
-                          loggedUser: LoggedUser.of(context, listen: false),
-                          house: HouseDataRef.of(context, listen: false),
-                          onComplete: () => setState(() => _checkedIds.clear()),
-                        ),
-                        fullscreenDialog: true,
-                      ),
-                    );
-                  },
-            icon: const Icon(Icons.shopping_cart),
-          ),
-          PopupMenuButton<_PopupMenu>(
-            onSelected: (value) async {
-              final house = HouseDataRef.of(context, listen: false);
-
-              switch (value) {
-                case _PopupMenu.recipes:
-                  Navigator.of(context).push(SlidingPageRoute(RecipesPage(house: house), fullscreenDialog: true));
-                  break;
-                case _PopupMenu.quickAddRecipe:
-                  if (await isNotConnectedToInternet(context) || !context.mounted) return;
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    enableDrag: false,
-                    builder: (context) => RecipeBottomSheet.quickAddRecipe(
-                      _checkedItems().map((item) {
-                        return RecipeItem(
-                          title: item.data.title,
-                          price: item.data.price,
-                          quantity: item.data.quantity,
-                          supermarket: item.data.supermarket,
-                        );
-                      }).toList(),
-                      house: house,
-                    ),
-                  );
-                  break;
-              }
-            },
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                value: _PopupMenu.recipes,
-                child: PadRow(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  spacing: 16,
-                  children: [
-                    const Icon(Icons.assignment),
-                    Expanded(child: Text(localizations(context).recipesPage)),
-                  ],
-                ),
-              ),
-              PopupMenuItem(
-                value: _PopupMenu.quickAddRecipe,
-                enabled: _checkedIds.isNotEmpty,
-                child: PadRow(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  spacing: 16,
-                  children: [
-                    const Icon(Icons.add),
-                    Expanded(child: Text(localizations(context).quickRecipeTooltip)),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
+        actions: _buildActions(),
       ),
       body: Column(
         children: [
           Expanded(
             child: StreamBuilder(
-              stream: ShoppingPage.firestoreRef(HouseDataRef.of(context).id).orderBy(ShoppingItem.timestampKey, descending: true).snapshots().map(ShoppingItemRef.converter(context)),
+              stream: _stream,
               builder: (context, snapshot) {
                 final shoppingItems = snapshot.data;
 
                 if (shoppingItems == null) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return _shoppingList(Shimmer.fromColors(
-                      baseColor: Theme.of(context).disabledColor,
-                      highlightColor: Theme.of(context).disabledColor.withOpacity(.1),
-                      child: Column(
-                        children: [
-                          ShoppingItemTile.shimmer(titleWidth: 128),
-                          ShoppingItemTile.shimmer(titleWidth: 48),
-                          ShoppingItemTile.shimmer(titleWidth: 80),
-                          ShoppingItemTile.shimmer(titleWidth: 112),
-                          ShoppingItemTile.shimmer(titleWidth: 64),
-                          ShoppingItemTile.shimmer(titleWidth: 128),
-                          ShoppingItemTile.shimmer(titleWidth: 96),
-                        ],
-                      ),
-                    ));
+                    return _buildShimmer();
                   } else {
                     return centerErrorText(context: context, message: localizations(context).shoppingPageError, error: snapshot.error);
                   }
                 }
 
-                _shoppingItems = Map.fromEntries(shoppingItems.map((item) => MapEntry(item.id, item)));
-
-                if (_checkedIds.whereNot((id) => _shoppingItems.containsKey(id)).isNotEmpty) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) => setState(() => _checkedIds.removeWhere((id) => !_shoppingItems.containsKey(id))));
-                }
+                WidgetsBinding.instance.addPostFrameCallback((_) => _updateCheckedItems(shoppingItems));
 
                 if (shoppingItems.isEmpty) {
                   return centerSectionText(
@@ -218,12 +223,12 @@ class _ShoppingPageState extends State<ShoppingPage> {
                     children: shoppingItems.map((shoppingItem) {
                       return ShoppingItemTile(
                         shoppingItem,
-                        checked: _checkedIds.contains(shoppingItem.id),
+                        checked: _checkedItems.containsKey(shoppingItem.id),
                         setChecked: (value) => setState(() {
                           if (value) {
-                            _checkedIds.add(shoppingItem.id);
+                            _checkedItems[shoppingItem.id] = shoppingItem;
                           } else {
-                            _checkedIds.remove(shoppingItem.id);
+                            _checkedItems.remove(shoppingItem.id);
                           }
                         }),
                       );

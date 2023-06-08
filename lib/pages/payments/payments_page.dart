@@ -5,8 +5,10 @@ import 'package:house_wallet/components/house/trade/trades_section.dart';
 import 'package:house_wallet/components/payments/payment_tile.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/components/ui/sliding_page_route.dart';
+import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
+import 'package:house_wallet/data/payment_or_trade.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/data/payments/trade.dart';
@@ -32,8 +34,18 @@ class PaymentsPage extends StatefulWidget {
 }
 
 class _PaymentsPageState extends State<PaymentsPage> {
+  late final _stream = _createStream();
   bool _showFab = true;
   PaymentFilter _paymentFilter = const PaymentFilter.empty();
+
+  Stream<List<FirestoreDocument<PaymentOrTrade>>> _createStream() {
+    final houseId = HouseDataRef.of(context).id;
+    return Rx.combineLatest2(
+      PaymentsPage.paymentsFirestoreRef(houseId).snapshots().map(PaymentRef.converter(context, widget.categories)),
+      TradesSection.firestoreRef(houseId).where(Trade.acceptedKey, isEqualTo: true).snapshots().map(TradeRef.converter(context)),
+      (payments, trades) => [...payments, ...trades].toList()..sort((payment, trade) => trade.data.date.compareTo(payment.data.date)),
+    );
+  }
 
   void _addPayment(BuildContext context) {
     final loggedUser = LoggedUser.of(context, listen: false);
@@ -46,7 +58,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
     );
   }
 
-  void _filter(BuildContext context) async {
+  void _changeFilters(BuildContext context) async {
     final house = HouseDataRef.of(context, listen: false);
     final filter = await showModalBottomSheet<PaymentFilter>(
       context: context,
@@ -58,61 +70,64 @@ class _PaymentsPageState extends State<PaymentsPage> {
     setState(() => _paymentFilter = filter);
   }
 
+  List<Widget> _buildActions(BuildContext context) {
+    return [
+      if (!_paymentFilter.isEmpty)
+        IconButton(
+          key: const Key("resetFilter"),
+          tooltip: localizations(context).clearFilterTooltip,
+          icon: const Icon(Icons.filter_alt_off),
+          onPressed: () => setState(() => _paymentFilter = const PaymentFilter.empty()),
+        ),
+      IconButton(
+        key: const Key("filter"),
+        tooltip: localizations(context).filterTooltip,
+        onPressed: () => _changeFilters(context),
+        icon: const Icon(Icons.filter_alt),
+      ),
+      IconButton(
+        key: const Key("categories"),
+        tooltip: localizations(context).categoriesPage,
+        onPressed: () => Navigator.of(context).push(SlidingPageRoute(CategoriesPage(house: HouseDataRef.of(context, listen: false)), fullscreenDialog: true)),
+        icon: const Icon(Icons.segment),
+      )
+    ];
+  }
+
+  Shimmer _buildShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Theme.of(context).disabledColor,
+      highlightColor: Theme.of(context).disabledColor.withOpacity(.1),
+      child: ListView(
+        children: [
+          PaymentTile.shimmer(titleWidth: 128, subtitleWidth: 96),
+          PaymentTile.shimmer(titleWidth: 160, subtitleWidth: 96),
+          PaymentTile.shimmer(titleWidth: 96, subtitleWidth: 80),
+          PaymentTile.shimmer(titleWidth: 112, subtitleWidth: 40),
+          PaymentTile.shimmer(titleWidth: 96, subtitleWidth: 32),
+          PaymentTile.shimmer(titleWidth: 160, subtitleWidth: 96),
+          PaymentTile.shimmer(titleWidth: 96, subtitleWidth: 80),
+          PaymentTile.shimmer(titleWidth: 128, subtitleWidth: 96),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final houseId = HouseDataRef.of(context).id;
     return Scaffold(
       appBar: AppBarFix(
         title: Text(localizations(context).paymentsPage),
-        actions: [
-          if (!_paymentFilter.isEmpty)
-            IconButton(
-              key: const Key("resetFilter"),
-              tooltip: localizations(context).clearFilterTooltip,
-              icon: const Icon(Icons.filter_alt_off),
-              onPressed: () => setState(() => _paymentFilter = const PaymentFilter.empty()),
-            ),
-          IconButton(
-            key: const Key("filter"),
-            tooltip: localizations(context).filterTooltip,
-            onPressed: () => _filter(context),
-            icon: const Icon(Icons.filter_alt),
-          ),
-          IconButton(
-            key: const Key("categories"),
-            tooltip: localizations(context).categoriesPage,
-            onPressed: () => Navigator.of(context).push(SlidingPageRoute(CategoriesPage(house: HouseDataRef.of(context, listen: false)), fullscreenDialog: true)),
-            icon: const Icon(Icons.segment),
-          )
-        ],
+        actions: _buildActions(context),
       ),
       body: StreamBuilder(
-        stream: Rx.combineLatest2(
-          PaymentsPage.paymentsFirestoreRef(houseId).snapshots().map(PaymentRef.converter(context, widget.categories)),
-          TradesSection.firestoreRef(HouseDataRef.of(context).id).where(Trade.acceptedKey, isEqualTo: true).snapshots().map(TradeRef.converter(context)),
-          (payments, trades) => [...payments, ...trades].toList()..sort((payment, trade) => trade.data.date.compareTo(payment.data.date)),
-        ),
+        stream: _stream,
         builder: (context, snapshot) {
           final payments = snapshot.data;
 
           if (payments == null) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Shimmer.fromColors(
-                baseColor: Theme.of(context).disabledColor,
-                highlightColor: Theme.of(context).disabledColor.withOpacity(.1),
-                child: ListView(
-                  children: [
-                    PaymentTile.shimmer(titleWidth: 128, subtitleWidth: 96),
-                    PaymentTile.shimmer(titleWidth: 160, subtitleWidth: 96),
-                    PaymentTile.shimmer(titleWidth: 96, subtitleWidth: 80),
-                    PaymentTile.shimmer(titleWidth: 112, subtitleWidth: 40),
-                    PaymentTile.shimmer(titleWidth: 96, subtitleWidth: 32),
-                    PaymentTile.shimmer(titleWidth: 160, subtitleWidth: 96),
-                    PaymentTile.shimmer(titleWidth: 96, subtitleWidth: 80),
-                    PaymentTile.shimmer(titleWidth: 128, subtitleWidth: 96),
-                  ],
-                ),
-              );
+              return _buildShimmer();
             } else {
               return centerErrorText(context: context, message: localizations(context).paymentsPageError, error: snapshot.error);
             }

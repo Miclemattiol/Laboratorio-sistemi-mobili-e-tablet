@@ -9,13 +9,20 @@ import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/main_page.dart';
 
-class HousePage extends StatelessWidget {
+class HousePage extends StatefulWidget {
   const HousePage({super.key});
+
+  @override
+  State<HousePage> createState() => _HousePageState();
+}
+
+class _HousePageState extends State<HousePage> {
+  late final _tradesStream = TradesSection.firestoreRef(HouseDataRef.of(context).id).where(Trade.acceptedKey, isEqualTo: false).where(Trade.toKey, isEqualTo: LoggedUser.of(context).uid).snapshots().map(TradeRef.converter(context));
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: TradesSection.firestoreRef(HouseDataRef.of(context).id).where(Trade.acceptedKey, isEqualTo: false).where(Trade.toKey, isEqualTo: LoggedUser.of(context).uid).snapshots().map(TradeRef.converter(context)),
+      stream: _tradesStream,
       builder: (context, snapshot) {
         WidgetsBinding.instance.addPostFrameCallback((_) => BadgesNotifier.of(context, listen: false).setBadge(HousePage, snapshot.data?.length));
         return Scaffold(

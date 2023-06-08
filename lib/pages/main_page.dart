@@ -52,7 +52,7 @@ class MainPage extends StatelessWidget {
 
             return Provider.value(
               value: house,
-              child: const _MainPageStack(),
+              child: const _MainPageScaffold(),
             );
           },
         );
@@ -61,14 +61,14 @@ class MainPage extends StatelessWidget {
   }
 }
 
-class _MainPageStack extends StatefulWidget {
-  const _MainPageStack();
+class _MainPageScaffold extends StatefulWidget {
+  const _MainPageScaffold();
 
   @override
-  State<_MainPageStack> createState() => _MainPageStackState();
+  State<_MainPageScaffold> createState() => _MainPageScaffoldState();
 }
 
-class _MainPageStackState extends State<_MainPageStack> {
+class _MainPageScaffoldState extends State<_MainPageScaffold> {
   int _selectedIndex = prefs.lastSection;
 
   List<PageData> _pages() {

@@ -5,13 +5,7 @@ import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
 
-enum RepeatOptions {
-  daily,
-  weekly,
-  monthly,
-  yearly,
-  custom
-}
+enum RepeatOptions { daily, weekly, monthly, yearly, custom }
 
 extension RepeatOptionsValues on RepeatOptions {
   IconData get icon {

@@ -13,38 +13,43 @@ import 'package:shimmer/shimmer.dart';
 
 class CategoriesPage extends StatelessWidget {
   final HouseDataRef house;
+  late final _stream = PaymentsPage.categoriesFirestoreRef(house.id).orderBy(Category.nameKey).snapshots().map(defaultFirestoreConverter);
 
-  const CategoriesPage({
+  CategoriesPage({
     required this.house,
     super.key,
   });
+
+  Shimmer _buildShimmer(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Theme.of(context).disabledColor,
+      highlightColor: Theme.of(context).disabledColor.withOpacity(.1),
+      child: ListView(
+        children: [
+          CategoryListTile.shimmer(titleWidth: 128),
+          CategoryListTile.shimmer(titleWidth: 48),
+          CategoryListTile.shimmer(titleWidth: 80),
+          CategoryListTile.shimmer(titleWidth: 112),
+          CategoryListTile.shimmer(titleWidth: 64),
+          CategoryListTile.shimmer(titleWidth: 128),
+          CategoryListTile.shimmer(titleWidth: 96),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarFix(title: Text(localizations(context).categoriesPage)),
       body: StreamBuilder(
-        stream: PaymentsPage.categoriesFirestoreRef(house.id).orderBy(Category.nameKey).snapshots().map(defaultFirestoreConverter),
+        stream: _stream,
         builder: (context, snapshot) {
           final categories = snapshot.data;
 
           if (categories == null) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Shimmer.fromColors(
-                baseColor: Theme.of(context).disabledColor,
-                highlightColor: Theme.of(context).disabledColor.withOpacity(.1),
-                child: ListView(
-                  children: [
-                    CategoryListTile.shimmer(titleWidth: 128),
-                    CategoryListTile.shimmer(titleWidth: 48),
-                    CategoryListTile.shimmer(titleWidth: 80),
-                    CategoryListTile.shimmer(titleWidth: 112),
-                    CategoryListTile.shimmer(titleWidth: 64),
-                    CategoryListTile.shimmer(titleWidth: 128),
-                    CategoryListTile.shimmer(titleWidth: 96),
-                  ],
-                ),
-              );
+              return _buildShimmer(context);
             } else {
               return centerErrorText(context: context, message: localizations(context).categoriesPageError, error: snapshot.error);
             }

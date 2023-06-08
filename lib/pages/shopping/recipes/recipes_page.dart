@@ -27,6 +27,7 @@ class RecipesPage extends StatefulWidget {
 }
 
 class _RecipesPageState extends State<RecipesPage> {
+  late final _stream = RecipesPage.firestoreRef(widget.house.id).snapshots().map(defaultFirestoreConverter);
   bool _showFab = true;
 
   void _addRecipe(BuildContext context) {
@@ -38,32 +39,36 @@ class _RecipesPageState extends State<RecipesPage> {
     );
   }
 
+  Widget _buildShimmer() {
+    return Shimmer.fromColors(
+      baseColor: Theme.of(context).disabledColor,
+      highlightColor: Theme.of(context).disabledColor.withOpacity(.1),
+      child: ListView(
+        children: [
+          RecipeListTile.shimmer(titleWidth: 128),
+          RecipeListTile.shimmer(titleWidth: 48),
+          RecipeListTile.shimmer(titleWidth: 80),
+          RecipeListTile.shimmer(titleWidth: 112),
+          RecipeListTile.shimmer(titleWidth: 64),
+          RecipeListTile.shimmer(titleWidth: 128),
+          RecipeListTile.shimmer(titleWidth: 96),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBarFix(title: Text(localizations(context).recipesPage)),
       body: StreamBuilder(
-        stream: RecipesPage.firestoreRef(widget.house.id).snapshots().map(defaultFirestoreConverter),
+        stream: _stream,
         builder: (context, snapshot) {
           final recipes = snapshot.data;
 
           if (recipes == null) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Shimmer.fromColors(
-                baseColor: Theme.of(context).disabledColor,
-                highlightColor: Theme.of(context).disabledColor.withOpacity(.1),
-                child: ListView(
-                  children: [
-                    RecipeListTile.shimmer(titleWidth: 128),
-                    RecipeListTile.shimmer(titleWidth: 48),
-                    RecipeListTile.shimmer(titleWidth: 80),
-                    RecipeListTile.shimmer(titleWidth: 112),
-                    RecipeListTile.shimmer(titleWidth: 64),
-                    RecipeListTile.shimmer(titleWidth: 128),
-                    RecipeListTile.shimmer(titleWidth: 96),
-                  ],
-                ),
-              );
+              return _buildShimmer();
             } else {
               return centerErrorText(context: context, message: localizations(context).recipesPageError, error: snapshot.error);
             }

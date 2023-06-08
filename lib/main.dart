@@ -20,6 +20,8 @@ import 'package:provider/provider.dart';
 
 late final SharedPreferences prefs;
 
+//TODO create new ipa and new apk when done!
+
 AppLocalizations localizations(BuildContext context) => AppLocalizations.of(context)!;
 NumberFormat currencyFormat(BuildContext context) => NumberFormat("0.00 €", Localizations.localeOf(context).languageCode);
 DateFormat dateFormat(BuildContext context) => DateFormat("EEEE dd MMMM, HH:mm", Localizations.localeOf(context).languageCode);

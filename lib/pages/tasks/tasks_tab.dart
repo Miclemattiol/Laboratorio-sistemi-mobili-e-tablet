@@ -20,27 +20,31 @@ class TasksTab extends StatelessWidget {
     super.key,
   });
 
+  Shimmer _buildShimmer(BuildContext context) {
+    return Shimmer.fromColors(
+      baseColor: Theme.of(context).disabledColor,
+      highlightColor: Theme.of(context).disabledColor.withOpacity(.1),
+      child: Column(
+        children: [
+          TaskListTile.shimmer(titleWidth: 160, subtitleWidth: 96),
+          TaskListTile.shimmer(titleWidth: 96, subtitleWidth: 80),
+          TaskListTile.shimmer(titleWidth: 176, subtitleWidth: 96),
+          TaskListTile.shimmer(titleWidth: 112, subtitleWidth: 40),
+          TaskListTile.shimmer(titleWidth: 128, subtitleWidth: 96),
+          TaskListTile.shimmer(titleWidth: 128, subtitleWidth: 96),
+          TaskListTile.shimmer(titleWidth: 96, subtitleWidth: 32),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final tasks = snapshot.data?.where((task) => !myTasks || task.data.assignedTo.map((user) => user.uid).contains(LoggedUser.of(context).uid));
 
     if (tasks == null) {
       if (snapshot.connectionState == ConnectionState.waiting) {
-        return Shimmer.fromColors(
-          baseColor: Theme.of(context).disabledColor,
-          highlightColor: Theme.of(context).disabledColor.withOpacity(.1),
-          child: Column(
-            children: [
-              TaskListTile.shimmer(titleWidth: 160, subtitleWidth: 96),
-              TaskListTile.shimmer(titleWidth: 96, subtitleWidth: 80),
-              TaskListTile.shimmer(titleWidth: 176, subtitleWidth: 96),
-              TaskListTile.shimmer(titleWidth: 112, subtitleWidth: 40),
-              TaskListTile.shimmer(titleWidth: 128, subtitleWidth: 96),
-              TaskListTile.shimmer(titleWidth: 128, subtitleWidth: 96),
-              TaskListTile.shimmer(titleWidth: 96, subtitleWidth: 32),
-            ],
-          ),
-        );
+        return _buildShimmer(context);
       } else {
         return centerErrorText(context: context, message: localizations(context).tasksPageError, error: snapshot.error);
       }

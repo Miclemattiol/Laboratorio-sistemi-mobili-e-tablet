@@ -32,19 +32,37 @@ class TasksPage extends StatefulWidget {
 }
 
 class _TasksPageState extends State<TasksPage> {
+  late final _stream = _createStream();
   bool _showFab = true;
 
-  bool onNotification(UserScrollNotification notification) {
+  bool _onNotification(UserScrollNotification notification) {
     if (notification.depth == 0) {
       setState(() => _showFab = notification.direction == ScrollDirection.idle);
     }
     return true;
   }
 
+  Stream<List<FirestoreDocument<TaskRef>>> _createStream() {
+    final houseId = HouseDataRef.of(context).id;
+    return Rx.combineLatest2(
+      TasksPage.tasksFirestoreRef(houseId).where(Task.repeatingKey, isNull: true).where(Task.toKey, isGreaterThan: Timestamp.now()).snapshots().map(TaskRef.converter(context)),
+      TasksPage.tasksFirestoreRef(houseId).where(Task.repeatingKey, isNull: false).snapshots().map(TaskRef.converter(context)),
+      (validNonRepeatingTasks, repeatingTasks) => [...validNonRepeatingTasks, ...repeatingTasks]..sort((a, b) {
+          final sortByRepeating = (b.data.repeating != null).toInt() - (a.data.repeating != null).toInt();
+          if (sortByRepeating != 0) return sortByRepeating;
+
+          final sortByFrom = a.data.from.compareTo(b.data.from);
+          if (sortByFrom != 0) return sortByFrom;
+
+          return a.data.to.compareTo(b.data.to);
+        }),
+    );
+  }
+
   List<TabData> _tabs(BuildContext context, AsyncSnapshot<Iterable<FirestoreDocument<TaskRef>>> snapshot) {
     return [
-      TabData(label: localizations(context).myTasksTab, widget: TasksTab(snapshot: snapshot, myTasks: true, onNotification: onNotification)),
-      TabData(label: localizations(context).allTasksTab, widget: TasksTab(snapshot: snapshot, myTasks: false, onNotification: onNotification)),
+      TabData(label: localizations(context).myTasksTab, widget: TasksTab(snapshot: snapshot, myTasks: true, onNotification: _onNotification)),
+      TabData(label: localizations(context).allTasksTab, widget: TasksTab(snapshot: snapshot, myTasks: false, onNotification: _onNotification)),
     ];
   }
 
@@ -59,24 +77,10 @@ class _TasksPageState extends State<TasksPage> {
     );
   }
 
-  //TODO remove previous index (sorting) from firestore console
   @override
   Widget build(BuildContext context) {
-    final houseId = HouseDataRef.of(context).id;
     return StreamBuilder(
-      stream: Rx.combineLatest2(
-        TasksPage.tasksFirestoreRef(houseId).where(Task.repeatingKey, isNull: true).where(Task.toKey, isGreaterThan: Timestamp.now()).snapshots().map(TaskRef.converter(context)),
-        TasksPage.tasksFirestoreRef(houseId).where(Task.repeatingKey, isNull: false).snapshots().map(TaskRef.converter(context)),
-        (validNonRepeatingTasks, repeatingTasks) => [...validNonRepeatingTasks, ...repeatingTasks]..sort((a, b) {
-            final sortByRepeating = (b.data.repeating != null).toInt() - (a.data.repeating != null).toInt();
-            if (sortByRepeating != 0) return sortByRepeating;
-
-            final sortByFrom = a.data.from.compareTo(b.data.from);
-            if (sortByFrom != 0) return sortByFrom;
-
-            return a.data.to.compareTo(b.data.to);
-          }),
-      ),
+      stream: _stream,
       builder: (context, snapshot) {
         final tabs = _tabs(context, snapshot);
         return DefaultTabController(
