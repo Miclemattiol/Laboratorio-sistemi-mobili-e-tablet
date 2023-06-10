@@ -17,7 +17,7 @@ class RepeatIntervalFormField extends StatefulWidget {
   final InputDecoration? intervalInputDecoration;
   final String? Function(RepeatData? value)? validator;
   final void Function(RepeatData? value)? onSaved;
-  final void Function(RepeatData value)? onChanged;
+  final void Function(RepeatData newValue)? onChanged;
   final bool enabled;
 
   const RepeatIntervalFormField({
@@ -39,6 +39,11 @@ class _RepeatIntervalFormFieldState extends State<RepeatIntervalFormField> {
   late RepeatOptions _repeatValue = widget.initialValues?.repeat ?? RepeatOptions.daily;
   late int? _intervalValue = widget.initialValues?.interval;
 
+  void _update(FormFieldState<RepeatData> state, RepeatData newValue) {
+    state.didChange(newValue);
+    widget.onChanged?.call(newValue);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FormField<RepeatData>(
@@ -50,7 +55,6 @@ class _RepeatIntervalFormFieldState extends State<RepeatIntervalFormField> {
       builder: (state) {
         final stateValue = state.value!;
         final isRepeat = stateValue.repeat != null;
-        widget.onChanged?.call(stateValue);
         return InputDecorator(
           decoration: InputDecoration(
             border: InputBorder.none,
@@ -66,7 +70,7 @@ class _RepeatIntervalFormFieldState extends State<RepeatIntervalFormField> {
                 onChanged: widget.enabled
                     ? (value) => setState(() {
                           final repeatValue = value ? _repeatValue : null;
-                          state.didChange(RepeatData(repeatValue, repeatValue == RepeatOptions.custom ? _intervalValue : null));
+                          _update(state, RepeatData(repeatValue, repeatValue == RepeatOptions.custom ? _intervalValue : null));
                         })
                     : null,
               ),
@@ -82,7 +86,7 @@ class _RepeatIntervalFormFieldState extends State<RepeatIntervalFormField> {
                     onChanged: widget.enabled
                         ? (value) => setState(() {
                               final repeatValue = value ?? RepeatOptions.daily;
-                              state.didChange(RepeatData(repeatValue, repeatValue == RepeatOptions.custom ? _intervalValue : null));
+                              _update(state, RepeatData(repeatValue, repeatValue == RepeatOptions.custom ? _intervalValue : null));
                               _repeatValue = repeatValue;
                             })
                         : null,
@@ -113,7 +117,7 @@ class _RepeatIntervalFormFieldState extends State<RepeatIntervalFormField> {
                       errorStyle: const TextStyle(fontSize: 0),
                     ),
                     onChanged: (value) => setState(() {
-                      state.didChange(RepeatData(stateValue.repeat, value));
+                      _update(state, RepeatData(stateValue.repeat, value));
                       _intervalValue = value;
                     }),
                   ),

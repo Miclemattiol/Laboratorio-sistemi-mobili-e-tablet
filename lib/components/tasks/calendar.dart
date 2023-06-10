@@ -19,7 +19,6 @@ class _RangeColor {
   const _RangeColor(this.color, this.range);
 }
 
-//TODO show repeating tasks
 class Calendar extends StatefulWidget {
   final DateTime? initialDate;
   final List<DateTimeRange> ranges;

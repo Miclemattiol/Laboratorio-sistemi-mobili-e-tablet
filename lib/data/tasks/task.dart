@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:house_wallet/components/form/repeat_interval_form_field.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/user.dart';
@@ -112,6 +113,8 @@ class TaskRef {
   });
 
   DateTimeRange get range => DateTimeRange(start: DateTime(from.year, from.month, from.day), end: DateTime(to.year, to.month, to.day));
+
+  RepeatData get repeatData => RepeatData(repeating, interval);
 
   static FirestoreConverter<Task, TaskRef> converter(BuildContext context) {
     final houseRef = HouseDataRef.of(context);

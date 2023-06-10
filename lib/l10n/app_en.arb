@@ -302,6 +302,8 @@
     "rangeStartDateInvalid": "The start date must be before the end date",
     "rangeEndDate": "End date",
     "rangeEndDateInvalid": "The end date must be after the start date",
+    "rangeEndDateInvalidPast": "The end date must be greater than today's date",
+    "rangeDateInvalid": "You can't use these dates with the repetition that you have chosen",
     "supermarket": "Supermarket",
     "priceAndQuantity": "Price and quantity",
     "price": "Price",

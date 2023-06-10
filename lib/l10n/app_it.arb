@@ -302,6 +302,8 @@
     "rangeStartDateInvalid": "La data iniziale deve essere precedente alla data finale",
     "rangeEndDate": "Data finale",
     "rangeEndDateInvalid": "La data finale deve essere successiva alla data iniziale",
+    "rangeEndDateInvalidPast": "La data finale deve essere maggiore alla data di oggi",
+    "rangeDateInvalid": "Non puoi usare queste date con la ripetizione che hai scelto",
     "supermarket": "Supermercato",
     "priceAndQuantity": "Prezzo e quantità",
     "price": "Prezzo",

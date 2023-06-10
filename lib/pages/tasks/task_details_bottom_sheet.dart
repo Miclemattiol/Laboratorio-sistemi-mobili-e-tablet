@@ -45,7 +45,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
   String? _descriptionValue;
   DateTime? _fromValue;
   DateTime? _toValue;
-  RepeatData? _repeatValue;
+  late RepeatData? _repeatValue = widget.task?.data.repeatData;
   Set<String> _assignedToValue = {};
 
   _saveTask() async {
@@ -58,12 +58,13 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
     try {
       if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
 
+      final toValue = _repeatValue?.repeat == RepeatOptions.daily ? _fromValue! : _toValue!;
       if (widget.task == null) {
         await TasksPage.tasksFirestoreRef(widget.house.id).add(Task(
           title: _titleValue!,
           description: _descriptionValue,
           from: _fromValue!,
-          to: _toValue!,
+          to: toValue,
           repeating: _repeatValue!.repeat,
           interval: _repeatValue!.interval,
           assignedTo: _assignedToValue,
@@ -73,7 +74,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
           Task.titleKey: _titleValue!,
           Task.descriptionKey: _descriptionValue,
           Task.fromKey: _fromValue!,
-          Task.toKey: _toValue!,
+          Task.toKey: toValue,
           Task.repeatingKey: _repeatValue!.repeat?.index,
           Task.intervalKey: _repeatValue!.interval,
           Task.assignedToKey: _assignedToValue,
@@ -94,6 +95,9 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    final todayDate = DateTime.now();
+    final firstDate = DateTime(todayDate.year - 50, todayDate.month, todayDate.day);
+
     return Form(
       key: _formKey,
       child: CustomBottomSheet(
@@ -110,34 +114,61 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
           DatePickerFormField.dateOnly(
             enabled: !_loading,
             initialValue: widget.task?.data.from,
-            decoration: inputDecoration(localizations(context).startDate),
+            firstDate: firstDate,
+            decoration: inputDecoration(_repeatValue?.repeat == RepeatOptions.daily ? localizations(context).date : localizations(context).startDate),
             onSaved: (from) => _fromValue = from,
             validator: (from) {
               if (from == null) {
                 return localizations(context).dateMissing;
               } else if (_toValue?.isBefore(from) ?? false) {
                 return localizations(context).startDateInvalid;
+              } else if (_repeatValue?.repeat != null && _toValue != null) {
+                final differenceInDays = DateTimeRange(start: from, end: _toValue!).duration.inDays;
+                final repeat = _repeatValue!.repeat!;
+
+                final errorRepeatWeekly = (repeat == RepeatOptions.weekly && differenceInDays >= DateTime.daysPerWeek);
+                final errorRepeatMonthly = (repeat == RepeatOptions.monthly && differenceInDays >= 28);
+                final errorRepeatYearly = (repeat == RepeatOptions.yearly && differenceInDays >= 365);
+                final errorRepeatCustom = (repeat == RepeatOptions.custom && _repeatValue!.interval != null && differenceInDays >= _repeatValue!.interval!);
+                if (errorRepeatWeekly || errorRepeatMonthly || errorRepeatYearly || errorRepeatCustom) {
+                  return localizations(context).rangeDateInvalid;
+                }
               }
               return null;
             },
           ),
-          DatePickerFormField.dateOnly(
-            enabled: !_loading,
-            initialValue: widget.task?.data.to,
-            decoration: inputDecoration(localizations(context).endDate),
-            onSaved: (to) => _toValue = to,
-            validator: (to) {
-              if (to == null) {
-                return localizations(context).dateMissing;
-              } else if (_fromValue?.isAfter(to) ?? false) {
-                return localizations(context).endDateInvalid;
-              }
-              return null;
-            },
-          ),
+          if (_repeatValue?.repeat != RepeatOptions.daily)
+            DatePickerFormField.dateOnly(
+              enabled: !_loading,
+              initialValue: widget.task?.data.to,
+              firstDate: firstDate,
+              decoration: inputDecoration(localizations(context).endDate),
+              onSaved: (to) => _toValue = to,
+              validator: (to) {
+                if (to == null) {
+                  return localizations(context).dateMissing;
+                } else if (_fromValue?.isAfter(to) ?? false) {
+                  return localizations(context).endDateInvalid;
+                } else if (_repeatValue?.repeat == null && !to.isAfter(DateTime.now())) {
+                  return localizations(context).rangeEndDateInvalidPast;
+                } else if (_repeatValue?.repeat != null && _fromValue != null) {
+                  final differenceInDays = DateTimeRange(start: _fromValue!, end: to).duration.inDays;
+                  final repeat = _repeatValue!.repeat!;
+
+                  final errorRepeatWeekly = (repeat == RepeatOptions.weekly && differenceInDays >= DateTime.daysPerWeek);
+                  final errorRepeatMonthly = (repeat == RepeatOptions.monthly && differenceInDays >= 28);
+                  final errorRepeatYearly = (repeat == RepeatOptions.yearly && differenceInDays >= 365);
+                  final errorRepeatCustom = (repeat == RepeatOptions.custom && _repeatValue!.interval != null && differenceInDays >= _repeatValue!.interval!);
+                  if (errorRepeatWeekly || errorRepeatMonthly || errorRepeatYearly || errorRepeatCustom) {
+                    return localizations(context).rangeDateInvalid;
+                  }
+                }
+                return null;
+              },
+            ),
           RepeatIntervalFormField(
             enabled: !_loading,
-            initialValues: RepeatData(widget.task?.data.repeating, widget.task?.data.interval),
+            initialValues: _repeatValue,
             intervalInputDecoration: inputDecoration(localizations(context).interval),
             onSaved: (repeat) => _repeatValue = repeat,
             validator: (value) {
@@ -148,6 +179,7 @@ class _TaskDetailsBottomSheetState extends State<TaskDetailsBottomSheet> {
               }
               return null;
             },
+            onChanged: (repeat) => setState(() => _repeatValue = repeat),
           ),
           PeopleFormField(
             enabled: !_loading,

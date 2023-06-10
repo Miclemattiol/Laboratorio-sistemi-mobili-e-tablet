@@ -73,6 +73,7 @@ extension StringExtension on String {
 
 extension DateTimeExtension on DateTime {
   bool isSameDayAs(DateTime other) => year == other.year && month == other.month && day == other.day;
+  DateTime addDays(int days) => DateTime(year, month, day + days);
 }
 
 extension NumExtensions on num {
