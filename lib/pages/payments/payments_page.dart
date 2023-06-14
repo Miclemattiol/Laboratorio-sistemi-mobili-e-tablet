@@ -41,7 +41,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
   Stream<List<FirestoreDocument<PaymentOrTrade>>> _createStream() {
     final houseId = HouseDataRef.of(context).id;
     return Rx.combineLatest2(
-      PaymentsPage.paymentsFirestoreRef(houseId).snapshots().map(PaymentRef.converter(context, widget.categories)),
+      PaymentsPage.paymentsFirestoreRef(houseId).snapshots().map(PaymentRef.converter(context)),
       TradesSection.firestoreRef(houseId).where(Trade.acceptedKey, isEqualTo: true).snapshots().map(TradeRef.converter(context)),
       (payments, trades) => [...payments, ...trades].toList()..sort((payment, trade) => trade.data.date.compareTo(payment.data.date)),
     );

@@ -5,6 +5,7 @@ import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/payment_or_trade.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/user_share.dart';
+import 'package:provider/provider.dart';
 
 class Payment {
   final String? category;
@@ -84,10 +85,10 @@ class PaymentRef extends PaymentOrTrade {
   @override
   Shares get shares => to.map((key, value) => MapEntry(key, value.share));
 
-  static FirestoreConverter<Payment, PaymentRef> converter(BuildContext context, Iterable<FirestoreDocument<Category>>? categories) {
+  static FirestoreConverter<Payment, PaymentRef> converter(BuildContext context) {
     final houseRef = HouseDataRef.of(context);
-    final categoriesMap = Map.fromEntries((categories ?? []).map((category) => MapEntry(category.id, category)));
     return firestoreConverter((doc) {
+      final categoriesMap = Map.fromEntries((Provider.of<Categories?>(context, listen: false) ?? []).map((category) => MapEntry(category.id, category)));
       final payment = doc.data();
       return PaymentRef(
         category: categoriesMap[payment.category],
