@@ -166,7 +166,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
             child: ListView.separated(
               itemCount: filteredPayments.length,
               itemBuilder: (context, index) => PaymentTile(filteredPayments[index], categories: widget.categories),
-              separatorBuilder: (context, index) => const Divider(height: 0),
+              separatorBuilder: (context, index) => const Divider(height: 4),
             ),
           );
         },

@@ -19,12 +19,12 @@
     "noHousePageContentOr": "oppure",
     "houseDataError": "Impossibile caricare i dati della casa",
     "accountPage": "Profilo",
-    "accountPageError": "Impossibile caricare i dati dell'utente",
+    "accountPageError": "Impossibile caricare i dati dell''utente",
     "changeUsernameTitle": "Modifica nome utente",
     "changePasswordTitle": "Cambia password",
     "changePasswordContent": "Ti verrà inviata un email con un link per cambiare la tua password. Vuoi procedere?",
     "changePasswordSuccess": "Email inviata, controlla la tua posta in arrivo e lo spam",
-    "changePasswordError": "Impossibile inviare l'email per il reset della password ({error})",
+    "changePasswordError": "Impossibile inviare l''email per il reset della password ({error})",
     "@changePasswordError": {
         "placeholders": {
             "error": {
@@ -114,7 +114,7 @@
     "taskRepeatCustom": "Personalizzato",
     "taskEditTooltip": "Modifica incarico",
     "taskDeleteTitle": "Elimina incarico",
-    "taskDeleteContent": "Sei sicuro di voler eliminare l'incarico?",
+    "taskDeleteContent": "Sei sicuro di voler eliminare l''incarico?",
     "housePage": "Casa",
     "tradesSection": "Scambi",
     "tradesSectionError": "Impossibile caricare gli scambi",
@@ -190,7 +190,7 @@
     },
     "userTransfer": "Trasferisci proprietà",
     "userTransferTitle": "Conferma trasferimento",
-    "userTransferContent": "Sei sicuro di voler trasferire a {username} la proprietà dalla casa? Solo lui potrà annullare l'azione!",
+    "userTransferContent": "Sei sicuro di voler trasferire a {username} la proprietà dalla casa? Solo lui potrà annullare l''azione!",
     "@userTransferContent": {
         "placeholders": {
             "username": {
@@ -201,8 +201,8 @@
     "userLeave": "Esci dalla casa",
     "userLeaveTitle": "Conferma uscita",
     "userLeaveContent": "Sei sicuro di voler uscire dalla casa? Dovrai essere invitato nuovamente per rientrarci",
-    "userLeaveLastUser": "Sei sicuro di voler uscire dalla casa?\nEssendo l'ultimo utente la casa verrà eliminata permanentemente!",
-    "userLeaveNotAllowed": "Non puoi uscire da una casa se sei il suo proprietario e non sei l'ultimo utente al suo interno! Trasferisci la proprietà della casa ad un altro utente e riprova",
+    "userLeaveLastUser": "Sei sicuro di voler uscire dalla casa?\nEssendo l''ultimo utente la casa verrà eliminata permanentemente!",
+    "userLeaveNotAllowed": "Non puoi uscire da una casa se sei il suo proprietario e non sei l''ultimo utente al suo interno! Trasferisci la proprietà della casa ad un altro utente e riprova",
     "iconPickerSearch": "Cerca un icona",
     "filterError": "Nessun risultato per \"{query}\"",
     "@filterError": {
@@ -212,7 +212,7 @@
             }
         }
     },
-    "imageError": "Errore nel caricamento dell'immagine",
+    "imageError": "Errore nel caricamento dell''immagine",
     "balanceInvalidUser": "Impossibile modificare transazioni o scambi che riguardano degli utenti che hanno abbandonato la casa",
     "saveChanges": "Salva modifiche",
     "discardChanges": "Annulla modifiche",
@@ -225,7 +225,7 @@
             }
         }
     },
-    "actionError": "Impossibile completare l'azione, riprova più tardi\n({error})",
+    "actionError": "Impossibile completare l''azione, riprova più tardi\n({error})",
     "@actionError": {
         "placeholders": {
             "error": {
@@ -236,9 +236,9 @@
     "internetErrorTitle": "Nessuna connessione ad internet",
     "internetErrorContent": "Per eseguire questa azione è necessario essere connessi ad internet. Controlla la tua connessione e riprova.",
     "imagePickerCamera": "Scatta foto",
-    "imagePickerCameraError": "Impossibile accedere alla fotocamera\nControlla i permessi dell'app",
+    "imagePickerCameraError": "Impossibile accedere alla fotocamera\nControlla i permessi dell''app",
     "imagePickerGallery": "Scegli foto",
-    "imagePickerGalleryError": "Impossibile accedere alla galleria\nControlla i permessi dell'app",
+    "imagePickerGalleryError": "Impossibile accedere alla galleria\nControlla i permessi dell''app",
     "optional": "(facoltativo)",
     "copied": "Copiato!",
     "error": "Errore",
@@ -284,8 +284,8 @@
     "date": "Data",
     "dateMissing": "Inserisci una data",
     "description": "Descrizione",
-    "paidBy": "Pagato da",
-    "paidByUser": "pagato da {user}",
+    "paidBy": "da",
+    "paidByUser": "da {user}",
     "@paidByUser": {
         "placeholders": {
             "user": {

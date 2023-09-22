@@ -180,7 +180,7 @@
     "userSendMoney": "Send money",
     "userKick": "Kick user",
     "userKickTitle": "Confirm kick",
-    "userKickContent": "Are you sure you want to kick {username} from the house? They'll have to be invited again to rejoin",
+    "userKickContent": "Are you sure you want to kick {username} from the house? They''ll have to be invited again to rejoin",
     "@userKickContent": {
         "placeholders": {
             "username": {
@@ -190,7 +190,7 @@
     },
     "userTransfer": "Transfer ownership",
     "userTransferTitle": "Confirm transfer",
-    "userTransferContent": "Are you sure you want to transfer the house's ownership to {username}? The action can only be undone by them!",
+    "userTransferContent": "Are you sure you want to transfer the house''s ownership to {username}? The action can only be undone by them!",
     "@userTransferContent": {
         "placeholders": {
             "username": {
@@ -200,9 +200,9 @@
     },
     "userLeave": "Leave house",
     "userLeaveTitle": "Confirm exit",
-    "userLeaveContent": "Are you sure you want to leave the house? You'll have to be invited again to rejoin",
+    "userLeaveContent": "Are you sure you want to leave the house? You''ll have to be invited again to rejoin",
     "userLeaveLastUser": "Are you sure you want to leave the house?\nSince you are the last user, the house will be permanently deleted!",
-    "userLeaveNotAllowed": "You can't leave a house if you are it's owner and if you aren't the last user! Transfer the ownership to someone and try again",
+    "userLeaveNotAllowed": "You can't leave a house if you are it''s owner and if you aren't the last user! Transfer the ownership to someone and try again",
     "iconPickerSearch": "Search an icon",
     "filterError": "No results for \"{query}\"",
     "@filterError": {
@@ -236,9 +236,9 @@
     "internetErrorTitle": "No internet connection",
     "internetErrorContent": "To perform this action you must be connected to the internet. Check your connection and try again.",
     "imagePickerCamera": "Take a photo",
-    "imagePickerCameraError": "Could not access the camera\nCheck the app's permissions",
+    "imagePickerCameraError": "Could not access the camera\nCheck the app''s permissions",
     "imagePickerGallery": "Choose a photo",
-    "imagePickerGalleryError": "Could not access the gallery\nCheck the app's permissions",
+    "imagePickerGalleryError": "Could not access the gallery\nCheck the app''s permissions",
     "optional": "(optional)",
     "copied": "Copied!",
     "error": "Error",
@@ -262,7 +262,7 @@
     "emailInvalid": "Enter a valid email address",
     "groupCode": "House code",
     "groupCodeMissing": "Enter the code",
-    "groupCodeInvalid": "The code you entered is not valid, check that you have entered it correctly or ask the house's owner to send you a new one!",
+    "groupCodeInvalid": "The code you entered is not valid, check that you have entered it correctly or ask the house''s owner to send you a new one!",
     "username": "Username",
     "usernameMissing": "Enter a username",
     "iban": "IBAN",
@@ -284,8 +284,8 @@
     "date": "Date",
     "dateMissing": "Enter a date",
     "description": "Description",
-    "paidBy": "Paid by",
-    "paidByUser": "paid by {user}",
+    "paidBy": "from",
+    "paidByUser": "from {user}",
     "@paidByUser": {
         "placeholders": {
             "user": {
@@ -302,8 +302,8 @@
     "rangeStartDateInvalid": "The start date must be before the end date",
     "rangeEndDate": "End date",
     "rangeEndDateInvalid": "The end date must be after the start date",
-    "rangeEndDateInvalidPast": "The end date must be greater than today's date",
-    "rangeDateInvalid": "You can't use these dates with the repetition that you have chosen",
+    "rangeEndDateInvalidPast": "The end date must be greater than today''s date",
+    "rangeDateInvalid": "You can''t use these dates with the repetition that you have chosen",
     "supermarket": "Supermarket",
     "priceAndQuantity": "Price and quantity",
     "price": "Price",

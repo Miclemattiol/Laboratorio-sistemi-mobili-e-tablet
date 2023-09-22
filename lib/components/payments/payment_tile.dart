@@ -93,8 +93,11 @@ class PaymentTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.end,
       spacing: 4,
       children: [
-        Text(currencyFormat(context).format(payment.price)),
-        Text(localizations(context).balanceImpact("${impact > 0 ? "+" : ""}${currencyFormat(context).format(impact)}")),
+        Text(
+          style: impact < 0 ? const TextStyle(color: Colors.red) : null,
+          currencyFormat(context).format(payment.price),
+        ),
+        //Text(localizations(context).balanceImpact("${impact > 0 ? "+" : ""}${currencyFormat(context).format(impact)}")),
       ],
     );
   }
@@ -166,9 +169,14 @@ class PaymentTile extends StatelessWidget {
     return Slidable(
       key: Key(doc.id),
       endActionPane: ActionPane(
-        extentRatio: .2,
+        extentRatio: .4,
         motion: const ScrollMotion(),
         children: [
+          // const SlidableAction(
+          //   onPressed: null,
+          //   backgroundColor: Colors.grey,
+          //   icon: Icons.info,
+          // ),
           SlidableAction(
             onPressed: _delete,
             backgroundColor: Colors.red,
@@ -178,7 +186,7 @@ class PaymentTile extends StatelessWidget {
         ],
       ),
       child: ListTile(
-        title: Text(_title(context)),
+        title: Text(_title(context), style: const TextStyle(fontSize: 18)),
         subtitle: Text(_subtitle(context)),
         leading: SizedBox(height: double.infinity, child: Icon(_leading(context))),
         trailing: _trailing(context),
