@@ -69,6 +69,7 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
         crossAxisAlignment: CrossAxisAlignment.center,
         body: [
           CategoryFormField(
+            house: widget.house,
             categories: widget.categories,
             decoration: inputDecoration(localizations(context).category),
             onChanged: (category) => categoryValue = category,

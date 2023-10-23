@@ -107,7 +107,8 @@ ThemeData get darkTheme {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
     ),
     extensions: const {
-      ShoppingPageStyle(shoppingPostItColor: Color(0xFF8B7624)),
+      //ShoppingPageStyle(shoppingPostItColor: Color(0xFF8B7624)),
+      ShoppingPageStyle(shoppingPostItColor: Color(0xFFFFE5B4)),
     },
   );
 }

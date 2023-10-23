@@ -175,6 +175,7 @@ class _AccountPageState extends State<AccountPage> {
               onPressed: _edited ? _discardChanges : null,
               icon: const Icon(Icons.undo),
               tooltip: localizations(context).discardChanges,
+              
             ),
             IconButton(
               onPressed: _edited ? _saveChanges : null,

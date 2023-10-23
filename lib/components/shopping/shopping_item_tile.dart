@@ -88,7 +88,10 @@ class ShoppingItemTile extends StatelessWidget {
           child: Stack(
             alignment: Alignment.centerLeft,
             children: [
-              Text(shoppingItem.data.title),
+              Text(
+                shoppingItem.data.title,
+                style: const TextStyle(color: Colors.black),
+              ),
               CollapsibleContainer(
                 collapsed: !checked,
                 axis: Axis.horizontal,

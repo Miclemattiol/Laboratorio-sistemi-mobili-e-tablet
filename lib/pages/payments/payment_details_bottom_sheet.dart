@@ -20,10 +20,12 @@ import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/main.dart';
+import 'package:house_wallet/pages/main_page.dart';
 import 'package:house_wallet/pages/payments/categories/category_dialog.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:house_wallet/utils.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class PaymentDetailsBottomSheet extends StatefulWidget {
@@ -223,12 +225,20 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
             onSaved: (to) => _toValue = to,
             validator: (value) => (value.entries.isEmpty) ? localizations(context).peopleSharesMissing : null,
           ),
-          CategoryFormField(
-            categories: widget.categories,
-            enabled: !_loading,
-            initialValue: widget.payment?.data.category,
-            decoration: inputDecoration(localizations(context).category),
-            onSaved: (category) => _categoryValue = category,
+          StreamProvider<Categories?>(
+            initialData: null,
+            create: (context) => PaymentsPage.categoriesFirestoreRef(widget.house.id).orderBy(Category.nameKey).snapshots().map((data) => defaultFirestoreConverter(data).toList()),
+            catchError: (context, error) => null,
+            child: Consumer<Categories?>(
+              builder: (context, value, _) => CategoryFormField(
+                house: widget.house,
+                categories: value ?? [],
+                enabled: !_loading,
+                initialValue: widget.payment?.data.category,
+                decoration: inputDecoration(localizations(context).category),
+                onSaved: (category) => _categoryValue = category,
+              ),
+            ),
           ),
           DatePickerFormField(
             enabled: !_loading,

@@ -142,8 +142,8 @@
             }
         }
     },
-    "tradeFromMe": "Inviato denaro",
-    "tradeToMe": "Ricevuto denaro",
+    "tradeFromMe": "Hai inviato denaro",
+    "tradeToMe": "Hai ricevuto denaro",
     "tradeOthers": "Inviato denaro a {to}",
     "@tradeOthers": {
         "placeholders": {
@@ -330,5 +330,7 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "save": "Salva",
+    "undo": "Annulla"
 }

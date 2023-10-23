@@ -142,8 +142,8 @@
             }
         }
     },
-    "tradeFromMe": "Sent money",
-    "tradeToMe": "Received money",
+    "tradeFromMe": "You sent money",
+    "tradeToMe": "You received money",
     "tradeOthers": "Sent money to {to}",
     "@tradeOthers": {
         "placeholders": {
@@ -330,5 +330,7 @@
                 "type": "String"
             }
         }
-    }
+    },
+    "save": "Save",
+    "undo": "Cancel"
 }

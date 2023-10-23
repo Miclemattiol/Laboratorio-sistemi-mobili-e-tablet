@@ -74,10 +74,10 @@ class _MainPageScaffoldState extends State<_MainPageScaffold> {
   List<PageData> _pages() {
     return [
       PageData(icon: Icons.person, label: localizations(context).accountPage, widget: const AccountPage()),
-      PageData(icon: Icons.attach_money, label: localizations(context).paymentsPage, widget: Consumer<Categories?>(builder: (context, value, _) => PaymentsPage(value ?? []))),
-      PageData(icon: Icons.shopping_cart, label: localizations(context).shoppingPage, widget: Consumer<Categories?>(builder: (context, value, _) => ShoppingPage(value ?? []))),
       PageData(icon: Icons.assignment, label: localizations(context).tasksPage, widget: const TasksPage()),
       PageData(icon: Icons.groups, label: localizations(context).housePage, widget: const HousePage()),
+      PageData(icon: Icons.attach_money, label: localizations(context).paymentsPage, widget: Consumer<Categories?>(builder: (context, value, _) => PaymentsPage(value ?? []))),
+      PageData(icon: Icons.shopping_cart, label: localizations(context).shoppingPage, widget: Consumer<Categories?>(builder: (context, value, _) => ShoppingPage(value ?? []))),
     ];
   }
 
