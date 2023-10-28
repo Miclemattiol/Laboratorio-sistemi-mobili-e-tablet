@@ -45,8 +45,9 @@ class BuyItemsPage extends StatefulWidget {
 
 class _BuyItemsPageState extends State<BuyItemsPage> {
   late final Map<String, num?> _pricesQuantities = Map.fromEntries(widget.shoppingItems.map((item) => MapEntry(item.id, item.data.price)).toList());
+  late final Map<String, Shares> _shares = Map.fromEntries(widget.shoppingItems.map((item) => MapEntry(item.id, item.data.shares)).toList());
   late String _payAsValue = widget.loggedUser.uid;
-  late Map<String, int> _toValue = widget.house.users.map((key, value) => MapEntry(key, 1));
+  late Map<String, int> _toValue = sameUserShares() ? widget.shoppingItems[0].data.shares : widget.house.users.map((key, value) => MapEntry(key, 1));
 
   Future<String?> _categoryPrompt() async {
     String? categoryValue;
@@ -149,18 +150,15 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
     //check that all items have the same shares
     //if so return the string "ok", else return the string "custom"
 
-    final firstItem = widget.shoppingItems.first;
-    final firstItemShares = firstItem.data.shares;
+    final firstItemShares = _shares.entries.first;
 
-    for (final item in widget.shoppingItems) {
-      for (final user in widget.house.users.keys) {
-        if (firstItemShares[user] != item.data.shares[user]) {
-          print("different user shares");
+    for (final item in _shares.entries) {
+      for (final user in item.value.entries) {
+        if (user.value != firstItemShares.value[user.key]) {
           return false;
         }
       }
     }
-    print("same user shares");
     return true;
   }
 
@@ -172,7 +170,7 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
           ShoppingItem.toKey: shares,
         });
         setState(() {
-          
+          _shares[item.id] = shares;
         });
       }
     } on FirebaseException catch (error) {
@@ -196,10 +194,11 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
         children: widget.shoppingItems.map((item) {
           return ShoppingItemTileBuyPage(
             house: widget.house,
-            toValue: item.data.shares,
+            toValue: _shares[item.id]!,
             item,
             value: _pricesQuantities[item.id],
             onChanged: (value) => setState(() => _pricesQuantities[item.id] = value),
+            onSharesChanged: (value) => setState(() => {_shares[item.id] = value, sameUserShares() ? _toValue = value : null}),
           );
         }).toList(),
       ),

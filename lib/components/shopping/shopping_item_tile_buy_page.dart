@@ -16,6 +16,7 @@ class ShoppingItemTileBuyPage extends StatefulWidget {
   final FirestoreDocument<ShoppingItemRef> doc;
   final num? value;
   final void Function(num value) onChanged;
+  final void Function(Shares shares) onSharesChanged;
 
   final HouseDataRef house;
   late final Map<String, User> users;
@@ -26,6 +27,7 @@ class ShoppingItemTileBuyPage extends StatefulWidget {
     this.doc, {
     required this.value,
     required this.onChanged,
+    required this.onSharesChanged,
     required this.house,
     required this.toValue,
     super.key,
@@ -98,6 +100,7 @@ class _ShoppingItemTileBuyPageState extends State<ShoppingItemTileBuyPage> {
               if (to == null) return;
               _saveShoppingItemShares(to);
               setState(() => widget.toValue = to);
+              widget.onSharesChanged(to);
             },
           ),
           DetailsItemChip(
