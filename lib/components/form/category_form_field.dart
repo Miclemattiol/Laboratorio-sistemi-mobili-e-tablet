@@ -52,9 +52,9 @@ class _CategoryFormFieldState extends State<CategoryFormField> {
     );
   }
 
+  final dropdownFormField = GlobalKey<FormFieldState>();
   @override
   Widget build(BuildContext context) {
-    final dropdownFormField = GlobalKey<FormFieldState>();
     return DropdownFormField<String>(
       dropdownWidgetKey: dropdownFormField,
       initialValue: widget.initialValue?.id,
@@ -67,10 +67,6 @@ class _CategoryFormFieldState extends State<CategoryFormField> {
         if (value == CategoryFormField.noCategoryKey) return dropdownFormField.currentState!.didChange(null);
         if (value == CategoryFormField.newCategoryKey) {
           value = await showDialog<String?>(context: context, builder: (context) => CategoryDialog(house: widget.house));
-
-          print(widget.categories.map((e) => e.id));
-          print(value);
-
           dropdownFormField.currentState!.didChange(value ?? CategoryFormField.noCategoryKey);
         }
         widget.onChanged?.call(value);

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart' hide Category;
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/form/category_form_field.dart';
+import 'package:house_wallet/components/shopping/details_item_chip.dart';
 import 'package:house_wallet/components/shopping/shopping_item_tile_buy_page.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
@@ -17,6 +18,7 @@ import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/categories/category_dialog.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
+import 'package:house_wallet/pages/shopping/people_share_dialog.dart';
 import 'package:house_wallet/pages/shopping/price_quantity_dialog.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:house_wallet/utils.dart';
@@ -42,8 +44,9 @@ class BuyItemsPage extends StatefulWidget {
 }
 
 class _BuyItemsPageState extends State<BuyItemsPage> {
-  late final Map<String, PriceQuantity?> _pricesQuantities = Map.fromEntries(widget.shoppingItems.map((item) => MapEntry(item.id, PriceQuantity(item.data.price, item.data.quantity))).toList());
+  late final Map<String, num?> _pricesQuantities = Map.fromEntries(widget.shoppingItems.map((item) => MapEntry(item.id, item.data.price)).toList());
   late String _payAsValue = widget.loggedUser.uid;
+  late Map<String, int> _toValue = widget.house.users.map((key, value) => MapEntry(key, 1));
 
   Future<String?> _categoryPrompt() async {
     String? categoryValue;
@@ -111,9 +114,8 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
 
         for (final group in groupedItems.entries) {
           final price = group.value.fold<num>(0, (prev, item) {
-            final price = _pricesQuantities[item.id]?.price ?? 0;
-            final quantity = _pricesQuantities[item.id]?.quantity ?? 1;
-            return prev + price * quantity;
+            final price = _pricesQuantities[item.id] ?? 0;
+            return prev + price;
           });
 
           transaction.set<Payment>(
@@ -143,6 +145,46 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
     }
   }
 
+  bool sameUserShares() {
+    //check that all items have the same shares
+    //if so return the string "ok", else return the string "custom"
+
+    final firstItem = widget.shoppingItems.first;
+    final firstItemShares = firstItem.data.shares;
+
+    for (final item in widget.shoppingItems) {
+      for (final user in widget.house.users.keys) {
+        if (firstItemShares[user] != item.data.shares[user]) {
+          print("different user shares");
+          return false;
+        }
+      }
+    }
+    print("same user shares");
+    return true;
+  }
+
+  void _saveShoppingItemsShares(Shares shares) async {
+    try {
+      if (await isNotConnectedToInternet(context) || !mounted) return;
+      for (final item in widget.shoppingItems) {
+        await item.reference.update({
+          ShoppingItem.toKey: shares,
+        });
+        setState(() {
+          
+        });
+      }
+    } on FirebaseException catch (error) {
+      if (!context.mounted) return;
+      CustomDialog.alert(
+        context: context,
+        title: localizations(context).error,
+        content: localizations(context).saveChangesError(error.message.toString()),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -153,8 +195,10 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
       body: ListView(
         children: widget.shoppingItems.map((item) {
           return ShoppingItemTileBuyPage(
+            house: widget.house,
+            toValue: item.data.shares,
             item,
-            value: _pricesQuantities[item.id] ?? const PriceQuantity(null, null),
+            value: _pricesQuantities[item.id],
             onChanged: (value) => setState(() => _pricesQuantities[item.id] = value),
           );
         }).toList(),
@@ -173,9 +217,29 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
               }).toList(),
             ),
             ListTile(
+              title: const Text("Paga per: "), // todo localize
+              trailing: DetailsItemChip(
+                icon: Icons.groups,
+                tooltip: localizations(context).peopleShares,
+                label: _toValue.isEmpty
+                    ? null
+                    : sameUserShares()
+                        ? _toValue.length == widget.house.users.length
+                            ? localizations(context).peopleChipLabelEveryone
+                            : localizations(context).peopleChipLabel(_toValue.length)
+                        : localizations(context).taskRepeatCustom,
+                onTap: () async {
+                  final to = await showDialog<Shares>(context: context, builder: (_) => PeopleSharesDialog(house: widget.house, initialValues: _toValue));
+                  if (to == null) return;
+                  _saveShoppingItemsShares(to);
+                  setState(() => _toValue = to);
+                },
+              ),
+            ),
+            ListTile(
               title: Text(localizations(context).totalPrice, style: Theme.of(context).textTheme.headlineMedium),
               trailing: Text(
-                currencyFormat(context).format(_pricesQuantities.values.fold<num>(0, (prev, value) => prev + (value?.quantity ?? 1) * (value?.price ?? 0))),
+                currencyFormat(context).format(_pricesQuantities.values.fold<num>(0, (prev, value) => prev + (value ?? 0))),
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
             ),

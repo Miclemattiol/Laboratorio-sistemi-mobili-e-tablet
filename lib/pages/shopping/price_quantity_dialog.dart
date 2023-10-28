@@ -25,7 +25,7 @@ class PriceQuantity {
 }
 
 class PriceQuantityDialog extends StatefulWidget {
-  final PriceQuantity? initialValue;
+  final num? initialValue;
 
   const PriceQuantityDialog({
     required this.initialValue,
@@ -39,17 +39,13 @@ class PriceQuantityDialog extends StatefulWidget {
 class _PriceQuantityDialogState extends State<PriceQuantityDialog> {
   final _formKey = GlobalKey<FormState>();
 
-  int? _quantityValue;
   num? _priceValue;
 
   void _returnValue() {
     _formKey.currentState!.save();
     if (!_formKey.currentState!.validate()) return;
 
-    Navigator.of(context).pop<PriceQuantity?>(PriceQuantity(
-      _priceValue,
-      _quantityValue,
-    ));
+    Navigator.of(context).pop<num?>(_priceValue);
   }
 
   @override
@@ -62,14 +58,8 @@ class _PriceQuantityDialogState extends State<PriceQuantityDialog> {
         padding: const EdgeInsets.all(24),
         crossAxisAlignment: CrossAxisAlignment.center,
         body: [
-          NumberFormField<int>(
-            initialValue: widget.initialValue?.quantity,
-            decoration: inputDecoration(localizations(context).quantity),
-            validator: (quantity) => quantity == 0 ? localizations(context).quantityInvalid : null,
-            onSaved: (quantity) => _quantityValue = quantity,
-          ),
           NumberFormField(
-            initialValue: widget.initialValue?.price,
+            initialValue: widget.initialValue,
             decimal: true,
             decoration: inputDecoration(localizations(context).price),
             onSaved: (price) => _priceValue = price,

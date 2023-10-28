@@ -169,7 +169,7 @@ class PaymentTile extends StatelessWidget {
     return Slidable(
       key: Key(doc.id),
       endActionPane: ActionPane(
-        extentRatio: .4,
+        extentRatio: .2,
         motion: const ScrollMotion(),
         children: [
           // const SlidableAction(

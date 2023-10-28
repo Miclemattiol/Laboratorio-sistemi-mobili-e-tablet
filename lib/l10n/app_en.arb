@@ -214,8 +214,8 @@
     },
     "imageError": "Could not lead the image",
     "balanceInvalidUser": "Unable to edit transactions or trades involving users that have left the house",
-    "saveChanges": "Save changes",
-    "discardChanges": "Discard changes",
+    "saveChanges": "Save",
+    "discardChanges": "Discard",
     "saveChangesSuccess": "Changes saved successfully",
     "saveChangesError": "Could not save changes\n({error})",
     "@saveChangesError": {

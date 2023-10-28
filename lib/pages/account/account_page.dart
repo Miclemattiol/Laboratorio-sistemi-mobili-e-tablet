@@ -171,17 +171,34 @@ class _AccountPageState extends State<AccountPage> {
         appBar: AppBarFix(
           title: Text(localizations(context).accountPage),
           actions: [
-            IconButton(
-              onPressed: _edited ? _discardChanges : null,
-              icon: const Icon(Icons.undo),
-              tooltip: localizations(context).discardChanges,
-              
-            ),
-            IconButton(
-              onPressed: _edited ? _saveChanges : null,
-              icon: const Icon(Icons.save),
-              tooltip: localizations(context).saveChanges,
-            )
+            if (_edited)
+              TextButton.icon(
+                onPressed: _edited ? _discardChanges : null,
+                icon: Column(
+                  children: [
+                    const Icon(Icons.undo),
+                    Text(
+                      localizations(context).discardChanges,
+                      style: const TextStyle(fontSize: 11),
+                    ),
+                  ],
+                ),
+                label: const Text(''),
+              ),
+            if (_edited)
+              TextButton.icon(
+                onPressed: _edited ? _saveChanges : null,
+                icon: Column(
+                  children: [
+                    const Icon(Icons.save),
+                    Text(
+                      localizations(context).saveChanges,
+                      style: const TextStyle(fontSize: 11),
+                    ),
+                  ],
+                ),
+                label: const Text(''),
+              )
           ],
         ),
         body: ListView(

@@ -69,6 +69,19 @@ class _ShoppingPageState extends State<ShoppingPage> {
     );
   }
 
+  void _delete(BuildContext context, FirestoreDocument<ShoppingItemRef> shoppingItem) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final appLocalizations = localizations(context);
+
+    if (await isNotConnectedToInternet(context) || !context.mounted) return;
+
+    try {
+      await shoppingItem.reference.delete();
+    } on FirebaseException catch (error) {
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
+    }
+  }
+
   void _confirmPurchase() {
     Navigator.of(context).push(
       SlidingPageRoute(
@@ -117,6 +130,12 @@ class _ShoppingPageState extends State<ShoppingPage> {
   List<Widget> _buildActions() {
     final house = HouseDataRef.of(context, listen: false);
     return [
+      if (_checkedItems.isNotEmpty)
+        IconButton(
+          tooltip: localizations(context).delete, // TODO Localize
+          onPressed: () => setState(() => _checkedItems.forEach((key, value) => _delete(context, value))),
+          icon: const Icon(Icons.delete),
+        ),
       IconButton(
         tooltip: localizations(context).buyItemsTooltip,
         onPressed: _checkedItems.isEmpty ? null : _confirmPurchase,

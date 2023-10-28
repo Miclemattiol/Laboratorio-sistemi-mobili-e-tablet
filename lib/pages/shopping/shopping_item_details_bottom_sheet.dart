@@ -99,30 +99,30 @@ class _ShoppingItemDetailsBottomSheetState extends State<ShoppingItemDetailsBott
               ),
             ],
           ),
-          PadRow(
-            spacing: 16,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: TextFormField(
-                  enabled: !_loading,
-                  initialValue: widget.shoppingItem.data.supermarket,
-                  decoration: inputDecoration(localizations(context).supermarket),
-                  onSaved: (supermarket) => _supermarketValue = supermarket.toNullable(),
-                ),
-              ),
-              ConstrainedBox(
-                constraints: multiInputRowConstraints(context),
-                child: NumberFormField<int>(
-                  enabled: !_loading,
-                  initialValue: widget.shoppingItem.data.quantity,
-                  decoration: inputDecoration(localizations(context).quantity),
-                  validator: (quantity) => quantity == 0 ? localizations(context).quantityInvalid : null,
-                  onSaved: (quantity) => _quantityValue = quantity,
-                ),
-              ),
-            ],
-          ),
+          // PadRow(
+          //   spacing: 16,
+          //   crossAxisAlignment: CrossAxisAlignment.end,
+          //   children: [
+          // Expanded(
+          //   child: TextFormField(
+          //     enabled: !_loading,
+          //     initialValue: widget.shoppingItem.data.supermarket,
+          //     decoration: inputDecoration(localizations(context).supermarket),
+          //     onSaved: (supermarket) => _supermarketValue = supermarket.toNullable(),
+          //   ),
+          // ),
+          //     ConstrainedBox(
+          //       constraints: multiInputRowConstraints(context),
+          //       child: NumberFormField<int>(
+          //         enabled: !_loading,
+          //         initialValue: widget.shoppingItem.data.quantity,
+          //         decoration: inputDecoration(localizations(context).quantity),
+          //         validator: (quantity) => quantity == 0 ? localizations(context).quantityInvalid : null,
+          //         onSaved: (quantity) => _quantityValue = quantity,
+          //       ),
+          //     ),
+          //   ],
+          // ),
           PeopleSharesFormField(
             enabled: !_loading,
             house: widget.house,

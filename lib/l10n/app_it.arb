@@ -214,8 +214,8 @@
     },
     "imageError": "Errore nel caricamento dell''immagine",
     "balanceInvalidUser": "Impossibile modificare transazioni o scambi che riguardano degli utenti che hanno abbandonato la casa",
-    "saveChanges": "Salva modifiche",
-    "discardChanges": "Annulla modifiche",
+    "saveChanges": "Salva",
+    "discardChanges": "Annulla",
     "saveChangesSuccess": "Modifiche salvate con successo",
     "saveChangesError": "Impossibile salvare le modifiche\n({error})",
     "@saveChangesError": {
