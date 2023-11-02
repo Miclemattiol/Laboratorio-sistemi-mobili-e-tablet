@@ -1,14 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:house_wallet/components/ui/collapsible_container.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
-import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/shopping/shopping_item_details_bottom_sheet.dart';
-import 'package:house_wallet/utils.dart';
 
 class ShoppingItemTile extends StatelessWidget {
   final FirestoreDocument<ShoppingItemRef> shoppingItem;
@@ -50,18 +46,18 @@ class ShoppingItemTile extends StatelessWidget {
     );
   }
 
-  void _delete(BuildContext context) async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    final appLocalizations = localizations(context);
+  // void _delete(BuildContext context) async {
+  //   final scaffoldMessenger = ScaffoldMessenger.of(context);
+  //   final appLocalizations = localizations(context);
 
-    if (await isNotConnectedToInternet(context) || !context.mounted) return;
+  //   if (await isNotConnectedToInternet(context) || !context.mounted) return;
 
-    try {
-      await shoppingItem.reference.delete();
-    } on FirebaseException catch (error) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
-    }
-  }
+  //   try {
+  //     await shoppingItem.reference.delete();
+  //   } on FirebaseException catch (error) {
+  //     scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

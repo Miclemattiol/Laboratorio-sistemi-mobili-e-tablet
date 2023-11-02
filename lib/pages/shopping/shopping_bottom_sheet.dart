@@ -1,18 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
-import 'package:house_wallet/components/shopping/details_item_chip.dart';
-import 'package:house_wallet/components/ui/collapsible_container.dart';
 import 'package:house_wallet/components/ui/custom_bottom_sheet.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/shopping/people_share_dialog.dart';
 import 'package:house_wallet/pages/shopping/price_quantity_dialog.dart';
 import 'package:house_wallet/pages/shopping/shopping_page.dart';
-import 'package:house_wallet/pages/shopping/supermarket_dialog.dart';
-import 'package:house_wallet/themes.dart';
 import 'package:house_wallet/utils.dart';
 
 class ShoppingBottomSheet extends StatefulWidget {
@@ -25,7 +20,6 @@ class ShoppingBottomSheet extends StatefulWidget {
 class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
   late final _users = HouseDataRef.of(context, listen: false).users;
   final TextEditingController _titleController = TextEditingController();
-  bool _detailsCollapsed = true;
 
   String? _titleValue;
   late Shares _toValue = _users.map((key, value) => MapEntry(key, 1));

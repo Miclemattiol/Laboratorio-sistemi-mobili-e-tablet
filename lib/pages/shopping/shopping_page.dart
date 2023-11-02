@@ -232,7 +232,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 8,
                   children: [
-                    const Icon(Icons.shopping_cart),
+                    Icon(Icons.shopping_cart),
                     Text("Aggiungi al carrello"), //todo localize
                   ],
                 ),
