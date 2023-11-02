@@ -249,6 +249,7 @@ class _AccountPageState extends State<AccountPage> {
                     if (!_edited) setState(() => _edited = true);
                   },
                   onSaved: (iban) => _ibanValue = iban.toNullable(),
+                  focusNode: FocusNode(),
                 ),
                 TextFormField(
                   initialValue: user.payPal,

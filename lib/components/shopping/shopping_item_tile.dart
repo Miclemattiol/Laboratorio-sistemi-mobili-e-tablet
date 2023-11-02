@@ -65,49 +65,36 @@ class ShoppingItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      key: Key(shoppingItem.id),
-      endActionPane: ActionPane(
-        extentRatio: .2,
-        motion: const ScrollMotion(),
-        children: [
-          SlidableAction(
-            onPressed: (_) => _delete(context),
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-          ),
-        ],
-      ),
-      child: ListTile(
-        dense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 4),
-        horizontalTitleGap: 4,
-        title: Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              Text(
-                shoppingItem.data.title,
-                style: const TextStyle(color: Colors.black),
-              ),
-              CollapsibleContainer(
-                collapsed: !checked,
-                axis: Axis.horizontal,
-                curve: Curves.easeInOut,
-                child: Container(color: Theme.of(context).colorScheme.onBackground, width: double.infinity, height: 1),
-              )
-            ],
-          ),
+    return ListTile(
+      dense: true,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 4),
+      horizontalTitleGap: 4,
+      title: Padding(
+        padding: const EdgeInsets.only(right: 16),
+        child: Stack(
+          alignment: Alignment.centerLeft,
+          children: [
+            Text(
+              shoppingItem.data.title,
+              style: const TextStyle(color: Colors.black),
+            ),
+            CollapsibleContainer(
+              collapsed: !checked,
+              axis: Axis.horizontal,
+              curve: Curves.easeInOut,
+              child: Container(color: Theme.of(context).colorScheme.onBackground, width: double.infinity, height: 1),
+            )
+          ],
         ),
-        leading: Checkbox(
-          value: checked,
-          activeColor: Theme.of(context).colorScheme.onBackground,
-          onChanged: (value) => setChecked(value!),
-        ),
-        onTap: () => _openShoppingItemDetails(context),
       ),
+      leading: Checkbox(
+        value: checked,
+        activeColor: Theme.of(context).colorScheme.background,
+        checkColor: Theme.of(context).colorScheme.onBackground,
+        onChanged: (value) => setChecked(value!),
+        side: BorderSide(color: Theme.of(context).colorScheme.background),
+      ),
+      onTap: () => _openShoppingItemDetails(context),
     );
   }
 }

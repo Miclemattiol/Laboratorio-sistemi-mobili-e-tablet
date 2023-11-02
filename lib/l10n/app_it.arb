@@ -60,7 +60,7 @@
     "shoppingPageError": "Impossibile caricare la lista della spesa",
     "shoppingPageEmpty": "Nessun elemento",
     "shoppingPageEmptyDescription": "Aggiungine uno compilando il campo qui sotto!",
-    "quickRecipeTooltip": "Aggiungi elementi ad una nuova ricetta",
+    "quickRecipeTooltip": "Crea una nuova ricetta dagli elementi selezionati",
     "buyItemsTooltip": "Acquista oggetti selezionati",
     "showDetailsTooltip": "Mostra dettagli aggiuntivi",
     "hideDetailsTooltip": "Nascondi dettagli aggiuntivi",

@@ -25,8 +25,6 @@ class _RecipeItemDialogState extends State<RecipeItemDialog> {
 
   String? _titleValue;
   num? _priceValue;
-  int? _quantityValue;
-  String? _supermarketValue;
 
   void _saveItem() {
     _formKey.currentState!.save();
@@ -35,8 +33,6 @@ class _RecipeItemDialogState extends State<RecipeItemDialog> {
     Navigator.of(context).pop<RecipeItem?>(RecipeItem(
       title: _titleValue!,
       price: _priceValue,
-      quantity: _quantityValue,
-      supermarket: _supermarketValue,
     ));
   }
 
@@ -62,17 +58,6 @@ class _RecipeItemDialogState extends State<RecipeItemDialog> {
             decoration: inputDecoration(localizations(context).price),
             decimal: true,
             onSaved: (price) => _priceValue = price,
-          ),
-          NumberFormField<int>(
-            initialValue: widget.initialValue?.quantity,
-            decoration: inputDecoration(localizations(context).quantity),
-            validator: (quantity) => quantity == 0 ? localizations(context).quantityInvalid : null,
-            onSaved: (quantity) => _quantityValue = quantity,
-          ),
-          TextFormField(
-            initialValue: widget.initialValue?.supermarket,
-            decoration: inputDecoration(localizations(context).supermarket),
-            onSaved: (supermarket) => _supermarketValue = supermarket.toNullable(),
           ),
         ],
         actions: [

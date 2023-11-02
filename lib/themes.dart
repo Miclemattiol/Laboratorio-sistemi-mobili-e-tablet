@@ -79,7 +79,8 @@ ThemeData get lightTheme {
 }
 
 ThemeData get darkTheme {
-  final colorScheme = ColorScheme.fromSeed(seedColor: const Color(0xFFA6D0DD), brightness: Brightness.dark);
+  // final colorScheme = ColorScheme.fromSeed(seedColor: const Color(0xFFA6D0DD), brightness: Brightness.dark);
+  final colorScheme = ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 155, 181, 203), brightness: Brightness.dark);
   final theme = ThemeData(colorScheme: colorScheme);
   return ThemeData(
     useMaterial3: true,
@@ -107,7 +108,7 @@ ThemeData get darkTheme {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
     ),
     extensions: const {
-      ShoppingPageStyle(shoppingPostItColor: Color(0xFF8B7624)),
+      ShoppingPageStyle(shoppingPostItColor: Color.fromARGB(255, 248, 206, 113)),
       //ShoppingPageStyle(shoppingPostItColor: Color(0xFFFFE5B4)),
     },
   );

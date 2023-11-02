@@ -45,7 +45,7 @@ class BuyItemsPage extends StatefulWidget {
 
 class _BuyItemsPageState extends State<BuyItemsPage> {
   late final Map<String, num?> _pricesQuantities = Map.fromEntries(widget.shoppingItems.map((item) => MapEntry(item.id, item.data.price)).toList());
-  late final Map<String, Shares> _shares = Map.fromEntries(widget.shoppingItems.map((item) => MapEntry(item.id, item.data.shares)).toList());
+  late Map<String, Shares> _shares = Map.fromEntries(widget.shoppingItems.map((item) => MapEntry(item.id, item.data.shares)).toList());
   late String _payAsValue = widget.loggedUser.uid;
   late Map<String, int> _toValue = sameUserShares() ? widget.shoppingItems[0].data.shares : widget.house.users.map((key, value) => MapEntry(key, 1));
 
@@ -153,10 +153,8 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
     final firstItemShares = _shares.entries.first;
 
     for (final item in _shares.entries) {
-      for (final user in item.value.entries) {
-        if (user.value != firstItemShares.value[user.key]) {
-          return false;
-        }
+      if (!mapEquals(item.value, firstItemShares.value)) {
+        return false;
       }
     }
     return true;
@@ -165,14 +163,21 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
   void _saveShoppingItemsShares(Shares shares) async {
     try {
       if (await isNotConnectedToInternet(context) || !mounted) return;
-      for (final item in widget.shoppingItems) {
-        await item.reference.update({
-          ShoppingItem.toKey: shares,
-        });
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        Map<String, Shares> tmpShares = _shares;
+        for (final item in widget.shoppingItems) {
+          transaction.update(
+            item.reference,
+            {
+              ShoppingItem.toKey: shares,
+            },
+          );
+          tmpShares[item.id] = shares;
+        }
         setState(() {
-          _shares[item.id] = shares;
+          _shares = tmpShares;
         });
-      }
+      });
     } on FirebaseException catch (error) {
       if (!context.mounted) return;
       CustomDialog.alert(
@@ -190,17 +195,20 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
         title: Text(localizations(context).buyItemsPage),
         automaticallyImplyLeading: false,
       ),
-      body: ListView(
-        children: widget.shoppingItems.map((item) {
-          return ShoppingItemTileBuyPage(
-            house: widget.house,
-            toValue: _shares[item.id]!,
-            item,
-            value: _pricesQuantities[item.id],
-            onChanged: (value) => setState(() => _pricesQuantities[item.id] = value),
-            onSharesChanged: (value) => setState(() => {_shares[item.id] = value, sameUserShares() ? _toValue = value : null}),
-          );
-        }).toList(),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 8),
+        child: ListView(
+          children: widget.shoppingItems.map((item) {
+            return ShoppingItemTileBuyPage(
+              house: widget.house,
+              toValue: _shares[item.id]!,
+              item,
+              value: _pricesQuantities[item.id],
+              onChanged: (value) => setState(() => _pricesQuantities[item.id] = value),
+              onSharesChanged: (value) => setState(() => {_shares[item.id] = value, sameUserShares() ? _toValue = value : null}),
+            );
+          }).toList(),
+        ),
       ),
       bottomNavigationBar: SafeArea(
         child: Column(

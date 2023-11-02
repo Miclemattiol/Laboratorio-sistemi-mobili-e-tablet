@@ -60,7 +60,7 @@
     "shoppingPageError": "Could not load shopping list",
     "shoppingPageEmpty": "No items",
     "shoppingPageEmptyDescription": "Add one by filling in the field below!",
-    "quickRecipeTooltip": "Add items to a new recipe",
+    "quickRecipeTooltip": "Create a new recipe from selected items",
     "buyItemsTooltip": "Buy selected items",
     "showDetailsTooltip": "Show additional details",
     "hideDetailsTooltip": "Hide additional details",

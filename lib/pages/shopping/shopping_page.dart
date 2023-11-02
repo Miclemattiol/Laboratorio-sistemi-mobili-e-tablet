@@ -56,11 +56,11 @@ class _ShoppingPageState extends State<ShoppingPage> {
   Widget _shoppingList(Widget child) {
     return SingleChildScrollView(
       child: Padding(
-        padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+        padding: const EdgeInsets.all(16),
         child: Container(
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
-            borderRadius: const BorderRadius.vertical(bottom: Radius.circular(10)),
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
             color: ShoppingPageStyle.of(context).shoppingPostItColor,
           ),
           child: child,
@@ -69,14 +69,31 @@ class _ShoppingPageState extends State<ShoppingPage> {
     );
   }
 
-  void _delete(BuildContext context, FirestoreDocument<ShoppingItemRef> shoppingItem) async {
+  // void _delete(BuildContext context, FirestoreDocument<ShoppingItemRef> shoppingItem) async {
+  //   final scaffoldMessenger = ScaffoldMessenger.of(context);
+  //   final appLocalizations = localizations(context);
+
+  //   if (await isNotConnectedToInternet(context) || !context.mounted) return;
+
+  //   try {
+  //     await shoppingItem.reference.delete();
+  //   } on FirebaseException catch (error) {
+  //     scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
+  //   }
+  // }
+
+  void _deleteSelected(BuildContext context, List<FirestoreDocument<ShoppingItemRef>> shoppingItem) async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final appLocalizations = localizations(context);
 
     if (await isNotConnectedToInternet(context) || !context.mounted) return;
 
     try {
-      await shoppingItem.reference.delete();
+      await FirebaseFirestore.instance.runTransaction((transaction) async {
+        for (final item in shoppingItem) {
+          transaction.delete(item.reference);
+        }
+      });
     } on FirebaseException catch (error) {
       scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
     }
@@ -132,15 +149,19 @@ class _ShoppingPageState extends State<ShoppingPage> {
     return [
       if (_checkedItems.isNotEmpty)
         IconButton(
-          tooltip: localizations(context).delete, // TODO Localize
-          onPressed: () => setState(() => _checkedItems.forEach((key, value) => _delete(context, value))),
+          tooltip: localizations(context).delete,
+          // onPressed: () => setState(() async => _checkedItems.forEach((key, value) => _delete(context, value))),
+          onPressed: () async => {
+            _deleteSelected(context, _checkedItems.values.toList()),
+            setState(() => _checkedItems.clear()),
+          },
           icon: const Icon(Icons.delete),
         ),
-      IconButton(
-        tooltip: localizations(context).buyItemsTooltip,
-        onPressed: _checkedItems.isEmpty ? null : _confirmPurchase,
-        icon: const Icon(Icons.shopping_cart),
-      ),
+      // IconButton(
+      //   tooltip: localizations(context).buyItemsTooltip,
+      //   onPressed: _checkedItems.isEmpty ? null : _confirmPurchase,
+      //   icon: const Icon(Icons.shopping_cart),
+      // ),
       PopupMenuButton<_PopupMenu>(
         onSelected: (value) async {
           switch (value) {
@@ -187,12 +208,13 @@ class _ShoppingPageState extends State<ShoppingPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               spacing: 16,
               children: [
-                const Icon(Icons.add),
+                const Icon(Icons.assignment_add),
                 Expanded(child: Text(localizations(context).quickRecipeTooltip)),
               ],
             ),
           ),
         ],
+        offset: const Offset(0, 64),
       )
     ];
   }
@@ -200,6 +222,22 @@ class _ShoppingPageState extends State<ShoppingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: _checkedItems.isEmpty
+          ? null
+          : Padding(
+              padding: const EdgeInsets.only(bottom: 64),
+              child: FloatingActionButton.extended(
+                onPressed: _confirmPurchase,
+                label: const PadRow(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  spacing: 8,
+                  children: [
+                    const Icon(Icons.shopping_cart),
+                    Text("Aggiungi al carrello"), //todo localize
+                  ],
+                ),
+              ),
+            ),
       appBar: AppBarFix(
         title: Text(localizations(context).shoppingPage),
         shadowColor: Colors.black,

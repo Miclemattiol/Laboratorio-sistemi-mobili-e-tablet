@@ -23,7 +23,7 @@ class ShoppingBottomSheet extends StatefulWidget {
 }
 
 class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
-  late final _users = HouseDataRef.of(context).users;
+  late final _users = HouseDataRef.of(context, listen: false).users;
   final TextEditingController _titleController = TextEditingController();
   bool _detailsCollapsed = true;
 
@@ -80,9 +80,16 @@ class _ShoppingBottomSheetState extends State<ShoppingBottomSheet> {
               child: TextField(
                 controller: _titleController,
                 onChanged: (value) => _titleValue = value,
+                style: const TextStyle(color: Colors.black),
                 decoration: InputDecoration(
-                  suffixIcon: GestureDetector(onTap: _addShoppingItem, child: const Icon(Icons.add)),
+                  suffixIcon: GestureDetector(
+                      onTap: _addShoppingItem,
+                      child: const Icon(
+                        Icons.add,
+                        color: Colors.black,
+                      )),
                   hintText: localizations(context).shoppingPageNew,
+                  hintStyle: const TextStyle(color: Colors.black, fontWeight: FontWeight.normal),
                   border: InputBorder.none,
                 ),
                 onEditingComplete: _addShoppingItem,
