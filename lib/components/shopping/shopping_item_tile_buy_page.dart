@@ -11,7 +11,6 @@ import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/shopping/people_share_dialog.dart';
-import 'package:house_wallet/pages/shopping/price_quantity_dialog.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:house_wallet/utils.dart';
 
@@ -149,7 +148,7 @@ class _ShoppingItemTileBuyPageState extends State<ShoppingItemTileBuyPage> {
                   widget.onSharesChanged(to);
                 },
               ),
-              IconButton(onPressed: widget.onRemoved, icon: const Icon(Icons.remove))
+              IconButton(onPressed: widget.onRemoved, icon: const Icon(Icons.delete))
             ],
           ),
         ),

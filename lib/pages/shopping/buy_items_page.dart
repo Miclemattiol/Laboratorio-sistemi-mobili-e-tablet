@@ -258,7 +258,7 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
               }).toList(),
             ),
             ListTile(
-              title: const Text("Paga per: "), //TODO localize
+              title: Text("${localizations(context).payFor}: "),
               trailing: DetailsItemChip(
                 icon: Icons.groups,
                 tooltip: localizations(context).peopleShares,

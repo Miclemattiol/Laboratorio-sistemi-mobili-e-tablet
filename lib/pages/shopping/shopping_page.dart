@@ -154,7 +154,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
           tooltip: localizations(context).delete,
           // onPressed: () => setState(() async => _checkedItems.forEach((key, value) => _delete(context, value))),
           onPressed: () async => {
-            await CustomDialog.confirm(context: context, title: "Elimina", content: "Sei sicuro di voler eliminare gli elementi selezionati?") //TODO localize
+            await CustomDialog.confirm(context: context, title: "Elimina", content: localizations(context).shoppingPageRemoveElement)
                 ? {
                     _deleteSelected(context, _checkedItems.values.toList()),
                     setState(() => _checkedItems.clear()),
@@ -234,12 +234,12 @@ class _ShoppingPageState extends State<ShoppingPage> {
               padding: const EdgeInsets.only(bottom: 64),
               child: FloatingActionButton.extended(
                 onPressed: _confirmPurchase,
-                label: const PadRow(
+                label: PadRow(
                   mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 8,
                   children: [
-                    Icon(Icons.shopping_cart),
-                    Text("Aggiungi al carrello"), //TODO localize
+                    const Icon(Icons.shopping_cart),
+                    Text(localizations(context).shoppingPageAddToCart),
                   ],
                 ),
               ),
