@@ -28,6 +28,7 @@ class BuyItemsPage extends StatefulWidget {
   final LoggedUser loggedUser;
   final HouseDataRef house;
   final void Function() onComplete;
+  final void Function(FirestoreDocument<ShoppingItemRef> item)? onRemoved;
 
   const BuyItemsPage(
     this.shoppingItems, {
@@ -35,6 +36,7 @@ class BuyItemsPage extends StatefulWidget {
     required this.loggedUser,
     required this.house,
     required this.onComplete,
+    this.onRemoved,
     super.key,
   });
 
@@ -196,8 +198,9 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.only(top: 8),
-        child: ListView(
-          children: widget.shoppingItems.map((item) {
+        child: ListView.separated(
+          itemBuilder: (context, index) {
+            FirestoreDocument<ShoppingItemRef> item = widget.shoppingItems[index];
             return ShoppingItemTileBuyPage(
               house: widget.house,
               toValue: _shares[item.id]!,
@@ -205,8 +208,40 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
               value: _pricesQuantities[item.id],
               onChanged: (value) => setState(() => _pricesQuantities[item.id] = value),
               onSharesChanged: (value) => setState(() => {_shares[item.id] = value, sameUserShares() ? _toValue = value : null}),
+              onRemoved: () {
+                widget.onRemoved?.call(item);
+                widget.shoppingItems.length > 1
+                    ? setState(() {
+                        widget.shoppingItems.remove(item);
+                        _pricesQuantities.remove(item.id);
+                        _shares.remove(item.id);
+                      })
+                    : Navigator.of(context).pop();
+              },
             );
-          }).toList(),
+          },
+          separatorBuilder: (context, index) => const Divider(height: 16),
+          itemCount: widget.shoppingItems.length,
+          // children: widget.shoppingItems.map((item) {
+          //   return ShoppingItemTileBuyPage(
+          //     house: widget.house,
+          //     toValue: _shares[item.id]!,
+          //     item,
+          //     value: _pricesQuantities[item.id],
+          //     onChanged: (value) => setState(() => _pricesQuantities[item.id] = value),
+          //     onSharesChanged: (value) => setState(() => {_shares[item.id] = value, sameUserShares() ? _toValue = value : null}),
+          //     onRemoved: () {
+          //       widget.onRemoved?.call(item);
+          //       widget.shoppingItems.length > 1
+          //           ? setState(() {
+          //               widget.shoppingItems.remove(item);
+          //               _pricesQuantities.remove(item.id);
+          //               _shares.remove(item.id);
+          //             })
+          //           : Navigator.of(context).pop();
+          //     },
+          //   );
+          // }).toList(),
         ),
       ),
       bottomNavigationBar: SafeArea(
@@ -223,7 +258,7 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
               }).toList(),
             ),
             ListTile(
-              title: const Text("Paga per: "), // todo localize
+              title: const Text("Paga per: "), //TODO localize
               trailing: DetailsItemChip(
                 icon: Icons.groups,
                 tooltip: localizations(context).peopleShares,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:house_wallet/components/shopping/shopping_item_tile.dart';
 import 'package:house_wallet/components/ui/app_bar_fix.dart';
+import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
@@ -108,6 +109,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
           loggedUser: LoggedUser.of(context, listen: false),
           house: HouseDataRef.of(context, listen: false),
           onComplete: () => setState(() => _checkedItems.clear()),
+          onRemoved: (item) => setState(() => _checkedItems.remove(item.id)),
         ),
         fullscreenDialog: true,
       ),
@@ -152,8 +154,12 @@ class _ShoppingPageState extends State<ShoppingPage> {
           tooltip: localizations(context).delete,
           // onPressed: () => setState(() async => _checkedItems.forEach((key, value) => _delete(context, value))),
           onPressed: () async => {
-            _deleteSelected(context, _checkedItems.values.toList()),
-            setState(() => _checkedItems.clear()),
+            await CustomDialog.confirm(context: context, title: "Elimina", content: "Sei sicuro di voler eliminare gli elementi selezionati?") //TODO localize
+                ? {
+                    _deleteSelected(context, _checkedItems.values.toList()),
+                    setState(() => _checkedItems.clear()),
+                  }
+                : null
           },
           icon: const Icon(Icons.delete),
         ),
@@ -233,7 +239,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
                   spacing: 8,
                   children: [
                     Icon(Icons.shopping_cart),
-                    Text("Aggiungi al carrello"), //todo localize
+                    Text("Aggiungi al carrello"), //TODO localize
                   ],
                 ),
               ),
