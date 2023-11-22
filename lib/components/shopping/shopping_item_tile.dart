@@ -78,7 +78,7 @@ class ShoppingItemTile extends StatelessWidget {
               collapsed: !checked,
               axis: Axis.horizontal,
               curve: Curves.easeInOut,
-              child: Container(color: Theme.of(context).colorScheme.onBackground, width: double.infinity, height: 1),
+              child: Container(color: Colors.black, width: double.infinity, height: 1),
             )
           ],
         ),

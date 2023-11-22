@@ -297,6 +297,7 @@
         }
     },
     "paidFor": "Paid for",
+    "priceRange": "Price range",
     "rangeMinPrice": "Minimum price",
     "rangeMinPriceError": "The minimum price must be less than or equal to the maximum price",
     "rangeMaxPrice": "Maximum price",
@@ -317,6 +318,7 @@
     "recipeItemsMissing": "Enter at least one item",
     "payAs": "Pay as",
     "totalPrice": "Total",
+    "dateRange": "Date range",
     "startDate": "Start date",
     "startDateInvalid": "The start date must be before the end date",
     "endDate": "End date",
