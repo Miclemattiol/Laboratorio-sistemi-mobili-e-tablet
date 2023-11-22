@@ -40,6 +40,15 @@
     "paymentsPageEmpty": "Nessuna transazione",
     "paymentsPageEmptyDescription": "Aggiungine una premendo il bottone qui sotto!",
     "paymentsPageEmptyFilterDescription": "Prova a cambiare i filtri",
+    "deleteTransactionConfirmEmpty": "Sei sicuro di voler eliminare la transazione selezionata?",
+    "deleteTransactionConfirm": "Sei sicuro di voler eliminare la transazione {transaction}?",
+    "@deleteTransactionConfirm": {
+        "placeholders": {
+            "transaction": {
+                "type": "String"
+            }
+        }
+    },
     "filterTooltip": "Filtra transazioni",
     "clearFilterTooltip": "Rimuovi filtri",
     "balanceImpact": "Mio saldo: {impact}",
@@ -55,6 +64,14 @@
     "categoriesPageError": "Impossibile caricare le categorie",
     "categoriesPageEmpty": "Nessuna categoria",
     "categoriesPageEmptyDescription": "Aggiungine una premendo il bottone qui sotto!",
+    "deleteCategoryConfirm": "Sei sicuro di voler eliminare la categoria {category}",
+    "@deleteCategoryConfirm": {
+        "placeholders": {
+            "category": {
+                "type": "String"
+            }
+        }
+    },
     "shoppingPage": "Spesa",
     "shoppingPageAddToCart": "Aggiungi al carrello",
     "shoppingPageNew": "Aggiungi nuovo...",
@@ -82,6 +99,14 @@
     "recipesPageEmpty": "Nessuna ricetta",
     "recipesPageEmptyDescription": "Aggiungine una premendo il bottone qui sotto!",
     "recipesPageNewItem": "Aggiungi prodotto",
+    "deleteRecipeConfirm": "Sei sicuro di voler eliminare la ricetta {recipe}",
+    "@deleteRecipeConfirm": {
+        "placeholders": {
+            "recipe": {
+                "type": "String"
+            }
+        }
+    },
     "addToShoppingListTooltip": "Aggiungi prodotti alla lista della spesa",
     "addToShoppingListError": "Impossibile aggiungere i prodotti alla lista della spesa",
     "addToShoppingListSuccess": "Prodotti aggiunti alla lista della spesa",

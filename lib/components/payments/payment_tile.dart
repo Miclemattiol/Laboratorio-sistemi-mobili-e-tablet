@@ -1,8 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
@@ -13,7 +10,6 @@ import 'package:house_wallet/data/payments/trade.dart';
 import 'package:house_wallet/main.dart';
 import 'package:house_wallet/pages/payments/payment_details_bottom_sheet.dart';
 import 'package:house_wallet/pages/payments/trade_details_bottom_sheet.dart';
-import 'package:house_wallet/utils.dart';
 
 class PaymentTile extends StatelessWidget {
   final List<FirestoreDocument<Category>> categories;
@@ -129,7 +125,12 @@ class PaymentTile extends StatelessWidget {
       enableDrag: false,
       builder: (context) {
         if (payment is PaymentRef) {
-          return PaymentDetailsBottomSheet.edit(doc as FirestoreDocument<PaymentRef>, loggedUser: loggedUser, house: house, categories: categories);
+          return PaymentDetailsBottomSheet.edit(
+            doc as FirestoreDocument<PaymentRef>,
+            loggedUser: loggedUser,
+            house: house,
+            categories: categories,
+          );
         } else {
           return TradeDetailsBottomSheet.edit(doc as FirestoreDocument<TradeRef>, loggedUser: loggedUser, house: house);
         }
@@ -137,61 +138,41 @@ class PaymentTile extends StatelessWidget {
     );
   }
 
-  void _delete(BuildContext context) async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-    final appLocalizations = localizations(context);
+  // void _delete(BuildContext context) async {
+  //   final scaffoldMessenger = ScaffoldMessenger.of(context);
+  //   final appLocalizations = localizations(context);
 
-    try {
-      if (await isNotConnectedToInternet(context) || !context.mounted) return;
+  //   try {
+  //     if (await isNotConnectedToInternet(context) || !context.mounted) return;
 
-      await FirebaseFirestore.instance.runTransaction((transaction) async {
-        transaction.delete(doc.reference);
+  //     await FirebaseFirestore.instance.runTransaction((transaction) async {
+  //       transaction.delete(doc.reference);
 
-        HouseDataRef.of(context, listen: false).updateBalances(
-          transaction,
-          [UpdateData(prevValues: SharesData(from: doc.data.from.uid, price: doc.data.price, shares: doc.data.shares))],
-        );
-      });
+  //       HouseDataRef.of(context, listen: false).updateBalances(
+  //         transaction,
+  //         [UpdateData(prevValues: SharesData(from: doc.data.from.uid, price: doc.data.price, shares: doc.data.shares))],
+  //       );
+  //     });
 
-      final imageUrl = doc.data is PaymentRef ? (doc.data as PaymentRef).imageUrl : null;
-      if (imageUrl != null) {
-        try {
-          await FirebaseStorage.instance.refFromURL(imageUrl).delete();
-        } catch (_) {}
-      }
-    } on FirebaseException catch (error) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text(error.code == HouseDataRef.invalidUsersError ? appLocalizations.balanceInvalidUser : appLocalizations.actionError(error.message.toString()))));
-    }
-  }
+  //     final imageUrl = doc.data is PaymentRef ? (doc.data as PaymentRef).imageUrl : null;
+  //     if (imageUrl != null) {
+  //       try {
+  //         await FirebaseStorage.instance.refFromURL(imageUrl).delete();
+  //       } catch (_) {}
+  //     }
+  //   } on FirebaseException catch (error) {
+  //     scaffoldMessenger.showSnackBar(SnackBar(content: Text(error.code == HouseDataRef.invalidUsersError ? appLocalizations.balanceInvalidUser : appLocalizations.actionError(error.message.toString()))));
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      key: Key(doc.id),
-      endActionPane: ActionPane(
-        extentRatio: .2,
-        motion: const ScrollMotion(),
-        children: [
-          // const SlidableAction(
-          //   onPressed: null,
-          //   backgroundColor: Colors.grey,
-          //   icon: Icons.info,
-          // ),
-          SlidableAction(
-            onPressed: _delete,
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-          ),
-        ],
-      ),
-      child: ListTile(
-        title: Text(_title(context), style: const TextStyle(fontSize: 18)),
-        subtitle: Text(_subtitle(context)),
-        leading: SizedBox(height: double.infinity, child: Icon(_leading(context))),
-        trailing: _trailing(context),
-        onTap: () => _onTap(context),
-      ),
+    return ListTile(
+      title: Text(_title(context), style: const TextStyle(fontSize: 18)),
+      subtitle: Text(_subtitle(context)),
+      leading: SizedBox(height: double.infinity, child: Icon(_leading(context))),
+      trailing: _trailing(context),
+      onTap: () => _onTap(context),
     );
   }
 }

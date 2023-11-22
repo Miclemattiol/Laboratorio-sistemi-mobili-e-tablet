@@ -81,6 +81,30 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
     }
   }
 
+  void _delete(BuildContext context) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final appLocalizations = localizations(context);
+    final navigator = Navigator.of(context);
+    bool pop = false;
+
+    try {
+      if (await isNotConnectedToInternet(context) || !context.mounted) return;
+      if (await CustomDialog.confirm(context: context, title: localizations(context).delete, content: localizations(context).deleteTransactionConfirmEmpty)) {
+        await FirebaseFirestore.instance.runTransaction((transaction) async {
+          transaction.delete(widget.trade.reference);
+          widget.house.updateBalances(
+            transaction,
+            [UpdateData(prevValues: SharesData(from: widget.trade.data.from.uid, price: widget.trade.data.price, shares: widget.trade.data.shares))],
+          );
+        });
+        pop = true;
+      }
+    } on FirebaseException catch (error) {
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(error.code == HouseDataRef.invalidUsersError ? appLocalizations.balanceInvalidUser : appLocalizations.actionError(error.message.toString()))));
+    }
+    if (pop) navigator.pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -112,6 +136,15 @@ class _TradeDetailsBottomSheetState extends State<TradeDetailsBottomSheet> {
             decoration: inputDecoration(localizations(context).description),
             keyboardType: TextInputType.multiline,
             onSaved: (description) => _descriptionValue = description.toNullable(),
+          ),
+          ElevatedButton(
+            onPressed: () => _delete(context),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.red),
+              foregroundColor: MaterialStateProperty.all(Colors.white),
+              shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+            ),
+            child: Text(localizations(context).delete),
           ),
         ],
         actions: [

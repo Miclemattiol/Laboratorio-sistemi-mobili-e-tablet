@@ -154,7 +154,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
           tooltip: localizations(context).delete,
           // onPressed: () => setState(() async => _checkedItems.forEach((key, value) => _delete(context, value))),
           onPressed: () async => {
-            await CustomDialog.confirm(context: context, title: "Elimina", content: localizations(context).shoppingPageRemoveElement)
+            await CustomDialog.confirm(context: context, title: localizations(context).delete, content: localizations(context).shoppingPageRemoveElement)
                 ? {
                     _deleteSelected(context, _checkedItems.values.toList()),
                     setState(() => _checkedItems.clear()),

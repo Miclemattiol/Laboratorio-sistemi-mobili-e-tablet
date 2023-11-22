@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/shopping/recipe.dart';
@@ -46,7 +47,7 @@ class RecipeListTile extends StatelessWidget {
 
     if (await isNotConnectedToInternet(context) || !context.mounted) return;
 
-    final to = await showDialog<Shares>(context: context, builder: (context) => PeopleSharesDialog(house: house, initialValues: house.users.map((key, value) => MapEntry(key, 1))));
+    final to = await showDialog<Shares>(context: context, builder: (context) => PeopleSharesDialog(house: house, title: "Chi partecipa all'acquisto?", initialValues: house.users.map((key, value) => MapEntry(key, 1)))); //TODO localization
     if (to == null) return;
 
     try {
@@ -76,11 +77,12 @@ class RecipeListTile extends StatelessWidget {
     final appLocalizations = localizations(context);
 
     if (await isNotConnectedToInternet(context) || !context.mounted) return;
-
-    try {
-      await recipe.reference.delete();
-    } on FirebaseException catch (error) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
+    if (await CustomDialog.confirm(context: context, title: localizations(context).delete, content: localizations(context).deleteRecipeConfirm(recipe.data.title))) {
+      try {
+        await recipe.reference.delete();
+      } on FirebaseException catch (error) {
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
+      }
     }
   }
 
@@ -104,10 +106,20 @@ class RecipeListTile extends StatelessWidget {
         contentPadding: const EdgeInsets.only(left: 16, right: 8),
         title: Text(recipe.data.title),
         onTap: () => _editRecipe(context),
-        trailing: IconButton(
-          tooltip: localizations(context).addToShoppingListTooltip,
-          icon: const Icon(Icons.add),
-          onPressed: () => _addToShoppingList(context),
+        trailing: PadRow(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              tooltip: localizations(context).addToShoppingListTooltip,
+              icon: const Icon(Icons.add),
+              onPressed: () => _addToShoppingList(context),
+            ),
+            IconButton(
+              tooltip: localizations(context).delete,
+              icon: const Icon(Icons.delete),
+              onPressed: () => _delete(context),
+            )
+          ],
         ),
       ),
     );

@@ -78,6 +78,23 @@ class _CategoryDialogState extends State<CategoryDialog> {
     }
   }
 
+  // void _delete(BuildContext context) async {
+  //   final scaffoldMessenger = ScaffoldMessenger.of(context);
+  //   final appLocalizations = localizations(context);
+  //   final navigator = Navigator.of(context);
+  //   if (await isNotConnectedToInternet(context) || !context.mounted) return;
+
+  //   if (await CustomDialog.confirm(context: context, title: localizations(context).delete, content: localizations(context).deleteCategoryConfirm(widget.category!.data.name))) {
+  //     try {
+  //       await widget.category!.reference.delete();
+  //     } on FirebaseException catch (error) {
+  //       scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
+  //     }
+
+  //     navigator.pop();
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -89,6 +106,7 @@ class _CategoryDialogState extends State<CategoryDialog> {
         body: [
           PadRow(
             spacing: 8,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 width: 48,

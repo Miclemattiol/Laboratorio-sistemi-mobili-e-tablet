@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/payments/category.dart';
@@ -35,35 +35,26 @@ class CategoryListTile extends StatelessWidget {
 
     if (await isNotConnectedToInternet(context) || !context.mounted) return;
 
-    try {
-      await category.reference.delete();
-    } on FirebaseException catch (error) {
-      scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
+    if (await CustomDialog.confirm(context: context, title: localizations(context).delete, content: localizations(context).deleteCategoryConfirm(category.data.name))) {
+      try {
+        await category.reference.delete();
+      } on FirebaseException catch (error) {
+        scaffoldMessenger.showSnackBar(SnackBar(content: Text(appLocalizations.actionError(error.message.toString()))));
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      key: Key(category.id),
-      endActionPane: ActionPane(
-        extentRatio: .2,
-        motion: const ScrollMotion(),
-        children: [
-          SlidableAction(
-            onPressed: (_) => _delete(context),
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-          ),
-        ],
+    return ListTile(
+      contentPadding: const EdgeInsets.only(left: 16, right: 16),
+      leading: SizedBox(height: double.infinity, child: Icon(category.data.icon)),
+      trailing: GestureDetector(
+        onTap: () => _delete(context),
+        child: const Icon(Icons.delete),
       ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.only(left: 16, right: 8),
-        leading: SizedBox(height: double.infinity, child: Icon(category.data.icon)),
-        title: Text(category.data.name),
-        onTap: () => showDialog(context: context, builder: (context) => CategoryDialog.edit(category, house: house)),
-      ),
+      title: Text(category.data.name),
+      onTap: () => showDialog(context: context, builder: (context) => CategoryDialog.edit(category, house: house)),
     );
   }
 }

@@ -11,9 +11,11 @@ import 'package:house_wallet/themes.dart';
 class PeopleSharesDialog extends StatefulWidget {
   final HouseDataRef house;
   final Shares? initialValues;
+  final String? title;
 
   const PeopleSharesDialog({
     required this.house,
+    this.title,
     this.initialValues,
     super.key,
   });
@@ -45,34 +47,41 @@ class _PeopleSharesDialogState extends State<PeopleSharesDialog> {
       dismissible: false,
       padding: const EdgeInsets.all(24),
       crossAxisAlignment: CrossAxisAlignment.center,
-      body: users.map((user) {
-        return PadRow(
-          spacing: 8,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Checkbox(
-              value: _values[user.uid]!.enabled,
-              onChanged: (value) => setState(() => _values[user.uid]!.enabled = value!),
-              visualDensity: VisualDensity.compact,
-            ),
-            Expanded(child: Text(user.username, overflow: TextOverflow.ellipsis, softWrap: false)),
-            SizedBox(
-              width: 48,
-              child: NumberFormField<int>(
-                initialValue: _values[user.uid]!.value,
-                enabled: _values[user.uid]!.enabled,
-                textAlign: TextAlign.center,
-                decoration: inputDecoration().copyWith(contentPadding: EdgeInsets.zero),
-                onChanged: (value) => setState(() {
-                  if (value != null) {
-                    _values[user.uid]!.value = value;
-                  }
-                }),
+      body: [
+        if (widget.title != null)
+          Text(
+            widget.title!,
+            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+          ),
+        ...users.map((user) {
+          return PadRow(
+            spacing: 8,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Checkbox(
+                value: _values[user.uid]!.enabled,
+                onChanged: (value) => setState(() => _values[user.uid]!.enabled = value!),
+                visualDensity: VisualDensity.compact,
               ),
-            )
-          ],
-        );
-      }).toList(),
+              Expanded(child: Text(user.username, overflow: TextOverflow.ellipsis, softWrap: false)),
+              SizedBox(
+                width: 48,
+                child: NumberFormField<int>(
+                  initialValue: _values[user.uid]!.value,
+                  enabled: _values[user.uid]!.enabled,
+                  textAlign: TextAlign.center,
+                  decoration: inputDecoration().copyWith(contentPadding: EdgeInsets.zero),
+                  onChanged: (value) => setState(() {
+                    if (value != null) {
+                      _values[user.uid]!.value = value;
+                    }
+                  }),
+                ),
+              )
+            ],
+          );
+        }).toList(),
+      ],
       actions: [
         ModalButton(onPressed: () => Navigator.of(context).pop<Shares?>(), child: Text(localizations(context).cancel)),
         ModalButton(onPressed: _submit, child: Text(localizations(context).ok)),

@@ -164,6 +164,37 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
     }
   }
 
+  void _delete(BuildContext context) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+    final appLocalizations = localizations(context);
+    final navigator = Navigator.of(context);
+    bool pop = false;
+
+    try {
+      if (await isNotConnectedToInternet(context) || !context.mounted) return;
+      if (await CustomDialog.confirm(context: context, title: localizations(context).delete, content: localizations(context).deleteTransactionConfirm(widget.payment!.data.title))) {
+        await FirebaseFirestore.instance.runTransaction((transaction) async {
+          transaction.delete(widget.payment!.reference);
+          widget.house.updateBalances(
+            transaction,
+            [UpdateData(prevValues: SharesData(from: widget.payment!.data.from.uid, price: widget.payment!.data.price, shares: widget.payment!.data.shares))],
+          );
+        });
+
+        final imageUrl = widget.payment!.data.imageUrl;
+        if (imageUrl != null) {
+          try {
+            await FirebaseStorage.instance.refFromURL(imageUrl).delete();
+          } catch (_) {}
+        }
+        pop = true;
+      }
+    } on FirebaseException catch (error) {
+      scaffoldMessenger.showSnackBar(SnackBar(content: Text(error.code == HouseDataRef.invalidUsersError ? appLocalizations.balanceInvalidUser : appLocalizations.actionError(error.message.toString()))));
+    }
+    if (pop) navigator.pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -256,6 +287,16 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
             keyboardType: TextInputType.multiline,
             onSaved: (description) => _descriptionValue = description.toNullable(),
           ),
+          if (widget.payment != null)
+            ElevatedButton(
+              onPressed: () => _delete(context),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.red),
+                foregroundColor: MaterialStateProperty.all(Colors.white),
+                shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
+              ),
+              child: Text(localizations(context).delete),
+            ),
         ],
         actions: [
           ModalButton(enabled: !_loading, onPressed: () => Navigator.of(context).pop(), child: Text(localizations(context).cancel)),
