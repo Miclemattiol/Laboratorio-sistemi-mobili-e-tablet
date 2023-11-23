@@ -90,7 +90,7 @@ class PaymentTile extends StatelessWidget {
       spacing: 4,
       children: [
         Text(
-          style: impact < 0 ? const TextStyle(color: Colors.red) : null,
+          style: (impact > 0 && payment is PaymentRef) || (payment is TradeRef && impact < 0) ? const TextStyle(color: Colors.green) : null,
           currencyFormat(context).format(payment.price),
         ),
         //Text(localizations(context).balanceImpact("${impact > 0 ? "+" : ""}${currencyFormat(context).format(impact)}")),

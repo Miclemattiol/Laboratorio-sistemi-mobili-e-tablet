@@ -107,6 +107,7 @@
             }
         }
     },
+    "recipePurchaseShareDialog": "Chi partecipa all''acquisto?",
     "addToShoppingListTooltip": "Aggiungi prodotti alla lista della spesa",
     "addToShoppingListError": "Impossibile aggiungere i prodotti alla lista della spesa",
     "addToShoppingListSuccess": "Prodotti aggiunti alla lista della spesa",
@@ -217,7 +218,7 @@
     },
     "userTransfer": "Trasferisci proprietà",
     "userTransferTitle": "Conferma trasferimento",
-    "userTransferContent": "Sei sicuro di voler trasferire a {username} la proprietà dalla casa? Solo lui potrà annullare l''azione!",
+    "userTransferContent": "Sei sicuro di voler trasferire a {username} la proprietà dalla casa? Solo lui potrà annullare l'azione!",
     "@userTransferContent": {
         "placeholders": {
             "username": {

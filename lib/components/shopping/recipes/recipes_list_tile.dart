@@ -47,7 +47,7 @@ class RecipeListTile extends StatelessWidget {
 
     if (await isNotConnectedToInternet(context) || !context.mounted) return;
 
-    final to = await showDialog<Shares>(context: context, builder: (context) => PeopleSharesDialog(house: house, title: "Chi partecipa all'acquisto?", initialValues: house.users.map((key, value) => MapEntry(key, 1)))); //TODO localization
+    final to = await showDialog<Shares>(context: context, builder: (context) => PeopleSharesDialog(house: house, title: localizations(context).recipePurchaseShareDialog, initialValues: house.users.map((key, value) => MapEntry(key, 1))));
     if (to == null) return;
 
     try {

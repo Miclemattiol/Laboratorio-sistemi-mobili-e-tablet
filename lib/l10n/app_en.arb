@@ -107,6 +107,7 @@
             }
         }
     },
+    "recipePurchaseShareDialog": "Who is joining the purchase?",
     "addToShoppingListTooltip": "Add items to shopping list",
     "addToShoppingListError": "Could not add items to the shopping list",
     "addToShoppingListSuccess": "Items added to the shopping list",
