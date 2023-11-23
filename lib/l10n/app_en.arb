@@ -362,6 +362,7 @@
             }
         }
     },
+    "paymentMethods": "Payment methods",
     "save": "Save",
     "undo": "Cancel"
 }

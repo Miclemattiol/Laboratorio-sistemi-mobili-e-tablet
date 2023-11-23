@@ -51,35 +51,35 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
   late Map<String, int> _toValue = sameUserShares() ? widget.shoppingItems[0].data.shares : widget.house.users.map((key, value) => MapEntry(key, 1));
 
   Future<String?> _categoryPrompt() async {
-  String? categoryValue;
-  return await showDialog<String>(
-    context: context,
-    builder: (context) => CustomDialog(
-      dismissible: false,
-      padding: const EdgeInsets.all(24),
-      crossAxisAlignment: CrossAxisAlignment.center,
-      body: [
-        StreamProvider<Categories?>(
-          initialData: null,
-          create: (context) => PaymentsPage.categoriesFirestoreRef(widget.house.id).orderBy(Category.nameKey).snapshots().map((data) => defaultFirestoreConverter(data).toList()),
-          catchError: (context, error) => null,
-          child: Consumer<Categories?>(
-            builder: (context, value, _) => CategoryFormField(
-              house: widget.house,
-              categories: value ?? [],
-              decoration: inputDecoration(localizations(context).category),
-              onChanged: (category) => categoryValue = category,
+    String? categoryValue;
+    return await showDialog<String>(
+      context: context,
+      builder: (context) => CustomDialog(
+        dismissible: false,
+        padding: const EdgeInsets.all(24),
+        crossAxisAlignment: CrossAxisAlignment.center,
+        body: [
+          StreamProvider<Categories?>(
+            initialData: null,
+            create: (context) => PaymentsPage.categoriesFirestoreRef(widget.house.id).orderBy(Category.nameKey).snapshots().map((data) => defaultFirestoreConverter(data).toList()),
+            catchError: (context, error) => null,
+            child: Consumer<Categories?>(
+              builder: (context, value, _) => CategoryFormField(
+                house: widget.house,
+                categories: value ?? [],
+                decoration: inputDecoration(localizations(context).category),
+                onChanged: (category) => categoryValue = category,
+              ),
             ),
           ),
-        ),
-      ],
-      actions: [
-        ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).cancel)),
-        ModalButton(onPressed: () => Navigator.of(context).pop<String?>(categoryValue ?? CategoryFormField.noCategoryKey), child: Text(localizations(context).ok)),
-      ],
-    ),
-  );
-}
+        ],
+        actions: [
+          ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).cancel)),
+          ModalButton(onPressed: () => Navigator.of(context).pop<String?>(categoryValue ?? CategoryFormField.noCategoryKey), child: Text(localizations(context).ok)),
+        ],
+      ),
+    );
+  }
 
   void _confirmPurchase() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
@@ -95,7 +95,7 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
     List<FirestoreDocument<ShoppingItemRef>> getShareList(shares) => groupedItems.entries.firstWhere((entry) => mapEquals(entry.key, shares), orElse: () => MapEntry(shares, groupedItems[shares] = [])).value;
 
     for (final item in widget.shoppingItems) {
-      final shares = item.data.shares.isNotEmpty ? item.data.shares : widget.house.users.map((key, _) => MapEntry(key, 1));
+      final shares = _shares[item.id]!.isNotEmpty ? _shares[item.id] : widget.house.users.map((key, _) => MapEntry(key, 1));
       getShareList(shares).add(item);
     }
 
@@ -118,7 +118,7 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
             Payment(
               title: appLocalizations.shoppingPage,
               category: category == CategoryFormField.noCategoryKey ? null : category,
-              description: group.value.map((item) => item.data.title).join(", "),
+              description: group.value.map((item) => "${item.data.title}${_pricesQuantities[item.id] != null ? ": €${_pricesQuantities[item.id]}" : null}").join(", "),
               price: price,
               imageUrl: null,
               date: DateTime.now(),

@@ -247,6 +247,7 @@ class _ShoppingPageState extends State<ShoppingPage> {
       appBar: AppBarFix(
         title: Text(localizations(context).shoppingPage),
         shadowColor: Colors.black,
+        surfaceTintColor: Colors.transparent,
         elevation: 3,
         scrolledUnderElevation: 3,
         actions: _buildActions(),

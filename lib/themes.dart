@@ -72,13 +72,8 @@ ThemeData get lightTheme {
     bottomSheetTheme: const BottomSheetThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
     ),
-    checkboxTheme: CheckboxThemeData(
-      checkColor: MaterialStateProperty.all(Colors.white),
-      fillColor: MaterialStateProperty.all(const Color(0xff121212)),
-      side: const BorderSide(color: Color(0xff121212)),
-    ),
     extensions: const {
-      ShoppingPageStyle(shoppingPostItColor: Color(0xFFE6D676)),
+      ShoppingPageStyle(shoppingPostItColor: Color(0xFFF9F3B7)),
     },
   );
 }
@@ -112,13 +107,8 @@ ThemeData get darkTheme {
     bottomSheetTheme: const BottomSheetThemeData(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(10))),
     ),
-    checkboxTheme: CheckboxThemeData(
-      checkColor: MaterialStateProperty.all(Colors.white),
-      fillColor: MaterialStateProperty.all(const Color(0xff121212)),
-      side: const BorderSide(color: Color(0xff121212)),
-    ),
     extensions: const {
-      ShoppingPageStyle(shoppingPostItColor: Color.fromARGB(255, 248, 206, 113)),
+      ShoppingPageStyle(shoppingPostItColor: Color(0xFFF9F3B7)),
       //ShoppingPageStyle(shoppingPostItColor: Color(0xFFFFE5B4)),
     },
   );
