@@ -256,7 +256,7 @@ class _PaymentDetailsBottomSheetState extends State<PaymentDetailsBottomSheet> {
             validator: (value) => (value.entries.isEmpty) ? localizations(context).peopleSharesMissing : null,
           ),
           StreamProvider<Categories?>(
-            initialData: null,
+            initialData: widget.categories,
             create: (context) => PaymentsPage.categoriesFirestoreRef(widget.house.id).orderBy(Category.nameKey).snapshots().map((data) => defaultFirestoreConverter(data).toList()),
             catchError: (context, error) => null,
             child: Consumer<Categories?>(

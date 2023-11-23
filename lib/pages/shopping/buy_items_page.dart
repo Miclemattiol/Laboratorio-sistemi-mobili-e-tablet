@@ -16,11 +16,11 @@ import 'package:house_wallet/data/payments/category.dart';
 import 'package:house_wallet/data/payments/payment.dart';
 import 'package:house_wallet/data/shopping/shopping_item.dart';
 import 'package:house_wallet/main.dart';
-import 'package:house_wallet/pages/payments/categories/category_dialog.dart';
 import 'package:house_wallet/pages/payments/payments_page.dart';
 import 'package:house_wallet/pages/shopping/people_share_dialog.dart';
 import 'package:house_wallet/themes.dart';
 import 'package:house_wallet/utils.dart';
+import 'package:provider/provider.dart';
 
 class BuyItemsPage extends StatefulWidget {
   final List<FirestoreDocument<ShoppingItemRef>> shoppingItems;
@@ -51,42 +51,35 @@ class _BuyItemsPageState extends State<BuyItemsPage> {
   late Map<String, int> _toValue = sameUserShares() ? widget.shoppingItems[0].data.shares : widget.house.users.map((key, value) => MapEntry(key, 1));
 
   Future<String?> _categoryPrompt() async {
-    String? categoryValue;
-
-    void returnValue(BuildContext context) async {
-      final navigator = Navigator.of(context);
-
-      if (categoryValue == CategoryFormField.newCategoryKey) {
-        categoryValue = await showDialog<String?>(context: context, builder: (context) => CategoryDialog(house: widget.house));
-        if (categoryValue == null) return navigator.pop<String?>();
-      }
-
-      if (mounted) {
-        Navigator.of(context).pop<String?>(categoryValue ?? CategoryFormField.noCategoryKey);
-      }
-    }
-
-    return await showDialog<String>(
-      context: context,
-      builder: (context) => CustomDialog(
-        dismissible: false,
-        padding: const EdgeInsets.all(24),
-        crossAxisAlignment: CrossAxisAlignment.center,
-        body: [
-          CategoryFormField(
-            house: widget.house,
-            categories: widget.categories,
-            decoration: inputDecoration(localizations(context).category),
-            onChanged: (category) => categoryValue = category,
+  String? categoryValue;
+  return await showDialog<String>(
+    context: context,
+    builder: (context) => CustomDialog(
+      dismissible: false,
+      padding: const EdgeInsets.all(24),
+      crossAxisAlignment: CrossAxisAlignment.center,
+      body: [
+        StreamProvider<Categories?>(
+          initialData: null,
+          create: (context) => PaymentsPage.categoriesFirestoreRef(widget.house.id).orderBy(Category.nameKey).snapshots().map((data) => defaultFirestoreConverter(data).toList()),
+          catchError: (context, error) => null,
+          child: Consumer<Categories?>(
+            builder: (context, value, _) => CategoryFormField(
+              house: widget.house,
+              categories: value ?? [],
+              decoration: inputDecoration(localizations(context).category),
+              onChanged: (category) => categoryValue = category,
+            ),
           ),
-        ],
-        actions: [
-          ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).cancel)),
-          ModalButton(onPressed: () => returnValue(context), child: Text(localizations(context).ok)),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+      actions: [
+        ModalButton(onPressed: () => Navigator.of(context).pop<String?>(), child: Text(localizations(context).cancel)),
+        ModalButton(onPressed: () => Navigator.of(context).pop<String?>(categoryValue ?? CategoryFormField.noCategoryKey), child: Text(localizations(context).ok)),
+      ],
+    ),
+  );
+}
 
   void _confirmPurchase() async {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
