@@ -8,7 +8,6 @@ import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/components/ui/dropdown_list_tile.dart';
 import 'package:house_wallet/components/ui/image_avatar.dart';
 import 'package:house_wallet/components/ui/sliding_page_route.dart';
-import 'package:house_wallet/data/house_data.dart';
 import 'package:house_wallet/data/logged_user.dart';
 import 'package:house_wallet/data/user.dart';
 import 'package:house_wallet/main.dart';
@@ -28,7 +27,6 @@ class AccountPage extends StatefulWidget {
 
 class _AccountPageState extends State<AccountPage> {
   late final loggedUser = LoggedUser.of(context);
-  bool _loading = false;
   double? _uploadProgress;
 
   void _changeProfilePicture(String? currentImage) async {
@@ -38,7 +36,7 @@ class _AccountPageState extends State<AccountPage> {
     final image = await ImagePickerBottomSheet.pickImage(context, image: currentImage);
     if (image == null || !mounted) return;
 
-    if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+    if (await isNotConnectedToInternet(context) || !mounted) return;
 
     final upload = FirebaseStorage.instance.ref("users/${loggedUser.uid}-${DateTime.now().millisecondsSinceEpoch}.png").putFile(image);
 
@@ -68,7 +66,7 @@ class _AccountPageState extends State<AccountPage> {
     final scaffoldMessenger = ScaffoldMessenger.of(context);
     final appLocalizations = localizations(context);
 
-    if (await isNotConnectedToInternet(context) || !mounted) return mounted ? setState(() => _loading = false) : null;
+    if (await isNotConnectedToInternet(context) || !mounted) return;
 
     final username = await CustomDialog.prompt(
       context: context,
