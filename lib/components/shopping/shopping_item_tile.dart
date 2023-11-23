@@ -85,10 +85,10 @@ class ShoppingItemTile extends StatelessWidget {
       ),
       leading: Checkbox(
         value: checked,
-        activeColor: Theme.of(context).colorScheme.background,
-        checkColor: Theme.of(context).colorScheme.onBackground,
+        // activeColor: Theme.of(context).chec,
+        // checkColor: Colors.white,
         onChanged: (value) => setChecked(value!),
-        side: BorderSide(color: Theme.of(context).colorScheme.background),
+        // side: const BorderSide(color: Color(0xff121212)),
       ),
       onTap: () => _openShoppingItemDetails(context),
     );

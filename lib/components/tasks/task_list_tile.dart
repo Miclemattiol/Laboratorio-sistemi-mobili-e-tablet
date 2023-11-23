@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:house_wallet/components/ui/sliding_page_route.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
@@ -61,35 +60,20 @@ class TaskListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      key: Key(task.id),
-      endActionPane: ActionPane(
-        extentRatio: .2,
-        motion: const ScrollMotion(),
+    return ListTile(
+      leading: task.data.repeating == null ? null : const SizedBox(height: double.infinity, child: Icon(Icons.repeat)),
+      title: Text(task.data.title),
+      subtitle: Text(localizations(context).assignedToUsers(task.data.assignedTo.map((user) => user.username).join(", "))),
+      trailing: PadColumn(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        spacing: 2,
         children: [
-          SlidableAction(
-            onPressed: (_) => _delete(context),
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
-          ),
+          Text(localizations(context).taskFromDate(taskDateFormat(context).format(task.data.from))),
+          Text(localizations(context).taskToDate(taskDateFormat(context).format(task.data.to))),
         ],
       ),
-      child: ListTile(
-        leading: task.data.repeating == null ? null : const SizedBox(height: double.infinity, child: Icon(Icons.repeat)),
-        title: Text(task.data.title),
-        subtitle: Text(localizations(context).assignedToUsers(task.data.assignedTo.map((user) => user.username).join(", "))),
-        trailing: PadColumn(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          spacing: 2,
-          children: [
-            Text(localizations(context).taskFromDate(taskDateFormat(context).format(task.data.from))),
-            Text(localizations(context).taskToDate(taskDateFormat(context).format(task.data.to))),
-          ],
-        ),
-        onTap: () => Navigator.of(context).push(SlidingPageRoute(TaskDetailsPage(task, house: HouseDataRef.of(context, listen: false), loggedUser: LoggedUser.of(context, listen: false)), fullscreenDialog: true)),
-      ),
+      onTap: () => Navigator.of(context).push(SlidingPageRoute(TaskDetailsPage(task, house: HouseDataRef.of(context, listen: false), loggedUser: LoggedUser.of(context, listen: false)), fullscreenDialog: true)),
     );
   }
 }

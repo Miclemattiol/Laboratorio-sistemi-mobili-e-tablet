@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_series/flutter_series.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:house_wallet/components/ui/custom_dialog.dart';
 import 'package:house_wallet/data/firestore.dart';
 import 'package:house_wallet/data/house_data.dart';
@@ -88,39 +87,24 @@ class RecipeListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Slidable(
-      key: Key(recipe.id),
-      endActionPane: ActionPane(
-        extentRatio: .2,
-        motion: const ScrollMotion(),
+    return ListTile(
+      contentPadding: const EdgeInsets.only(left: 16, right: 8),
+      title: Text(recipe.data.title),
+      onTap: () => _editRecipe(context),
+      trailing: PadRow(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          SlidableAction(
-            onPressed: (_) => _delete(context),
-            backgroundColor: Colors.red,
-            foregroundColor: Colors.white,
-            icon: Icons.delete,
+          IconButton(
+            tooltip: localizations(context).addToShoppingListTooltip,
+            icon: const Icon(Icons.add),
+            onPressed: () => _addToShoppingList(context),
           ),
+          IconButton(
+            tooltip: localizations(context).delete,
+            icon: const Icon(Icons.delete),
+            onPressed: () => _delete(context),
+          )
         ],
-      ),
-      child: ListTile(
-        contentPadding: const EdgeInsets.only(left: 16, right: 8),
-        title: Text(recipe.data.title),
-        onTap: () => _editRecipe(context),
-        trailing: PadRow(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              tooltip: localizations(context).addToShoppingListTooltip,
-              icon: const Icon(Icons.add),
-              onPressed: () => _addToShoppingList(context),
-            ),
-            IconButton(
-              tooltip: localizations(context).delete,
-              icon: const Icon(Icons.delete),
-              onPressed: () => _delete(context),
-            )
-          ],
-        ),
       ),
     );
   }
